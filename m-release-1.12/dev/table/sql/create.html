@@ -1,0 +1,1039 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: CREATE Statements</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/dev/table/sql/create.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html">Local Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/datastream_api.html">Fraud Detection with the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/table_api.html">Real Time Reporting with the Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/flink-operations-playground.html">Flink Operations Playground</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> Learn Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/datastream_api.html">Intro to the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/etl.html">Data Pipelines & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/streaming_analytics.html">Streaming Analytics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/event_driven.html">Event-driven Applications</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/fault_tolerance.html">Fault Tolerance</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/index.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/stateful-stream-processing.html">Stateful Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html">Timely Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/flink-architecture.html">Flink Architecture</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/glossary.html">Glossary</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"class="active"><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development</a><div class="collapse in" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_api.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">Event Time<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_time.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamps_watermarks.html">Generating Watermarks</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamp_extractors.html">Builtin Watermark Generators</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/broadcast_state.html">The Broadcast State Pattern</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/schema_evolution.html">State Schema Evolution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/custom_serialization.html">Custom State Serialization</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/user_defined_functions.html">User-Defined Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">Operators<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/windows.html">Windows</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/asyncio.html">Async I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/side_output.html">Side Outputs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/testing.html">Testing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/experimental.html">Experimental Features</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/java_lambdas.html">Java Lambda Expressions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/iterations.html">Iterations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/hadoop_compatibility.html">Hadoop Compatibility</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/local_execution.html">Local Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/cluster_execution.html">Cluster Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/examples.html">Batch Examples</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse"class="active">Table API & SQL</a><div class="collapse in" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/common.html">Concepts & Common API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">Streaming Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/dynamic_tables.html">Dynamic Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html">Time Attributes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/joins.html">Joins in Continuous Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/temporal_tables.html">Temporal Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/match_recognize.html">Detecting Patterns</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse"class="active">SQL</a><div class="collapse in" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/queries.html">Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/create.html" class="active">CREATE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/drop.html">DROP Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/alter.html">ALTER Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/insert.html">INSERT Statement</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/describe.html">DESCRIBE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/explain.html">EXPLAIN Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/use.html">USE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/show.html">SHOW Statements</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html">System (Built-in) Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/modules.html">Modules</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sqlClient.html">SQL Client</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/config.html">Configuration</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tuning/streaming_aggregation_optimization.html">Streaming Aggregation</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/installation.html">Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table_api_tutorial.html">Table API Tutorial</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream_tutorial.html">DataStream API Tutorial</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/intro_to_table_api.html">Intro to the Python Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/built_in_functions.html">System (Built-in) Functions</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">User Defined Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/python_udfs.html">General User-defined Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">Vectorized User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/conversion_of_pandas.html">Conversions between PyFlink Table and Pandas DataFrame</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/dependency_management.html">Dependency Management</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_table_api_connectors.html">Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/data_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/operators.html">Operators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/dependency_management.html">Dependency Management</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/python_config.html">Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/environment_variables.html">Environment Variables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/faq.html">FAQ</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">Data Types & Serialization<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/types_serialization.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/custom_serializers.html">Custom Serializers</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">Managing Execution<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_configuration.html">Execution Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/packaging.html">Program Packaging</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/parallel.html">Parallel Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_plans.html">Execution Plans</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/task_failure_recovery.html">Task Failure Recovery</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/migration.html">API Migration Guides</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/cep.html">Event Processing (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">Graphs: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/guarantees.html">Fault Tolerance Guarantees</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">Overview</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_dialect.html">Hive Dialect</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_functions.html">Hive Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/downloads.html">Download</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/">Overview</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/local.html">Local Cluster</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html">Configuration</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">Memory Configuration<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup.html">Set up Flink's Process Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_tm.html">Set up TaskManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_jobmanager.html">Set up JobManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_tuning.html">Memory tuning guide</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_trouble.html">Troubleshooting</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_migration.html">Migration Guide</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">File Systems<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/common.html">Common Configurations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/oss.html">Aliyun OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/azure.html">Azure Blob Storage</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-ssl.html">SSL Setup</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/external_resources.html">External Resources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/logging.html">Logging</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/large_state_tuning.html">Tuning Checkpoints and Large State</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_event_time.html">Debugging Windows & Event Time</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_classloading.html">Debugging Classloading</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/application_profiling.html">Application Profiling & Debugging</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/checkpoint_monitoring.html">Monitoring Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/back_pressure.html">Monitoring Back Pressure</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/upgrading.html">Upgrading Applications and Flink Versions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/production_ready.html">Production Readiness Checklist</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/ide_setup.html">Importing Flink into an IDE</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/building.html">Building Flink from Source</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> Internals<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/job_scheduling.html">Jobs and Scheduling</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/task_lifecycle.html">Task Lifecycle</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/filesystems.html">File Systems</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Pick Docs Version<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><!-- link to the Chinese home page when current is blog page -->
+    <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">
+      <button type="submit" class="btn btn-default">中文版</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development</li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/">Table API & SQL</a></li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">SQL</a></li>
+  
+    <li class="active">CREATE Statements</li>
+</ol>
+
+<h1>CREATE Statements</h1>
+
+
+
+
+<ul id="markdown-toc">
+  <li><a href="#run-a-create-statement" id="markdown-toc-run-a-create-statement">Run a CREATE statement</a></li>
+  <li><a href="#create-table" id="markdown-toc-create-table">CREATE TABLE</a>    <ul>
+      <li><a href="#columns" id="markdown-toc-columns">Columns</a></li>
+      <li><a href="#watermark" id="markdown-toc-watermark"><code class="highlighter-rouge">WATERMARK</code></a></li>
+      <li><a href="#primary-key" id="markdown-toc-primary-key"><code class="highlighter-rouge">PRIMARY KEY</code></a></li>
+      <li><a href="#partitioned-by" id="markdown-toc-partitioned-by"><code class="highlighter-rouge">PARTITIONED BY</code></a></li>
+      <li><a href="#with-options" id="markdown-toc-with-options"><code class="highlighter-rouge">WITH</code> Options</a></li>
+      <li><a href="#like" id="markdown-toc-like"><code class="highlighter-rouge">LIKE</code></a></li>
+    </ul>
+  </li>
+  <li><a href="#create-catalog" id="markdown-toc-create-catalog">CREATE CATALOG</a></li>
+  <li><a href="#create-database" id="markdown-toc-create-database">CREATE DATABASE</a></li>
+  <li><a href="#create-view" id="markdown-toc-create-view">CREATE VIEW</a></li>
+  <li><a href="#create-function" id="markdown-toc-create-function">CREATE FUNCTION</a></li>
+</ul>
+
+<p>CREATE statements are used to register a table/view/function into current or specified <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalog</a>. A registered table/view/function can be used in SQL queries.</p>
+
+<p>Flink SQL supports the following CREATE statements for now:</p>
+
+<ul>
+  <li>CREATE TABLE</li>
+  <li>CREATE DATABASE</li>
+  <li>CREATE VIEW</li>
+  <li>CREATE FUNCTION</li>
+</ul>
+
+<h2 id="run-a-create-statement">Run a CREATE statement</h2>
+
+<div class="codetabs" data-hide-tabs="1">
+  <div data-lang="java/scala">
+
+    <p>CREATE statements can be executed with the <code class="highlighter-rouge">executeSql()</code> method of the <code class="highlighter-rouge">TableEnvironment</code>. The <code class="highlighter-rouge">executeSql()</code> method returns ‘OK’ for a successful CREATE operation, otherwise will throw an exception.</p>
+
+    <p>The following examples show how to run a CREATE statement in <code class="highlighter-rouge">TableEnvironment</code>.</p>
+
+  </div>
+
+  <div data-lang="python">
+
+    <p>CREATE statements can be executed with the <code class="highlighter-rouge">execute_sql()</code> method of the <code class="highlighter-rouge">TableEnvironment</code>. The <code class="highlighter-rouge">execute_sql()</code> method returns ‘OK’ for a successful CREATE operation, otherwise will throw an exception.</p>
+
+    <p>The following examples show how to run a CREATE statement in <code class="highlighter-rouge">TableEnvironment</code>.</p>
+
+  </div>
+
+  <div data-lang="SQL CLI">
+
+    <p>CREATE statements can be executed in <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sqlClient.html">SQL CLI</a>.</p>
+
+    <p>The following examples show how to run a CREATE statement in SQL CLI.</p>
+
+  </div>
+</div>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">EnvironmentSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="nc">EnvironmentSettings</span><span class="o">.</span><span class="na">newInstance</span><span class="o">()...</span>
+<span class="nc">TableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">settings</span><span class="o">);</span>
+
+<span class="c1">// SQL query with a registered table</span>
+<span class="c1">// register a table named "Orders"</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="o">);</span>
+<span class="c1">// run a SQL query on the Table and retrieve the result as a new Table</span>
+<span class="nc">Table</span> <span class="n">result</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">);</span>
+
+<span class="c1">// Execute insert SQL with a registered table</span>
+<span class="c1">// register a TableSink</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE RubberOrders(product STRING, amount INT) WITH (...)"</span><span class="o">);</span>
+<span class="c1">// run an insert SQL on the Table and emit the result to the TableSink</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span>
+  <span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">settings</span> <span class="k">=</span> <span class="nv">EnvironmentSettings</span><span class="o">.</span><span class="py">newInstance</span><span class="o">()...</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">TableEnvironment</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="n">settings</span><span class="o">)</span>
+
+<span class="c1">// SQL query with a registered table</span>
+<span class="c1">// register a table named "Orders"</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="o">);</span>
+<span class="c1">// run a SQL query on the Table and retrieve the result as a new Table</span>
+<span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">);</span>
+
+<span class="c1">// Execute insert SQL with a registered table</span>
+<span class="c1">// register a TableSink</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE RubberOrders(product STRING, amount INT) WITH ('connector.path'='/path/to/file' ...)"</span><span class="o">);</span>
+<span class="c1">// run an insert SQL on the Table and emit the result to the TableSink</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span>
+  <span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="python">
+
+    <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">settings</span> <span class="o">=</span> <span class="n">EnvironmentSettings</span><span class="p">.</span><span class="n">new_instance</span><span class="p">()...</span>
+<span class="n">table_env</span> <span class="o">=</span> <span class="n">StreamTableEnvironment</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+
+<span class="c1"># SQL query with a registered table
+# register a table named "Orders"
+</span><span class="n">table_env</span><span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="p">);</span>
+<span class="c1"># run a SQL query on the Table and retrieve the result as a new Table
+</span><span class="n">result</span> <span class="o">=</span> <span class="n">table_env</span><span class="p">.</span><span class="n">sql_query</span><span class="p">(</span>
+  <span class="s">"SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="p">);</span>
+
+<span class="c1"># Execute an INSERT SQL with a registered table
+# register a TableSink
+</span><span class="n">table_env</span><span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"CREATE TABLE RubberOrders(product STRING, amount INT) WITH (...)"</span><span class="p">)</span>
+<span class="c1"># run an INSERT SQL on the Table and emit the result to the TableSink
+</span><span class="n">table_env</span> \
+    <span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="p">)</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="SQL CLI">
+
+    <figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">Flink</span> <span class="k">SQL</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders</span> <span class="p">(</span><span class="nv">`user`</span> <span class="nb">BIGINT</span><span class="p">,</span> <span class="n">product</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">amount</span> <span class="nb">INT</span><span class="p">)</span> <span class="k">WITH</span> <span class="p">(...);</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="k">Table</span> <span class="n">has</span> <span class="n">been</span> <span class="n">created</span><span class="p">.</span>
+
+<span class="n">Flink</span> <span class="k">SQL</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">RubberOrders</span> <span class="p">(</span><span class="n">product</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">amount</span> <span class="nb">INT</span><span class="p">)</span> <span class="k">WITH</span> <span class="p">(...);</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="k">Table</span> <span class="n">has</span> <span class="n">been</span> <span class="n">created</span><span class="p">.</span>
+
+<span class="n">Flink</span> <span class="k">SQL</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">RubberOrders</span> <span class="k">SELECT</span> <span class="n">product</span><span class="p">,</span> <span class="n">amount</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">product</span> <span class="k">LIKE</span> <span class="s1">'%Rubber%'</span><span class="p">;</span>
+<span class="p">[</span><span class="n">INFO</span><span class="p">]</span> <span class="n">Submitting</span> <span class="k">SQL</span> <span class="k">update</span> <span class="k">statement</span> <span class="k">to</span> <span class="n">the</span> <span class="k">cluster</span><span class="p">...</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="create-table">CREATE TABLE</h2>
+
+<p>The following grammar gives an overview about the available syntax:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">CREATE TABLE [catalog_name.][db_name.]table_name
+  (
+    { &lt;physical_column_definition&gt; | &lt;metadata_column_definition&gt; | &lt;computed_column_definition&gt; }[ , ...n]
+    [ &lt;watermark_definition&gt; ]
+    [ &lt;table_constraint&gt; ][ , ...n]
+  )
+  [COMMENT table_comment]
+  [PARTITIONED BY (partition_column_name1, partition_column_name2, ...)]
+  WITH (key1=val1, key2=val2, ...)
+  [ LIKE source_table [( &lt;like_options&gt; )] ]
+   
+&lt;physical_column_definition&gt;:
+  column_name column_type [ &lt;column_constraint&gt; ] [COMMENT column_comment]
+  
+&lt;column_constraint&gt;:
+  [CONSTRAINT constraint_name] PRIMARY KEY NOT ENFORCED
+
+&lt;table_constraint&gt;:
+  [CONSTRAINT constraint_name] PRIMARY KEY (column_name, ...) NOT ENFORCED
+
+&lt;metadata_column_definition&gt;:
+  column_name column_type METADATA [ FROM metadata_key ] [ VIRTUAL ]
+
+&lt;computed_column_definition&gt;:
+  column_name AS computed_column_expression [COMMENT column_comment]
+
+&lt;watermark_definition&gt;:
+  WATERMARK FOR rowtime_column_name AS watermark_strategy_expression
+
+&lt;source_table&gt;:
+  [catalog_name.][db_name.]table_name
+
+&lt;like_options&gt;:
+{
+   { INCLUDING | EXCLUDING } { ALL | CONSTRAINTS | PARTITIONS }
+ | { INCLUDING | EXCLUDING | OVERWRITING } { GENERATED | OPTIONS | WATERMARKS } 
+}[, ...]</code></pre></figure>
+
+<p>The statement above creates a table with the given name. If a table with the same name already exists
+in the catalog, an exception is thrown.</p>
+
+<h3 id="columns">Columns</h3>
+
+<p><strong>Physical / Regular Columns</strong></p>
+
+<p>Physical columns are regular columns known from databases. They define the names, the types, and the
+order of fields in the physical data. Thus, physical columns represent the payload that is read from
+and written to an external system. Connectors and formats use these columns (in the defined order)
+to configure themselves. Other kinds of columns can be declared between physical columns but will not
+influence the final physical schema.</p>
+
+<p>The following statement creates a table with only regular columns:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="n">STRING</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p><strong>Metadata Columns</strong></p>
+
+<p>Metadata columns are an extension to the SQL standard and allow to access connector and/or format specific
+fields for every row of a table. A metadata column is indicated by the <code class="highlighter-rouge">METADATA</code> keyword. For example,
+a metadata column can be be used to read and write the timestamp from and to Kafka records for time-based
+operations. The <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">connector and format documentation</a> lists the
+available metadata fields for every component. However, declaring a metadata column in a table’s schema
+is optional.</p>
+
+<p>The following statement creates a table with an additional metadata column that references the metadata field <code class="highlighter-rouge">timestamp</code>:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="nv">`record_time`</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">WITH</span> <span class="k">LOCAL</span> <span class="nb">TIME</span> <span class="k">ZONE</span> <span class="n">METADATA</span> <span class="k">FROM</span> <span class="s1">'timestamp'</span>    <span class="c1">-- reads and writes a Kafka record's timestamp</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>Every metadata field is identified by a string-based key and has a documented data type. For example,
+the Kafka connector exposes a metadata field with key <code class="highlighter-rouge">timestamp</code> and data type <code class="highlighter-rouge">TIMESTAMP(3) WITH LOCAL TIME ZONE</code>
+that can be used for both reading and writing records.</p>
+
+<p>In the example above, the metadata column <code class="highlighter-rouge">record_time</code> becomes part of the table’s schema and can be
+transformed and stored like a regular column:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">MyTable</span> <span class="k">SELECT</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">record_time</span> <span class="o">+</span> <span class="n">INTERVAL</span> <span class="s1">'1'</span> <span class="k">SECOND</span> <span class="k">FROM</span> <span class="n">MyTable</span><span class="p">;</span></code></pre></figure>
+
+<p>For convenience, the <code class="highlighter-rouge">FROM</code> clause can be omitted if the column name should be used as the identifying metadata key:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="nv">`timestamp`</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="k">WITH</span> <span class="k">LOCAL</span> <span class="nb">TIME</span> <span class="k">ZONE</span> <span class="n">METADATA</span>    <span class="c1">-- use column name as metadata key</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>For convenience, the runtime will perform an explicit cast if the data type of the column differs from
+the data type of the metadata field. Of course, this requires that the two data types are compatible.</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="nv">`timestamp`</span> <span class="nb">BIGINT</span> <span class="n">METADATA</span>    <span class="c1">-- cast the timestamp as BIGINT</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>By default, the planner assumes that a metadata column can be used for both reading and writing. However,
+in many cases an external system provides more read-only metadata fields than writable fields. Therefore,
+it is possible to exclude metadata columns from persisting using the <code class="highlighter-rouge">VIRTUAL</code> keyword.</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`timestamp`</span> <span class="nb">BIGINT</span> <span class="n">METADATA</span><span class="p">,</span>       <span class="c1">-- part of the query-to-sink schema</span>
+  <span class="nv">`offset`</span> <span class="nb">BIGINT</span> <span class="n">METADATA</span> <span class="n">VIRTUAL</span><span class="p">,</span>  <span class="c1">-- not part of the query-to-sink schema</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`name`</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>In the example above, the <code class="highlighter-rouge">offset</code> is a read-only metadata column and excluded from the query-to-sink
+schema. Thus, source-to-query schema (for <code class="highlighter-rouge">SELECT</code>) and query-to-sink (for <code class="highlighter-rouge">INSERT INTO</code>) schema differ:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">source-to-query schema:
+MyTable(`timestamp` BIGINT, `offset` BIGINT, `user_id` BIGINT, `name` STRING)
+
+query-to-sink schema:
+MyTable(`timestamp` BIGINT, `user_id` BIGINT, `name` STRING)</code></pre></figure>
+
+<p><strong>Computed Columns</strong></p>
+
+<p>Computed columns are virtual columns that are generated using the syntax <code class="highlighter-rouge">column_name AS computed_column_expression</code>.</p>
+
+<p>A computed column evaluates an expression that can reference other columns declared in the same table.
+Both physical columns and metadata columns can be accessed if they preceed the computed column in the
+schema declaration. The column itself is not physically stored within the table. The column’s data type
+is derived automatically from the given expression and does not have to be declared manually.</p>
+
+<p>The planner will transform computed columns into a regular projection after the source. For optimization
+or <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sourceSinks.html">watermark strategy push down</a>, the evaluation might be spread
+across operators, performed multiple times, or skipped if not needed for the given query.</p>
+
+<p>For example, a computed column could be defined as:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">MyTable</span> <span class="p">(</span>
+  <span class="nv">`user_id`</span> <span class="nb">BIGINT</span><span class="p">,</span>
+  <span class="nv">`price`</span> <span class="nb">DOUBLE</span><span class="p">,</span>
+  <span class="nv">`quantity`</span> <span class="nb">DOUBLE</span><span class="p">,</span>
+  <span class="nv">`cost`</span> <span class="k">AS</span> <span class="n">price</span> <span class="o">*</span> <span class="n">quanitity</span><span class="p">,</span>  <span class="c1">-- evaluate expression and supply the result to queries</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span>
+  <span class="p">...</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>The expression may contain any combination of columns, constants, or functions. The expression cannot
+contain a subquery.</p>
+
+<p>Computed columns are commonly used in Flink for defining <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html">time attributes</a>
+in <code class="highlighter-rouge">CREATE TABLE</code> statements.</p>
+<ul>
+  <li>A <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html#processing-time">processing time attribute</a>
+can be defined easily via <code class="highlighter-rouge">proc AS PROCTIME()</code> using the system’s <code class="highlighter-rouge">PROCTIME()</code> function.</li>
+  <li>An <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html#event-time">event time attribute</a> timestamp
+can be pre-processed before the <code class="highlighter-rouge">WATERMARK</code> declaration. For example, the computed column can be used
+if the original field is not <code class="highlighter-rouge">TIMESTAMP(3)</code> type or is nested in a JSON string.</li>
+</ul>
+
+<p>Similar to virtual metadata columns, computed columns are excluded from persisting. Therefore, a computed
+column cannot be the target of an <code class="highlighter-rouge">INSERT INTO</code> statement. Thus, source-to-query schema (for <code class="highlighter-rouge">SELECT</code>)
+and query-to-sink (for <code class="highlighter-rouge">INSERT INTO</code>) schema differ:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">source-to-query schema:
+MyTable(`user_id` BIGINT, `price` DOUBLE, `quantity` DOUBLE, `cost` DOUBLE)
+
+query-to-sink schema:
+MyTable(`user_id` BIGINT, `price` DOUBLE, `quantity` DOUBLE)</code></pre></figure>
+
+<h3 id="watermark"><code class="highlighter-rouge">WATERMARK</code></h3>
+
+<p>The <code class="highlighter-rouge">WATERMARK</code> clause defines the event time attributes of a table and takes the form <code class="highlighter-rouge">WATERMARK FOR rowtime_column_name AS watermark_strategy_expression</code>.</p>
+
+<p>The  <code class="highlighter-rouge">rowtime_column_name</code> defines an existing column that is marked as the event time attribute of the table. The column must be of type <code class="highlighter-rouge">TIMESTAMP(3)</code> and be a top-level column in the schema. It may be a computed column.</p>
+
+<p>The <code class="highlighter-rouge">watermark_strategy_expression</code> defines the watermark generation strategy. It allows arbitrary non-query expression, including computed columns, to calculate the watermark. The expression return type must be TIMESTAMP(3), which represents the timestamp since the Epoch.
+The returned watermark will be emitted only if it is non-null and its value is larger than the previously emitted local watermark (to preserve the contract of ascending watermarks). The watermark generation expression is evaluated by the framework for every record.
+The framework will periodically emit the largest generated watermark. If the current watermark is still identical to the previous one, or is null, or the value of the returned watermark is smaller than that of the last emitted one, then no new watermark will be emitted.
+Watermark is emitted in an interval defined by <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html#pipeline-auto-watermark-interval"><code class="highlighter-rouge">pipeline.auto-watermark-interval</code></a> configuration.
+If watermark interval is <code class="highlighter-rouge">0ms</code>, the generated watermarks will be emitted per-record if it is not null and greater than the last emitted one.</p>
+
+<p>When using event time semantics, tables must contain an event time attribute and watermarking strategy.</p>
+
+<p>Flink provides several commonly used watermark strategies.</p>
+
+<ul>
+  <li>
+    <p>Strictly ascending timestamps: <code class="highlighter-rouge">WATERMARK FOR rowtime_column AS rowtime_column</code>.</p>
+
+    <p>Emits a watermark of the maximum observed timestamp so far. Rows that have a timestamp bigger to the max timestamp are not late.</p>
+  </li>
+  <li>
+    <p>Ascending timestamps: <code class="highlighter-rouge">WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL '0.001' SECOND</code>.</p>
+
+    <p>Emits a watermark of the maximum observed timestamp so far minus 1. Rows that have a timestamp bigger or equal to the max timestamp are not late.</p>
+  </li>
+  <li>
+    <p>Bounded out of orderness timestamps: <code class="highlighter-rouge">WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL 'string' timeUnit</code>.</p>
+
+    <p>Emits watermarks, which are the maximum observed timestamp minus the specified delay, e.g., <code class="highlighter-rouge">WATERMARK FOR rowtime_column AS rowtime_column - INTERVAL '5' SECOND</code> is a 5 seconds delayed watermark strategy.</p>
+  </li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders</span> <span class="p">(</span>
+    <span class="k">user</span> <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="n">product</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="n">order_time</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+    <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">order_time</span> <span class="k">AS</span> <span class="n">order_time</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'5'</span> <span class="k">SECOND</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span> <span class="p">.</span> <span class="p">.</span> <span class="p">.</span> <span class="p">);</span></code></pre></figure>
+
+<h3 id="primary-key"><code class="highlighter-rouge">PRIMARY KEY</code></h3>
+
+<p>Primary key constraint is a hint for Flink to leverage for optimizations. It tells that a column or a set of columns of a table or a view are unique and they <strong>do not</strong> contain null.
+Neither of columns in a primary can be nullable. Primary key therefore uniquely identify a row in a table.</p>
+
+<p>Primary key constraint can be either declared along with a column definition (a column constraint) or as a single line (a table constraint).
+For both cases, it should only be declared as a singleton. If you define multiple primary key constraints at the same time, an exception would be thrown.</p>
+
+<p><strong>Validity Check</strong></p>
+
+<p>SQL standard specifies that a constraint can either be <code class="highlighter-rouge">ENFORCED</code> or <code class="highlighter-rouge">NOT ENFORCED</code>. This controls if the constraint checks are performed on the incoming/outgoing data.
+Flink does not own the data therefore the only mode we want to support is the <code class="highlighter-rouge">NOT ENFORCED</code> mode.
+It is up to the user to ensure that the query enforces key integrity.</p>
+
+<p>Flink will assume correctness of the primary key by assuming that the columns nullability is aligned with the columns in primary key. Connectors should ensure those are aligned.</p>
+
+<p><strong>Notes:</strong> In a CREATE TABLE statement, creating a primary key constraint will alter the columns nullability, that means, a column with primary key constraint is not nullable.</p>
+
+<h3 id="partitioned-by"><code class="highlighter-rouge">PARTITIONED BY</code></h3>
+
+<p>Partition the created table by the specified columns. A directory is created for each partition if this table is used as a filesystem sink.</p>
+
+<h3 id="with-options"><code class="highlighter-rouge">WITH</code> Options</h3>
+
+<p>Table properties used to create a table source/sink. The properties are usually used to find and create the underlying connector.</p>
+
+<p>The key and value of expression <code class="highlighter-rouge">key1=val1</code> should both be string literal. See details in <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">Connect to External Systems</a> for all the supported table properties of different connectors.</p>
+
+<p><strong>Notes:</strong> The table name can be of three formats: 1. <code class="highlighter-rouge">catalog_name.db_name.table_name</code> 2. <code class="highlighter-rouge">db_name.table_name</code> 3. <code class="highlighter-rouge">table_name</code>. For <code class="highlighter-rouge">catalog_name.db_name.table_name</code>, the table would be registered into metastore with catalog named “catalog_name” and database named “db_name”; for <code class="highlighter-rouge">db_name.table_name</code>, the table would be registered into the current catalog of the execution table environment and database named “db_name”; for <code class="highlighter-rouge">table_name</code>, the table would be registered into the current catalog and database of the execution table environment.</p>
+
+<p><strong>Notes:</strong> The table registered with <code class="highlighter-rouge">CREATE TABLE</code> statement can be used as both table source and table sink, we can not decide if it is used as a source or sink until it is referenced in the DMLs.</p>
+
+<h3 id="like"><code class="highlighter-rouge">LIKE</code></h3>
+
+<p>The <code class="highlighter-rouge">LIKE</code> clause is a variant/combination of SQL features (Feature T171, “LIKE clause in table definition” and Feature T173, “Extended LIKE clause in table definition”). The clause can be used to create a table based on a definition of an existing table. Additionally, users
+can extend the original table or exclude certain parts of it. In contrast to the SQL standard the clause must be defined at the top-level of a CREATE statement. That is because the clause applies to multiple parts of the definition and not only to the schema part.</p>
+
+<p>You can use the clause to reuse (and potentially overwrite) certain connector properties or add watermarks to tables defined externally. For example, you can add a watermark to a table defined in Apache Hive.</p>
+
+<p>Consider the example statement below:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders</span> <span class="p">(</span>
+    <span class="k">user</span> <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="n">product</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="n">order_time</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span> 
+    <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span><span class="p">,</span>
+    <span class="s1">'scan.startup.mode'</span> <span class="o">=</span> <span class="s1">'earliest-offset'</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders_with_watermark</span> <span class="p">(</span>
+    <span class="c1">-- Add watermark definition</span>
+    <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">order_time</span> <span class="k">AS</span> <span class="n">order_time</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'5'</span> <span class="k">SECOND</span> 
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+    <span class="c1">-- Overwrite the startup-mode</span>
+    <span class="s1">'scan.startup.mode'</span> <span class="o">=</span> <span class="s1">'latest-offset'</span>
+<span class="p">)</span>
+<span class="k">LIKE</span> <span class="n">Orders</span><span class="p">;</span></code></pre></figure>
+
+<p>The resulting table <code class="highlighter-rouge">Orders_with_watermark</code> will be equivalent to a table created with a following statement:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders_with_watermark</span> <span class="p">(</span>
+    <span class="k">user</span> <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="n">product</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="n">order_time</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+    <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">order_time</span> <span class="k">AS</span> <span class="n">order_time</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'5'</span> <span class="k">SECOND</span> 
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+    <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span><span class="p">,</span>
+    <span class="s1">'scan.startup.mode'</span> <span class="o">=</span> <span class="s1">'latest-offset'</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>The merging logic of table features can be controlled with <code class="highlighter-rouge">like options</code>.</p>
+
+<p>You can control the merging behavior of:</p>
+
+<ul>
+  <li>CONSTRAINTS - constraints such as primary and unique keys</li>
+  <li>GENERATED - computed columns</li>
+  <li>METADATA - metadata columns</li>
+  <li>OPTIONS - connector options that describe connector and format properties</li>
+  <li>PARTITIONS - partition of the tables</li>
+  <li>WATERMARKS - watermark declarations</li>
+</ul>
+
+<p>with three different merging strategies:</p>
+
+<ul>
+  <li>INCLUDING - Includes the feature of the source table, fails on duplicate entries, e.g. if an option with the same key exists in both tables.</li>
+  <li>EXCLUDING - Does not include the given feature of the source table.</li>
+  <li>OVERWRITING - Includes the feature of the source table, overwrites duplicate entries of the source table with properties of the new table, e.g. if an option with the same key exists in both tables, the one from the current statement will be used.</li>
+</ul>
+
+<p>Additionally, you can use the <code class="highlighter-rouge">INCLUDING/EXCLUDING ALL</code> option to specify what should be the strategy if there was no specific strategy defined, i.e. if you use <code class="highlighter-rouge">EXCLUDING ALL INCLUDING WATERMARKS</code> only the watermarks will be included from the source table.</p>
+
+<p>Example:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- A source table stored in a filesystem</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders_in_file</span> <span class="p">(</span>
+    <span class="k">user</span> <span class="nb">BIGINT</span><span class="p">,</span>
+    <span class="n">product</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="n">order_time_string</span> <span class="n">STRING</span><span class="p">,</span>
+    <span class="n">order_time</span> <span class="k">AS</span> <span class="n">to_timestamp</span><span class="p">(</span><span class="n">order_time</span><span class="p">)</span>
+    
+<span class="p">)</span>
+<span class="n">PARTITIONED</span> <span class="k">BY</span> <span class="k">user</span> 
+<span class="k">WITH</span> <span class="p">(</span> 
+    <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'filesystem'</span>
+    <span class="s1">'path'</span> <span class="o">=</span> <span class="s1">'...'</span>
+<span class="p">);</span>
+
+<span class="c1">-- A corresponding table we want to store in kafka</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">Orders_in_kafka</span> <span class="p">(</span>
+    <span class="c1">-- Add watermark definition</span>
+    <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">order_time</span> <span class="k">AS</span> <span class="n">order_time</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'5'</span> <span class="k">SECOND</span> 
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+    <span class="s1">'connector'</span><span class="p">:</span> <span class="s1">'kafka'</span>
+    <span class="p">...</span>
+<span class="p">)</span>
+<span class="k">LIKE</span> <span class="n">Orders_in_file</span> <span class="p">(</span>
+    <span class="c1">-- Exclude everything besides the computed columns which we need to generate the watermark for.</span>
+    <span class="c1">-- We do not want to have the partitions or filesystem options as those do not apply to kafka. </span>
+    <span class="k">EXCLUDING</span> <span class="k">ALL</span>
+    <span class="k">INCLUDING</span> <span class="k">GENERATED</span>
+<span class="p">);</span></code></pre></figure>
+
+<p>If you provide no like options, <code class="highlighter-rouge">INCLUDING ALL OVERWRITING OPTIONS</code> will be used as a default.</p>
+
+<p><strong>NOTE</strong> You cannot control the behavior of merging physical columns. Those will be merged as if you applied the <code class="highlighter-rouge">INCLUDING</code> strategy.</p>
+
+<p><strong>NOTE</strong> The <code class="highlighter-rouge">source_table</code> can be a compound identifier. Thus, it can be a table from a different catalog or database: e.g. <code class="highlighter-rouge">my_catalog.my_db.MyTable</code> specifies table <code class="highlighter-rouge">MyTable</code> from catalog <code class="highlighter-rouge">MyCatalog</code> and database <code class="highlighter-rouge">my_db</code>; <code class="highlighter-rouge">my_db.MyTable</code> specifies table <code class="highlighter-rouge">MyTable</code> from current catalog and database <code class="highlighter-rouge">my_db</code>.</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="create-catalog">CREATE CATALOG</h2>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">CATALOG</span> <span class="k">catalog_name</span>
+  <span class="k">WITH</span> <span class="p">(</span><span class="n">key1</span><span class="o">=</span><span class="n">val1</span><span class="p">,</span> <span class="n">key2</span><span class="o">=</span><span class="n">val2</span><span class="p">,</span> <span class="p">...)</span></code></pre></figure>
+
+<p>Create a catalog with the given catalog properties. If a catalog with the same name already exists, an exception is thrown.</p>
+
+<p><strong>WITH OPTIONS</strong></p>
+
+<p>Catalog properties used to store extra information related to this catalog.
+The key and value of expression <code class="highlighter-rouge">key1=val1</code> should both be string literal.</p>
+
+<p>Check out more details at <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalogs</a>.</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="create-database">CREATE DATABASE</h2>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="k">catalog_name</span><span class="p">.]</span><span class="n">db_name</span>
+  <span class="p">[</span><span class="k">COMMENT</span> <span class="n">database_comment</span><span class="p">]</span>
+  <span class="k">WITH</span> <span class="p">(</span><span class="n">key1</span><span class="o">=</span><span class="n">val1</span><span class="p">,</span> <span class="n">key2</span><span class="o">=</span><span class="n">val2</span><span class="p">,</span> <span class="p">...)</span></code></pre></figure>
+
+<p>Create a database with the given database properties. If a database with the same name already exists in the catalog, an exception is thrown.</p>
+
+<p><strong>IF NOT EXISTS</strong></p>
+
+<p>If the database already exists, nothing happens.</p>
+
+<p><strong>WITH OPTIONS</strong></p>
+
+<p>Database properties used to store extra information related to this database.
+The key and value of expression <code class="highlighter-rouge">key1=val1</code> should both be string literal.</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="create-view">CREATE VIEW</h2>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="p">[</span><span class="k">TEMPORARY</span><span class="p">]</span> <span class="k">VIEW</span> <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="k">catalog_name</span><span class="p">.][</span><span class="n">db_name</span><span class="p">.]</span><span class="n">view_name</span>
+  <span class="p">[</span><span class="err">{</span><span class="n">columnName</span> <span class="p">[,</span> <span class="n">columnName</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span><span class="p">]</span> <span class="p">[</span><span class="k">COMMENT</span> <span class="n">view_comment</span><span class="p">]</span>
+  <span class="k">AS</span> <span class="n">query_expression</span></code></pre></figure>
+
+<p>Create a view with the given query expression. If a view with the same name already exists in the catalog, an exception is thrown.</p>
+
+<p><strong>TEMPORARY</strong></p>
+
+<p>Create temporary view that has catalog and database namespaces and overrides views.</p>
+
+<p><strong>IF NOT EXISTS</strong></p>
+
+<p>If the view already exists, nothing happens.</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="create-function">CREATE FUNCTION</h2>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="p">[</span><span class="k">TEMPORARY</span><span class="o">|</span><span class="k">TEMPORARY</span> <span class="k">SYSTEM</span><span class="p">]</span> <span class="k">FUNCTION</span> 
+  <span class="p">[</span><span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="p">[</span><span class="k">catalog_name</span><span class="p">.][</span><span class="n">db_name</span><span class="p">.]</span><span class="n">function_name</span> 
+  <span class="k">AS</span> <span class="n">identifier</span> <span class="p">[</span><span class="k">LANGUAGE</span> <span class="n">JAVA</span><span class="o">|</span><span class="n">SCALA</span><span class="o">|</span><span class="n">PYTHON</span><span class="p">]</span></code></pre></figure>
+
+<p>Create a catalog function that has catalog and database namespaces with the identifier and optional language tag. If a function with the same name already exists in the catalog, an exception is thrown.</p>
+
+<p>If the language tag is JAVA/SCALA, the identifier is the full classpath of the UDF. For the implementation of Java/Scala UDF, please refer to <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">User-defined Functions</a> for more details.</p>
+
+<p>If the language tag is PYTHON, the identifier is the fully qualified name of the UDF, e.g. <code class="highlighter-rouge">pyflink.table.tests.test_udf.add</code>. For the implementation of Python UDF, please refer to <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/python_udfs.html">Python UDFs</a> for more details.</p>
+
+<p>If the language tag is PYTHON, however the current program is written in Java/Scala or pure SQL, then you need to <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/dependency_management.html#python-dependency-in-javascala-program">configure the Python dependencies</a>.</p>
+
+<p><strong>TEMPORARY</strong></p>
+
+<p>Create temporary catalog function that has catalog and database namespaces and overrides catalog functions.</p>
+
+<p><strong>TEMPORARY SYSTEM</strong></p>
+
+<p>Create temporary system function that has no namespace and overrides built-in functions</p>
+
+<p><strong>IF NOT EXISTS</strong></p>
+
+<p>If the function already exists, nothing happens.</p>
+
+<p><strong>LANGUAGE JAVA|SCALA|PYTHON</strong></p>
+
+<p>Language tag to instruct Flink runtime how to execute the function. Currently only JAVA, SCALA and PYTHON are supported, the default language for a function is JAVA.</p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      Want to contribute translation?
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

@@ -1,0 +1,602 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: Flink 架构</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/concepts/flink-architecture.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"class="active"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析</a><div class="collapse in" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html" class="active">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">流式概念<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/flink-architecture.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析</a></li>
+  
+    <li class="active">Flink 架构</li>
+</ol>
+
+<h1>Flink 架构</h1>
+
+
+
+
+<p>Flink 是一个分布式系统，需要有效分配和管理计算资源才能执行流应用程序。它集成了所有常见的集群资源管理器，例如<a href="https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html">Hadoop YARN</a>、<a href="https://mesos.apache.org/">Apache Mesos</a>和<a href="https://kubernetes.io/">Kubernetes</a>，但也可以设置作为独立集群甚至库运行。</p>
+
+<p>本节概述了 Flink 架构，并且描述了其主要组件如何交互以执行应用程序和从故障中恢复。</p>
+
+<ul id="markdown-toc">
+  <li><a href="#flink-集群剖析" id="markdown-toc-flink-集群剖析">Flink 集群剖析</a>    <ul>
+      <li><a href="#jobmanager" id="markdown-toc-jobmanager">JobManager</a></li>
+      <li><a href="#taskmanagers" id="markdown-toc-taskmanagers">TaskManagers</a></li>
+    </ul>
+  </li>
+  <li><a href="#tasks-和算子链" id="markdown-toc-tasks-和算子链">Tasks 和算子链</a></li>
+  <li><a href="#task-slots-和资源" id="markdown-toc-task-slots-和资源">Task Slots 和资源</a></li>
+  <li><a href="#flink-应用程序执行" id="markdown-toc-flink-应用程序执行">Flink 应用程序执行</a>    <ul>
+      <li><a href="#flink-session-集群" id="markdown-toc-flink-session-集群">Flink Session 集群</a></li>
+      <li><a href="#flink-job-集群" id="markdown-toc-flink-job-集群">Flink Job 集群</a></li>
+      <li><a href="#flink-application-集群" id="markdown-toc-flink-application-集群">Flink Application 集群</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="flink-集群剖析">Flink 集群剖析</h2>
+
+<p>Flink 运行时由两种类型的进程组成：一个 <em>JobManager</em> 和一个或者多个 <em>TaskManager</em>。</p>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/processes.svg" alt="The processes involved in executing a Flink dataflow" class="offset" width="70%" /></p>
+
+<p><em>Client</em> 不是运行时和程序执行的一部分，而是用于准备数据流并将其发送给 JobManager。之后，客户端可以断开连接（<em>分离模式</em>），或保持连接来接收进程报告（<em>附加模式</em>）。客户端可以作为触发执行 Java/Scala 程序的一部分运行，也可以在命令行进程<code class="highlighter-rouge">./bin/flink run ...</code>中运行。</p>
+
+<p>可以通过多种方式启动 JobManager 和 TaskManager：直接在机器上作为<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">standalone 集群</a>启动、在容器中启动、或者通过<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a>或<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a>等资源框架管理并启动。TaskManager 连接到 JobManagers，宣布自己可用，并被分配工作。</p>
+
+<h3 id="jobmanager">JobManager</h3>
+
+<p><em>JobManager</em> 具有许多与协调 Flink 应用程序的分布式执行有关的职责：它决定何时调度下一个 task（或一组 task）、对完成的 task 或执行失败做出反应、协调 checkpoint、并且协调从失败中恢复等等。这个进程由三个不同的组件组成：</p>
+
+<ul>
+  <li>
+    <p><strong>ResourceManager</strong></p>
+
+    <p><em>ResourceManager</em> 负责 Flink 集群中的资源提供、回收、分配 - 它管理 <strong>task slots</strong>，这是 Flink 集群中资源调度的单位（请参考<a href="#taskmanagers">TaskManagers</a>）。Flink 为不同的环境和资源提供者（例如 YARN、Mesos、Kubernetes 和 standalone 部署）实现了对应的 ResourceManager。在 standalone 设置中，ResourceManager 只能分配可用 TaskManager 的 slots，而不能自行启动新的 TaskManager。</p>
+  </li>
+  <li>
+    <p><strong>Dispatcher</strong></p>
+
+    <p><em>Dispatcher</em> 提供了一个 REST 接口，用来提交 Flink 应用程序执行，并为每个提交的作业启动一个新的 JobMaster。它还运行 Flink WebUI 用来提供作业执行信息。</p>
+  </li>
+  <li>
+    <p><strong>JobMaster</strong></p>
+
+    <p><em>JobMaster</em> 负责管理单个<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html#logical-graph">JobGraph</a>的执行。Flink 集群中可以同时运行多个作业，每个作业都有自己的 JobMaster。</p>
+  </li>
+</ul>
+
+<p>始终至少有一个 JobManager。高可用（HA）设置中可能有多个 JobManager，其中一个始终是 <em>leader</em>，其他的则是 <em>standby</em>（请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">高可用（HA）</a>）。</p>
+
+<h3 id="taskmanagers">TaskManagers</h3>
+
+<p><em>TaskManager</em>（也称为 <em>worker</em>）执行作业流的 task，并且缓存和交换数据流。</p>
+
+<p>必须始终至少有一个 TaskManager。在 TaskManager 中资源调度的最小单位是 task <em>slot</em>。TaskManager 中 task slot 的数量表示并发处理 task 的数量。请注意一个 task slot 中可以执行多个算子（请参考<a href="#tasks-and-operator-chains">Tasks 和算子链</a>）。</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="tasks-和算子链">Tasks 和算子链</h2>
+
+<p>对于分布式执行，Flink 将算子的 subtasks <em>链接</em>成 <em>tasks</em>。每个 task 由一个线程执行。将算子链接成 task 是个有用的优化：它减少线程间切换、缓冲的开销，并且减少延迟的同时增加整体吞吐量。链行为是可以配置的；请参考<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/#task-chaining-and-resource-groups">链文档</a>以获取详细信息。</p>
+
+<p>下图中样例数据流用 5 个 subtask 执行，因此有 5 个并行线程。</p>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/tasks_chains.svg" alt="Operator chaining into Tasks" class="offset" width="80%" /></p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="task-slots-和资源">Task Slots 和资源</h2>
+
+<p>每个 worker（TaskManager）都是一个 <em>JVM 进程</em>，可以在单独的线程中执行一个或多个 subtask。为了控制一个 TaskManager 中接受多少个 task，就有了所谓的 <strong>task slots</strong>（至少一个）。</p>
+
+<p>每个 <em>task slot</em> 代表 TaskManager 中资源的固定子集。例如，具有 3 个 slot 的 TaskManager，会将其托管内存 1/3 用于每个 slot。分配资源意味着 subtask 不会与其他作业的 subtask 竞争托管内存，而是具有一定数量的保留托管内存。注意此处没有 CPU 隔离；当前 slot 仅分离 task 的托管内存。</p>
+
+<p>通过调整 task slot 的数量，用户可以定义 subtask 如何互相隔离。每个 TaskManager 有一个 slot，这意味着每个 task 组都在单独的 JVM 中运行（例如，可以在单独的容器中启动）。具有多个 slot 意味着更多 subtask 共享同一 JVM。同一 JVM 中的 task 共享 TCP 连接（通过多路复用）和心跳信息。它们还可以共享数据集和数据结构，从而减少了每个 task 的开销。</p>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/tasks_slots.svg" alt="A TaskManager with Task Slots and Tasks" class="offset" width="80%" /></p>
+
+<p>默认情况下，Flink 允许 subtask 共享 slot，即便它们是不同的 task 的 subtask，只要是来自于同一作业即可。结果就是一个 slot 可以持有整个作业管道。允许 <em>slot 共享</em>有两个主要优点：</p>
+
+<ul>
+  <li>
+    <p>Flink 集群所需的 task slot 和作业中使用的最大并行度恰好一样。无需计算程序总共包含多少个 task（具有不同并行度）。</p>
+  </li>
+  <li>
+    <p>容易获得更好的资源利用。如果没有 slot 共享，非密集 subtask（<em>source/map()</em>）将阻塞和密集型 subtask（<em>window</em>） 一样多的资源。通过 slot 共享，我们示例中的基本并行度从 2 增加到 6，可以充分利用分配的资源，同时确保繁重的 subtask 在 TaskManager 之间公平分配。</p>
+  </li>
+</ul>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/slot_sharing.svg" alt="TaskManagers with shared Task Slots" class="offset" width="80%" /></p>
+
+<h2 id="flink-应用程序执行">Flink 应用程序执行</h2>
+
+<p><em>Flink 应用程序</em> 是从其 <code class="highlighter-rouge">main()</code> 方法产生的一个或多个 Flink 作业的任何用户程序。这些作业的执行可以在本地 JVM（<code class="highlighter-rouge">LocalEnvironment</code><code class="highlighter-rouge">）中进行，或具有多台机器的集群的远程设置（</code><code class="highlighter-rouge">RemoteEnvironment</code><code class="highlighter-rouge">）中进行。对于每个程序，[</code><code class="highlighter-rouge">ExecutionEnvironment</code>`](//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java/) 提供了一些方法来控制作业执行（例如设置并行度）并与外界交互（请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html#anatomy-of-a-flink-program">Flink 程序剖析</a> ）。</p>
+
+<p>Flink 应用程序的作业可以被提交到长期运行的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html#flink-session-cluster">Flink Session 集群</a>、专用的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html#flink-job-cluster">Flink Job 集群</a> 或 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html#flink-application-cluster">Flink Application 集群</a>。这些选项之间的差异主要与集群的生命周期和资源隔离保证有关。</p>
+
+<h3 id="flink-session-集群">Flink Session 集群</h3>
+
+<ul>
+  <li>
+    <p><strong>集群生命周期</strong>：在 Flink Session 集群中，客户端连接到一个预先存在的、长期运行的集群，该集群可以接受多个作业提交。即使所有作业完成后，集群（和 JobManager）仍将继续运行直到手动停止 session 为止。因此，Flink Session 集群的寿命不受任何 Flink 作业寿命的约束。</p>
+  </li>
+  <li>
+    <p><strong>资源隔离</strong>：TaskManager slot 由 ResourceManager 在提交作业时分配，并在作业完成时释放。由于所有作业都共享同一集群，因此在集群资源方面存在一些竞争 — 例如提交工作阶段的网络带宽。此共享设置的局限性在于，如果 TaskManager 崩溃，则在此 TaskManager 上运行 task 的所有作业都将失败；类似的，如果 JobManager 上发生一些致命错误，它将影响集群中正在运行的所有作业。</p>
+  </li>
+  <li>
+    <p><strong>其他注意事项</strong>：拥有一个预先存在的集群可以节省大量时间申请资源和启动 TaskManager。有种场景很重要，作业执行时间短并且启动时间长会对端到端的用户体验产生负面的影响 — 就像对简短查询的交互式分析一样，希望作业可以使用现有资源快速执行计算。</p>
+  </li>
+</ul>
+
+<div class="alert alert-info"> <strong>注意：</strong> 以前，Flink Session 集群也被称为 <i> session 模式</i>下的 Flink 集群。</div>
+
+<h3 id="flink-job-集群">Flink Job 集群</h3>
+
+<ul>
+  <li>
+    <p><strong>集群生命周期</strong>：在 Flink Job 集群中，可用的集群管理器（例如 YARN 或 Kubernetes）用于为每个提交的作业启动一个集群，并且该集群仅可用于该作业。在这里，客户端首先从集群管理器请求资源启动 JobManager，然后将作业提交给在这个进程中运行的 Dispatcher。然后根据作业的资源请求惰性的分配 TaskManager。一旦作业完成，Flink Job 集群将被拆除。</p>
+  </li>
+  <li>
+    <p><strong>资源隔离</strong>：JobManager 中的致命错误仅影响在 Flink Job 集群中运行的一个作业。</p>
+  </li>
+  <li>
+    <p><strong>其他注意事项</strong>：由于 ResourceManager 必须应用并等待外部资源管理组件来启动 TaskManager 进程和分配资源，因此 Flink Job 集群更适合长期运行、具有高稳定性要求且对较长的启动时间不敏感的大型作业。</p>
+  </li>
+</ul>
+
+<div class="alert alert-info"> <strong>注意：</strong> 以前，Flink Job 集群也被称为<i> job (or per-job) 模式</i>下的 Flink 集群。</div>
+
+<h3 id="flink-application-集群">Flink Application 集群</h3>
+
+<ul>
+  <li>
+    <p><strong>集群生命周期</strong>：Flink Application 集群是专用的 Flink 集群，仅从 Flink 应用程序执行作业，并且 <code class="highlighter-rouge">main()</code>方法在集群上而不是客户端上运行。提交作业是一个单步骤过程：无需先启动 Flink 集群，然后将作业提交到现有的 session 集群；相反，将应用程序逻辑和依赖打包成一个可执行的作业 JAR 中，并且集群入口（<code class="highlighter-rouge">ApplicationClusterEntryPoint</code>）负责调用 <code class="highlighter-rouge">main()</code>方法来提取 JobGraph。例如，这允许你像在 Kubernetes 上部署任何其他应用程序一样部署 Flink 应用程序。因此，Flink Application 集群的寿命与 Flink 应用程序的寿命有关。</p>
+  </li>
+  <li>
+    <p><strong>资源隔离</strong>：在 Flink Application 集群中，ResourceManager 和 Dispatcher 作用于单个的 Flink 应用程序，相比于 Flink Session 集群，它提供了更好的隔离。</p>
+  </li>
+</ul>
+
+<div class="alert alert-info"> <strong>注意：</strong> Flink Job 集群可以看做是 Flink Application 集群”客户端运行“的替代方案。</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

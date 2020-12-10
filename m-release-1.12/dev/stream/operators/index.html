@@ -1,0 +1,1799 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: Operators</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html">Local Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/datastream_api.html">Fraud Detection with the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/table_api.html">Real Time Reporting with the Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/flink-operations-playground.html">Flink Operations Playground</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> Learn Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/datastream_api.html">Intro to the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/etl.html">Data Pipelines & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/streaming_analytics.html">Streaming Analytics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/event_driven.html">Event-driven Applications</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/fault_tolerance.html">Fault Tolerance</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/index.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/stateful-stream-processing.html">Stateful Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html">Timely Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/flink-architecture.html">Flink Architecture</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/glossary.html">Glossary</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"class="active"><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development</a><div class="collapse in" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse"class="active">DataStream API</a><div class="collapse in" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_api.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">Event Time<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_time.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamps_watermarks.html">Generating Watermarks</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamp_extractors.html">Builtin Watermark Generators</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/broadcast_state.html">The Broadcast State Pattern</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/schema_evolution.html">State Schema Evolution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/custom_serialization.html">Custom State Serialization</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/user_defined_functions.html">User-Defined Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse"class="active">Operators</a><div class="collapse in" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/"class="active">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/windows.html">Windows</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/asyncio.html">Async I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/side_output.html">Side Outputs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/testing.html">Testing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/experimental.html">Experimental Features</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/java_lambdas.html">Java Lambda Expressions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/iterations.html">Iterations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/hadoop_compatibility.html">Hadoop Compatibility</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/local_execution.html">Local Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/cluster_execution.html">Cluster Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/examples.html">Batch Examples</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/common.html">Concepts & Common API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">Streaming Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/dynamic_tables.html">Dynamic Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html">Time Attributes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/joins.html">Joins in Continuous Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/temporal_tables.html">Temporal Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/match_recognize.html">Detecting Patterns</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/queries.html">Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/create.html">CREATE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/drop.html">DROP Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/alter.html">ALTER Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/insert.html">INSERT Statement</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/describe.html">DESCRIBE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/explain.html">EXPLAIN Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/use.html">USE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/show.html">SHOW Statements</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html">System (Built-in) Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/modules.html">Modules</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sqlClient.html">SQL Client</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/config.html">Configuration</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tuning/streaming_aggregation_optimization.html">Streaming Aggregation</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/installation.html">Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table_api_tutorial.html">Table API Tutorial</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream_tutorial.html">DataStream API Tutorial</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/intro_to_table_api.html">Intro to the Python Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/built_in_functions.html">System (Built-in) Functions</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">User Defined Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/python_udfs.html">General User-defined Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">Vectorized User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/conversion_of_pandas.html">Conversions between PyFlink Table and Pandas DataFrame</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/dependency_management.html">Dependency Management</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_table_api_connectors.html">Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/data_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/operators.html">Operators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/dependency_management.html">Dependency Management</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/python_config.html">Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/environment_variables.html">Environment Variables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/faq.html">FAQ</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">Data Types & Serialization<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/types_serialization.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/custom_serializers.html">Custom Serializers</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">Managing Execution<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_configuration.html">Execution Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/packaging.html">Program Packaging</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/parallel.html">Parallel Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_plans.html">Execution Plans</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/task_failure_recovery.html">Task Failure Recovery</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/migration.html">API Migration Guides</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/cep.html">Event Processing (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">Graphs: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/guarantees.html">Fault Tolerance Guarantees</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">Overview</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_dialect.html">Hive Dialect</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_functions.html">Hive Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/downloads.html">Download</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/">Overview</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/local.html">Local Cluster</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html">Configuration</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">Memory Configuration<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup.html">Set up Flink's Process Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_tm.html">Set up TaskManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_jobmanager.html">Set up JobManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_tuning.html">Memory tuning guide</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_trouble.html">Troubleshooting</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_migration.html">Migration Guide</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">File Systems<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/common.html">Common Configurations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/oss.html">Aliyun OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/azure.html">Azure Blob Storage</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-ssl.html">SSL Setup</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/external_resources.html">External Resources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/logging.html">Logging</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/large_state_tuning.html">Tuning Checkpoints and Large State</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_event_time.html">Debugging Windows & Event Time</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_classloading.html">Debugging Classloading</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/application_profiling.html">Application Profiling & Debugging</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/checkpoint_monitoring.html">Monitoring Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/back_pressure.html">Monitoring Back Pressure</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/upgrading.html">Upgrading Applications and Flink Versions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/production_ready.html">Production Readiness Checklist</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/ide_setup.html">Importing Flink into an IDE</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/building.html">Building Flink from Source</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> Internals<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/job_scheduling.html">Jobs and Scheduling</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/task_lifecycle.html">Task Lifecycle</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/filesystems.html">File Systems</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Pick Docs Version<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><!-- link to the Chinese home page when current is blog page -->
+    <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">
+      <button type="submit" class="btn btn-default">中文版</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development</li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_api.html">DataStream API</a></li>
+  
+    <li class="active">Operators</li>
+</ol>
+
+<h1>Operators</h1>
+
+
+
+
+<p>Operators transform one or more DataStreams into a new DataStream. Programs can combine
+multiple transformations into sophisticated dataflow topologies.</p>
+
+<p>This section gives a description of the basic transformations, the effective physical
+partitioning after applying those as well as insights into Flink’s operator chaining.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#datastream-transformations" id="markdown-toc-datastream-transformations">DataStream Transformations</a></li>
+  <li><a href="#physical-partitioning" id="markdown-toc-physical-partitioning">Physical partitioning</a></li>
+  <li><a href="#task-chaining-and-resource-groups" id="markdown-toc-task-chaining-and-resource-groups">Task chaining and resource groups</a></li>
+</ul>
+
+<h1 id="datastream-transformations">DataStream Transformations</h1>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 25%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+          <td><h5><strong>Map</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces one element. A map function that doubles the values of the input stream:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">dataStream</span> <span class="o">=</span> <span class="c1">//...</span>
+<span class="n">dataStream</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="nc">MapFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">map</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td><h5><strong>FlatMap</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces zero, one, or more elements. A flatmap function that splits sentences to words:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">flatMap</span><span class="o">(</span><span class="k">new</span> <span class="nc">FlatMapFunction</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">flatMap</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">for</span><span class="o">(</span><span class="nc">String</span> <span class="nl">word:</span> <span class="n">value</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">)){</span>
+            <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Filter</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Evaluates a boolean function for each element and retains those for which the function returns true.
+            A filter that filters out zero values:
+            </p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">new</span> <span class="nc">FilterFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>KeyBy</strong></h5>DataStream &rarr; KeyedStream</td>
+          <td>
+            <p>Logically partitions a stream into disjoint partitions. All records with the same key are assigned to the same partition. Internally, <em>keyBy()</em> is implemented with hash partitioning. There are different ways to <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html#keyed-datastream">specify keys</a>.</p>
+            <p>
+            This transformation returns a <em>KeyedStream</em>, which is, among other things, required to use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html#keyed-state">keyed state</a>. </p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="n">value</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">getSomeKey</span><span class="o">())</span> <span class="c1">// Key by field "someKey"</span>
+<span class="n">dataStream</span><span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="n">value</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">f0</span><span class="o">)</span> <span class="c1">// Key by the first element of a Tuple</span></code></pre></figure>
+
+            <p>
+            <span class="label label-danger">Attention</span>
+            A type <strong>cannot be a key</strong> if:
+    	    <ol>
+    	    <li> it is a POJO type but does not override the <em>hashCode()</em> method and
+    	    relies on the <em>Object.hashCode()</em> implementation.</li>
+    	    <li> it is an array of any type.</li>
+    	    </ol>
+    	    </p>
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Reduce</strong></h5>KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>A "rolling" reduce on a keyed data stream. Combines the current element with the last reduced value and
+            emits the new value.
+              <br />
+            	<br />
+            <p>A reduce function that creates a stream of partial sums:</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">keyedStream</span><span class="o">.</span><span class="na">reduce</span><span class="o">(</span><span class="k">new</span> <span class="nc">ReduceFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">reduce</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">value1</span><span class="o">,</span> <span class="nc">Integer</span> <span class="n">value2</span><span class="o">)</span>
+    <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value1</span> <span class="o">+</span> <span class="n">value2</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Aggregations</strong></h5>KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>Rolling aggregations on a keyed data stream. The difference between min
+	    and minBy is that min returns the minimum value, whereas minBy returns
+	    the element that has the minimum value in this field (same for max and maxBy).</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">keyedStream</span><span class="o">.</span><span class="na">sum</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">sum</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">minBy</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">minBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">maxBy</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">maxBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window</strong></h5>KeyedStream &rarr; WindowedStream</td>
+          <td>
+            <p>Windows can be defined on already partitioned KeyedStreams. Windows group the data in each
+            key according to some characteristic (e.g., the data that arrived within the last 5 seconds).
+            See <a href="windows.html">windows</a> for a complete description of windows.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="n">value</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">.</span><span class="na">f0</span><span class="o">).</span><span class="na">window</span><span class="o">(</span><span class="nc">TumblingEventTimeWindows</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">5</span><span class="o">)));</span> <span class="c1">// Last 5 seconds of data</span></code></pre></figure>
+
+        </p>
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>WindowAll</strong></h5>DataStream &rarr; AllWindowedStream</td>
+          <td>
+              <p>Windows can be defined on regular DataStreams. Windows group all the stream events
+              according to some characteristic (e.g., the data that arrived within the last 5 seconds).
+              See <a href="windows.html">windows</a> for a complete description of windows.</p>
+              <p><strong>WARNING:</strong> This is in many cases a <strong>non-parallel</strong> transformation. All records will be
+               gathered in one task for the windowAll operator.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">windowAll</span><span class="o">(</span><span class="nc">TumblingEventTimeWindows</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">5</span><span class="o">)));</span> <span class="c1">// Last 5 seconds of data</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Apply</strong></h5>WindowedStream &rarr; DataStream<br />AllWindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Applies a general function to the window as a whole. Below is a function that manually sums the elements of a window.</p>
+            <p><strong>Note:</strong> If you are using a windowAll transformation, you need to use an AllWindowFunction instead.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">windowedStream</span><span class="o">.</span><span class="na">apply</span> <span class="o">(</span><span class="k">new</span> <span class="nc">WindowFunction</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;,</span> <span class="nc">Integer</span><span class="o">,</span> <span class="nc">Tuple</span><span class="o">,</span> <span class="nc">Window</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">apply</span> <span class="o">(</span><span class="nc">Tuple</span> <span class="n">tuple</span><span class="o">,</span>
+            <span class="nc">Window</span> <span class="n">window</span><span class="o">,</span>
+            <span class="nc">Iterable</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">values</span><span class="o">,</span>
+            <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">value</span> <span class="nl">t:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="na">f1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">collect</span> <span class="o">(</span><span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span><span class="n">sum</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+
+<span class="c1">// applying an AllWindowFunction on non-keyed window stream</span>
+<span class="n">allWindowedStream</span><span class="o">.</span><span class="na">apply</span> <span class="o">(</span><span class="k">new</span> <span class="nc">AllWindowFunction</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;,</span> <span class="nc">Integer</span><span class="o">,</span> <span class="nc">Window</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">apply</span> <span class="o">(</span><span class="nc">Window</span> <span class="n">window</span><span class="o">,</span>
+            <span class="nc">Iterable</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">values</span><span class="o">,</span>
+            <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">value</span> <span class="nl">t:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">t</span><span class="o">.</span><span class="na">f1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">collect</span> <span class="o">(</span><span class="k">new</span> <span class="nc">Integer</span><span class="o">(</span><span class="n">sum</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Reduce</strong></h5>WindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Applies a functional reduce function to the window and returns the reduced value.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">windowedStream</span><span class="o">.</span><span class="na">reduce</span> <span class="o">(</span><span class="k">new</span> <span class="nc">ReduceFunction</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">reduce</span><span class="o">(</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">value1</span><span class="o">,</span> <span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">value2</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;(</span><span class="n">value1</span><span class="o">.</span><span class="na">f0</span><span class="o">,</span> <span class="n">value1</span><span class="o">.</span><span class="na">f1</span> <span class="o">+</span> <span class="n">value2</span><span class="o">.</span><span class="na">f1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Aggregations on windows</strong></h5>WindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Aggregates the contents of a window. The difference between min
+	    and minBy is that min returns the minimum value, whereas minBy returns
+	    the element that has the minimum value in this field (same for max and maxBy).</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">windowedStream</span><span class="o">.</span><span class="na">sum</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">sum</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">minBy</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">minBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">maxBy</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">windowedStream</span><span class="o">.</span><span class="na">maxBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Union</strong></h5>DataStream* &rarr; DataStream</td>
+          <td>
+            <p>Union of two or more data streams creating a new stream containing all the elements from all the streams. Note: If you union a data stream
+            with itself you will get each element twice in the resulting stream.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">union</span><span class="o">(</span><span class="n">otherStream1</span><span class="o">,</span> <span class="n">otherStream2</span><span class="o">,</span> <span class="o">...);</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Join</strong></h5>DataStream,DataStream &rarr; DataStream</td>
+          <td>
+            <p>Join two data streams on a given key and a common window.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="n">otherStream</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">where</span><span class="o">(&lt;</span><span class="n">key</span> <span class="n">selector</span><span class="o">&gt;).</span><span class="na">equalTo</span><span class="o">(&lt;</span><span class="n">key</span> <span class="n">selector</span><span class="o">&gt;)</span>
+    <span class="o">.</span><span class="na">window</span><span class="o">(</span><span class="nc">TumblingEventTimeWindows</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">3</span><span class="o">)))</span>
+    <span class="o">.</span><span class="na">apply</span> <span class="o">(</span><span class="k">new</span> <span class="nc">JoinFunction</span> <span class="o">()</span> <span class="o">{...});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Interval Join</strong></h5>KeyedStream,KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>Join two elements e1 and e2 of two keyed streams with a common key over a given time interval, so that e1.timestamp + lowerBound &lt;= e2.timestamp &lt;= e1.timestamp + upperBound</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// this will join the two streams so that</span>
+<span class="c1">// key1 == key2 &amp;&amp; leftTs - 2 &lt; rightTs &lt; leftTs + 2</span>
+<span class="n">keyedStream</span><span class="o">.</span><span class="na">intervalJoin</span><span class="o">(</span><span class="n">otherKeyedStream</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">between</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">milliseconds</span><span class="o">(-</span><span class="mi">2</span><span class="o">),</span> <span class="nc">Time</span><span class="o">.</span><span class="na">milliseconds</span><span class="o">(</span><span class="mi">2</span><span class="o">))</span> <span class="c1">// lower and upper bound</span>
+    <span class="o">.</span><span class="na">upperBoundExclusive</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="c1">// optional</span>
+    <span class="o">.</span><span class="na">lowerBoundExclusive</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="c1">// optional</span>
+    <span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="nc">IntervalJoinFunction</span><span class="o">()</span> <span class="o">{...});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window CoGroup</strong></h5>DataStream,DataStream &rarr; DataStream</td>
+          <td>
+            <p>Cogroups two data streams on a given key and a common window.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">coGroup</span><span class="o">(</span><span class="n">otherStream</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">equalTo</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">window</span><span class="o">(</span><span class="nc">TumblingEventTimeWindows</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">3</span><span class="o">)))</span>
+    <span class="o">.</span><span class="na">apply</span> <span class="o">(</span><span class="k">new</span> <span class="nc">CoGroupFunction</span> <span class="o">()</span> <span class="o">{...});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Connect</strong></h5>DataStream,DataStream &rarr; ConnectedStreams</td>
+          <td>
+            <p>"Connects" two data streams retaining their types. Connect allowing for shared state between
+            the two streams.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">someStream</span> <span class="o">=</span> <span class="c1">//...</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">otherStream</span> <span class="o">=</span> <span class="c1">//...</span>
+
+<span class="nc">ConnectedStreams</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">connectedStreams</span> <span class="o">=</span> <span class="n">someStream</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="n">otherStream</span><span class="o">);</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>CoMap, CoFlatMap</strong></h5>ConnectedStreams &rarr; DataStream</td>
+          <td>
+            <p>Similar to map and flatMap on a connected data stream</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">connectedStreams</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="nc">CoMapFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Boolean</span> <span class="nf">map1</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Boolean</span> <span class="nf">map2</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+<span class="n">connectedStreams</span><span class="o">.</span><span class="na">flatMap</span><span class="o">(</span><span class="k">new</span> <span class="nc">CoFlatMapFunction</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+
+   <span class="nd">@Override</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">flatMap1</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+       <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+   <span class="o">}</span>
+
+   <span class="nd">@Override</span>
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">flatMap2</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+       <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="nl">word:</span> <span class="n">value</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">" "</span><span class="o">))</span> <span class="o">{</span>
+         <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">word</span><span class="o">);</span>
+       <span class="o">}</span>
+   <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Iterate</strong></h5>DataStream &rarr; IterativeStream &rarr; DataStream</td>
+          <td>
+            <p>
+                Creates a "feedback" loop in the flow, by redirecting the output of one operator
+                to some previous operator. This is especially useful for defining algorithms that
+                continuously update a model. The following code starts with a stream and applies
+		the iteration body continuously. Elements that are greater than 0 are sent back
+		to the feedback channel, and the rest of the elements are forwarded downstream.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">IterativeStream</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">iteration</span> <span class="o">=</span> <span class="n">initialStream</span><span class="o">.</span><span class="na">iterate</span><span class="o">();</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">iterationBody</span> <span class="o">=</span> <span class="n">iteration</span><span class="o">.</span><span class="na">map</span> <span class="o">(</span><span class="cm">/*do something*/</span><span class="o">);</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">feedback</span> <span class="o">=</span> <span class="n">iterationBody</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">new</span> <span class="nc">FilterFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;(){</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span>
+<span class="n">iteration</span><span class="o">.</span><span class="na">closeWith</span><span class="o">(</span><span class="n">feedback</span><span class="o">);</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">output</span> <span class="o">=</span> <span class="n">iterationBody</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="k">new</span> <span class="nc">FilterFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;(){</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+            </p>
+          </td>
+        </tr>
+  </tbody>
+</table>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 25%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+          <td><h5><strong>Map</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces one element. A map function that doubles the values of the input stream:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">map</span> <span class="o">{</span> <span class="n">x</span> <span class="k">=&gt;</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td><h5><strong>FlatMap</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces zero, one, or more elements. A flatmap function that splits sentences to words:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">flatMap</span> <span class="o">{</span> <span class="n">str</span> <span class="k">=&gt;</span> <span class="nv">str</span><span class="o">.</span><span class="py">split</span><span class="o">(</span><span class="s">" "</span><span class="o">)</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Filter</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Evaluates a boolean function for each element and retains those for which the function returns true.
+            A filter that filters out zero values:
+            </p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">filter</span> <span class="o">{</span> <span class="k">_</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>KeyBy</strong></h5>DataStream &rarr; KeyedStream</td>
+          <td>
+            <p>Logically partitions a stream into disjoint partitions, each partition containing elements of the same key.
+            Internally, this is implemented with hash partitioning. See <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html#keyed-state">keys</a> on how to specify keys.
+            This transformation returns a KeyedStream.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">someKey</span><span class="o">)</span> <span class="c1">// Key by field "someKey"</span>
+<span class="nv">dataStream</span><span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">_1</span><span class="o">)</span> <span class="c1">// Key by the first element of a Tuple</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Reduce</strong></h5>KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>A "rolling" reduce on a keyed data stream. Combines the current element with the last reduced value and
+            emits the new value.
+                    <br />
+            	<br />
+            A reduce function that creates a stream of partial sums:</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">keyedStream</span><span class="o">.</span><span class="py">reduce</span> <span class="o">{</span> <span class="k">_</span> <span class="o">+</span> <span class="k">_</span> <span class="o">}</span></code></pre></figure>
+
+            &lt;/p&gt;
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Aggregations</strong></h5>KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>Rolling aggregations on a keyed data stream. The difference between min
+	    and minBy is that min returns the minimum value, whereas minBy returns
+	    the element that has the minimum value in this field (same for max and maxBy).</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">keyedStream</span><span class="o">.</span><span class="py">sum</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">sum</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">min</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">min</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">max</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">max</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">minBy</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">minBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">maxBy</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">keyedStream</span><span class="o">.</span><span class="py">maxBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window</strong></h5>KeyedStream &rarr; WindowedStream</td>
+          <td>
+            <p>Windows can be defined on already partitioned KeyedStreams. Windows group the data in each
+            key according to some characteristic (e.g., the data that arrived within the last 5 seconds).
+            See <a href="windows.html">windows</a> for a description of windows.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">_1</span><span class="o">).</span><span class="py">window</span><span class="o">(</span><span class="nv">TumblingEventTimeWindows</span><span class="o">.</span><span class="py">of</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">5</span><span class="o">)))</span> <span class="c1">// Last 5 seconds of data</span></code></pre></figure>
+
+        </p>
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>WindowAll</strong></h5>DataStream &rarr; AllWindowedStream</td>
+          <td>
+              <p>Windows can be defined on regular DataStreams. Windows group all the stream events
+              according to some characteristic (e.g., the data that arrived within the last 5 seconds).
+              See <a href="windows.html">windows</a> for a complete description of windows.</p>
+              <p><strong>WARNING:</strong> This is in many cases a <strong>non-parallel</strong> transformation. All records will be
+               gathered in one task for the windowAll operator.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">windowAll</span><span class="o">(</span><span class="nv">TumblingEventTimeWindows</span><span class="o">.</span><span class="py">of</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">5</span><span class="o">)))</span> <span class="c1">// Last 5 seconds of data</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Apply</strong></h5>WindowedStream &rarr; DataStream<br />AllWindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Applies a general function to the window as a whole. Below is a function that manually sums the elements of a window.</p>
+            <p><strong>Note:</strong> If you are using a windowAll transformation, you need to use an AllWindowFunction instead.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">windowedStream</span><span class="o">.</span><span class="py">apply</span> <span class="o">{</span> <span class="nc">WindowFunction</span> <span class="o">}</span>
+
+<span class="c1">// applying an AllWindowFunction on non-keyed window stream</span>
+<span class="nv">allWindowedStream</span><span class="o">.</span><span class="py">apply</span> <span class="o">{</span> <span class="nc">AllWindowFunction</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Reduce</strong></h5>WindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Applies a functional reduce function to the window and returns the reduced value.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">windowedStream</span><span class="o">.</span><span class="py">reduce</span> <span class="o">{</span> <span class="k">_</span> <span class="o">+</span> <span class="k">_</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Aggregations on windows</strong></h5>WindowedStream &rarr; DataStream</td>
+          <td>
+            <p>Aggregates the contents of a window. The difference between min
+	    and minBy is that min returns the minimum value, whereas minBy returns
+	    the element that has the minimum value in this field (same for max and maxBy).</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">windowedStream</span><span class="o">.</span><span class="py">sum</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">sum</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">min</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">min</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">max</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">max</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">minBy</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">minBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">maxBy</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+<span class="nv">windowedStream</span><span class="o">.</span><span class="py">maxBy</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Union</strong></h5>DataStream* &rarr; DataStream</td>
+          <td>
+            <p>Union of two or more data streams creating a new stream containing all the elements from all the streams. Note: If you union a data stream
+            with itself you will get each element twice in the resulting stream.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">union</span><span class="o">(</span><span class="n">otherStream1</span><span class="o">,</span> <span class="n">otherStream2</span><span class="o">,</span> <span class="o">...)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window Join</strong></h5>DataStream,DataStream &rarr; DataStream</td>
+          <td>
+            <p>Join two data streams on a given key and a common window.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">join</span><span class="o">(</span><span class="n">otherStream</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">where</span><span class="o">(&lt;</span><span class="n">key</span> <span class="n">selector</span><span class="o">&gt;).</span><span class="py">equalTo</span><span class="o">(&lt;</span><span class="n">key</span> <span class="n">selector</span><span class="o">&gt;)</span>
+    <span class="o">.</span><span class="py">window</span><span class="o">(</span><span class="nv">TumblingEventTimeWindows</span><span class="o">.</span><span class="py">of</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">3</span><span class="o">)))</span>
+    <span class="o">.</span><span class="py">apply</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Window CoGroup</strong></h5>DataStream,DataStream &rarr; DataStream</td>
+          <td>
+            <p>Cogroups two data streams on a given key and a common window.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">coGroup</span><span class="o">(</span><span class="n">otherStream</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="py">equalTo</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">window</span><span class="o">(</span><span class="nv">TumblingEventTimeWindows</span><span class="o">.</span><span class="py">of</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">3</span><span class="o">)))</span>
+    <span class="o">.</span><span class="py">apply</span> <span class="o">{}</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Connect</strong></h5>DataStream,DataStream &rarr; ConnectedStreams</td>
+          <td>
+            <p>"Connects" two data streams retaining their types, allowing for shared state between
+            the two streams.</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">someStream</span> <span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+<span class="n">otherStream</span> <span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="nv">connectedStreams</span> <span class="k">=</span> <span class="nv">someStream</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="n">otherStream</span><span class="o">)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>CoMap, CoFlatMap</strong></h5>ConnectedStreams &rarr; DataStream</td>
+          <td>
+            <p>Similar to map and flatMap on a connected data stream</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">connectedStreams</span><span class="o">.</span><span class="py">map</span><span class="o">(</span>
+    <span class="o">(</span><span class="k">_</span> <span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="o">(</span><span class="k">_</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+<span class="o">)</span>
+<span class="nv">connectedStreams</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span>
+    <span class="o">(</span><span class="k">_</span> <span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">true</span><span class="o">,</span>
+    <span class="o">(</span><span class="k">_</span> <span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="kc">false</span>
+<span class="o">)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Iterate</strong></h5>DataStream &rarr; IterativeStream  &rarr; DataStream</td>
+          <td>
+            <p>
+                Creates a "feedback" loop in the flow, by redirecting the output of one operator
+                to some previous operator. This is especially useful for defining algorithms that
+                continuously update a model. The following code starts with a stream and applies
+		the iteration body continuously. Elements that are greater than 0 are sent back
+		to the feedback channel, and the rest of the elements are forwarded downstream.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">initialStream</span><span class="o">.</span><span class="na">iterate</span> <span class="o">{</span>
+  <span class="n">iteration</span> <span class="o">=&gt;</span> <span class="o">{</span>
+    <span class="n">val</span> <span class="n">iterationBody</span> <span class="o">=</span> <span class="n">iteration</span><span class="o">.</span><span class="na">map</span> <span class="o">{</span><span class="cm">/*do something*/</span><span class="o">}</span>
+    <span class="o">(</span><span class="n">iterationBody</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">_</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">),</span> <span class="n">iterationBody</span><span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">_</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+            </p>
+          </td>
+        </tr>
+  </tbody>
+</table>
+
+    <p>Extraction from tuples, case classes and collections via anonymous pattern matching, like the following:</p>
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">data</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">Int</span>, <span class="kt">String</span>, <span class="kt">Double</span><span class="o">)]</span> <span class="k">=</span> <span class="c1">// [...]</span>
+<span class="nv">data</span><span class="o">.</span><span class="py">map</span> <span class="o">{</span>
+  <span class="nf">case</span> <span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">temperature</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="c1">// [...]</span>
+<span class="o">}</span></code></pre></figure>
+
+    <p>is not supported by the API out-of-the-box. To use this feature, you should use a <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/scala_api_extensions.html">Scala API extension</a>.</p>
+
+  </div>
+
+  <div data-lang="python">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 25%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+          <td><h5><strong>Map</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces one element. A map function that doubles the values of the input stream:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">())</span></code></pre></figure>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td><h5><strong>FlatMap</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Takes one element and produces zero, one, or more elements. A flatmap function that splits sentences to words:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[</span><span class="s">'hello apache flink'</span><span class="p">,</span> <span class="s">'streaming compute'</span><span class="p">])</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="n">flat_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">' '</span><span class="p">),</span> <span class="n">result_type</span><span class="o">=</span><span class="n">Types</span><span class="p">.</span><span class="n">STRING</span><span class="p">())</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Filter</strong></h5>DataStream &rarr; DataStream</td>
+          <td>
+            <p>Evaluates a boolean function for each element and retains those for which the function returns true.
+            A filter that filters out zero values:
+            </p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span></code></pre></figure>
+
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>KeyBy</strong></h5>DataStream &rarr; KeyedStream</td>
+          <td>
+            <p>Logically partitions a stream into disjoint partitions. All records with the same key are assigned to the same partition. Internally, <em>keyBy()</em> is implemented with hash partitioning. There are different ways to <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html#keyed-datastream">specify keys</a>.</p>
+            <p>This transformation returns a <em>KeyedStream</em>, which is, among other things, required to use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html#keyed-state">keyed state</a>. </p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">'b'</span><span class="p">)])</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="n">key_by</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">key_type_info</span><span class="o">=</span><span class="n">Types</span><span class="p">.</span><span class="n">STRING</span><span class="p">())</span> <span class="o">//</span> <span class="n">Key</span> <span class="n">by</span> <span class="n">the</span> <span class="n">result</span> <span class="n">of</span> <span class="n">KeySelector</span></code></pre></figure>
+
+            <p>
+            <span class="label label-danger">Attention</span>
+            A type <strong>cannot be a key</strong> if it is an array of any type.
+    	    </p>
+          </td>
+        </tr>
+        <tr>
+          <td><h5><strong>Reduce</strong></h5>KeyedStream &rarr; DataStream</td>
+          <td>
+            <p>A "rolling" reduce on a keyed data stream. Combines the current element with the last reduced value and
+            emits the new value.
+              <br />
+            	<br />
+            <p>A reduce function that creates a stream of partial sums:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s">'b'</span><span class="p">)],</span> <span class="n">type_info</span><span class="o">=</span><span class="n">Types</span><span class="p">.</span><span class="n">ROW</span><span class="p">([</span><span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">(),</span> <span class="n">Types</span><span class="p">.</span><span class="n">STRING</span><span class="p">()]))</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="n">key_by</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]).</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></code></pre></figure>
+
+            </p>
+          </td>
+        </tr>
+         <tr>
+                  <td><h5><strong>Union</strong></h5>DataStream* &rarr; DataStream</td>
+                  <td>
+                    <p>Union of two or more data streams creating a new stream containing all the elements from all the streams. Note: If you union a data stream
+                    with itself you will get each element twice in the resulting stream.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span><span class="p">.</span><span class="n">union</span><span class="p">(</span><span class="n">otherStream1</span><span class="p">,</span> <span class="n">otherStream2</span><span class="p">,</span> <span class="p">...)</span></code></pre></figure>
+
+                  </td>
+               </tr>
+         <tr>
+                   <td><h5><strong>Connect</strong></h5>DataStream,DataStream &rarr; ConnectedStreams</td>
+                   <td>
+                     <p>"Connects" two data streams retaining their types, allowing for shared state between
+                    the two streams.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">stream_1</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">stream_2</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">connected_streams</span> <span class="o">=</span> <span class="n">stream_1</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">stream_2</span><span class="p">)</span></code></pre></figure>
+
+                   </td>
+                 </tr>
+         <tr>
+                   <td><h5><strong>CoMap, CoFlatMap</strong></h5>ConnectedStreams &rarr; DataStream</td>
+                   <td>
+                     <p>Similar to map and flatMap on a connected data stream</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MyCoMapFunction</span><span class="p">(</span><span class="n">CoMapFunction</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">map1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+       
+    <span class="k">def</span> <span class="nf">map2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">'flink'</span>
+        
+<span class="k">class</span> <span class="nc">MyCoFlatMapFunction</span><span class="p">(</span><span class="n">CoFlatMapFunction</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">flat_map1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">yield</span> <span class="n">i</span>
+    
+    <span class="k">def</span> <span class="nf">flat_map2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        
+<span class="n">connectedStreams</span><span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="n">MyCoMapFunction</span><span class="p">())</span>
+<span class="n">connectedStreams</span><span class="p">.</span><span class="n">flatMap</span><span class="p">(</span><span class="n">MyCoFlatMapFunction</span><span class="p">())</span></code></pre></figure>
+
+                   </td>
+                 </tr>
+  </tbody>
+</table>
+
+  </div>
+
+</div>
+
+<p>The following transformations are available on data streams of Tuples:</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td><h5><strong>Project</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>Selects a subset of fields from the tuples
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple3</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Double</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">in</span> <span class="o">=</span> <span class="c1">// [...]</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple2</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">out</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">project</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  <div data-lang="python">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td><h5><strong>Project</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>Selects a subset of fields from the tuples
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">([(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">)],</span> <span class="n">type_info</span><span class="o">=</span><span class="n">Types</span><span class="p">.</span><span class="n">TUPLE</span><span class="p">([</span><span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">(),</span> <span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">(),</span> <span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">(),</span> <span class="n">Types</span><span class="p">.</span><span class="n">INT</span><span class="p">()]))</span>
+<span class="n">out_stream</span> <span class="o">=</span> <span class="n">data_stream</span><span class="p">.</span><span class="n">project</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+</div>
+
+<h1 id="physical-partitioning">Physical partitioning</h1>
+
+<p>Flink also gives low-level control (if desired) on the exact stream partitioning after a transformation,
+via the following functions.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td><h5><strong>Custom partitioning</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Uses a user-defined Partitioner to select the target task for each element.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">partitionCustom</span><span class="o">(</span><span class="n">partitioner</span><span class="o">,</span> <span class="s">"someKey"</span><span class="o">);</span>
+<span class="n">dataStream</span><span class="o">.</span><span class="na">partitionCustom</span><span class="o">(</span><span class="n">partitioner</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+     <td><h5><strong>Random partitioning</strong></h5>DataStream &rarr; DataStream</td>
+     <td>
+       <p>
+            Partitions elements randomly according to a uniform distribution.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">shuffle</span><span class="o">();</span></code></pre></figure>
+
+       </p>
+     </td>
+   </tr>
+   <tr>
+      <td><h5><strong>Rebalancing (Round-robin partitioning)</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements round-robin, creating equal load per partition. Useful for performance
+            optimization in the presence of data skew.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">rebalance</span><span class="o">();</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td><h5><strong>Rescaling</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements, round-robin, to a subset of downstream operations. This is
+            useful if you want to have pipelines where you, for example, fan out from
+            each parallel instance of a source to a subset of several mappers to distribute load
+            but don't want the full rebalance that rebalance() would incur. This would require only
+            local data transfers instead of transferring data over network, depending on
+            other configuration values such as the number of slots of TaskManagers.
+        </p>
+        <p>
+            The subset of downstream operations to which the upstream operation sends
+            elements depends on the degree of parallelism of both the upstream and downstream operation.
+            For example, if the upstream operation has parallelism 2 and the downstream operation
+            has parallelism 6, then one upstream operation would distribute elements to three
+            downstream operations while the other upstream operation would distribute to the other
+            three downstream operations. If, on the other hand, the downstream operation has parallelism
+            2 while the upstream operation has parallelism 6 then three upstream operations would
+            distribute to one downstream operation while the other three upstream operations would
+            distribute to the other downstream operation.
+        </p>
+        <p>
+            In cases where the different parallelisms are not multiples of each other one or several
+            downstream operations will have a differing number of inputs from upstream operations.
+        </p>
+        <p>
+            Please see this figure for a visualization of the connection pattern in the above
+            example:
+        </p>
+
+        <div style="text-align: center">
+            <img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/rescale.svg" alt="Checkpoint barriers in data streams" />
+            </div>
+
+
+        <p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">rescale</span><span class="o">();</span></code></pre></figure>
+
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td><h5><strong>Broadcasting</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Broadcasts elements to every partition.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">broadcast</span><span class="o">();</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td><h5><strong>Custom partitioning</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Uses a user-defined Partitioner to select the target task for each element.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">partitionCustom</span><span class="o">(</span><span class="n">partitioner</span><span class="o">,</span> <span class="s">"someKey"</span><span class="o">)</span>
+<span class="nv">dataStream</span><span class="o">.</span><span class="py">partitionCustom</span><span class="o">(</span><span class="n">partitioner</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+     <td><h5><strong>Random partitioning</strong></h5>DataStream &rarr; DataStream</td>
+     <td>
+       <p>
+            Partitions elements randomly according to a uniform distribution.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">shuffle</span><span class="o">()</span></code></pre></figure>
+
+       </p>
+     </td>
+   </tr>
+   <tr>
+      <td><h5><strong>Rebalancing (Round-robin partitioning)</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements round-robin, creating equal load per partition. Useful for performance
+            optimization in the presence of data skew.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">rebalance</span><span class="o">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td><h5><strong>Rescaling</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements, round-robin, to a subset of downstream operations. This is
+            useful if you want to have pipelines where you, for example, fan out from
+            each parallel instance of a source to a subset of several mappers to distribute load
+            but don't want the full rebalance that rebalance() would incur. This would require only
+            local data transfers instead of transferring data over network, depending on
+            other configuration values such as the number of slots of TaskManagers.
+        </p>
+        <p>
+            The subset of downstream operations to which the upstream operation sends
+            elements depends on the degree of parallelism of both the upstream and downstream operation.
+            For example, if the upstream operation has parallelism 2 and the downstream operation
+            has parallelism 4, then one upstream operation would distribute elements to two
+            downstream operations while the other upstream operation would distribute to the other
+            two downstream operations. If, on the other hand, the downstream operation has parallelism
+            2 while the upstream operation has parallelism 4 then two upstream operations would
+            distribute to one downstream operation while the other two upstream operations would
+            distribute to the other downstream operations.
+        </p>
+        <p>
+            In cases where the different parallelisms are not multiples of each other one or several
+            downstream operations will have a differing number of inputs from upstream operations.
+
+        </p>
+        <p>
+            Please see this figure for a visualization of the connection pattern in the above
+            example:
+        </p>
+
+        <div style="text-align: center">
+            <img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/rescale.svg" alt="Checkpoint barriers in data streams" />
+            </div>
+
+
+        <p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">dataStream</span><span class="o">.</span><span class="na">rescale</span><span class="o">()</span></code></pre></figure>
+
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td><h5><strong>Broadcasting</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Broadcasts elements to every partition.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">dataStream</span><span class="o">.</span><span class="py">broadcast</span><span class="o">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+  <div data-lang="python">
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td><h5><strong>Custom partitioning</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>Uses a user-defined Partitioner to select the target task for each element.
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span> <span class="o">=</span> <span class="n">env</span><span class="p">.</span><span class="n">from_collection</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s">'a'</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s">'b'</span><span class="p">)])</span>
+<span class="n">data_stream</span><span class="p">.</span><span class="n">partition_custom</span><span class="p">(</span><span class="k">lambda</span> <span class="n">key</span><span class="p">,</span> <span class="n">num_partition</span><span class="p">:</span> <span class="n">key</span> <span class="o">%</span> <span class="n">partition</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+     <td><h5><strong>Random partitioning</strong></h5>DataStream &rarr; DataStream</td>
+     <td>
+       <p>
+            Partitions elements randomly according to a uniform distribution.
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span><span class="p">.</span><span class="n">shuffle</span><span class="p">()</span></code></pre></figure>
+
+       </p>
+     </td>
+   </tr>
+   <tr>
+      <td><h5><strong>Rebalancing (Round-robin partitioning)</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements round-robin, creating equal load per partition. Useful for performance
+            optimization in the presence of data skew.
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span><span class="p">.</span><span class="n">rebalance</span><span class="p">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td><h5><strong>Rescaling</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Partitions elements, round-robin, to a subset of downstream operations. This is
+            useful if you want to have pipelines where you, for example, fan out from
+            each parallel instance of a source to a subset of several mappers to distribute load
+            but don't want the full rebalance that rebalance() would incur. This would require only
+            local data transfers instead of transferring data over network, depending on
+            other configuration values such as the number of slots of TaskManagers.
+        </p>
+        <p>
+            The subset of downstream operations to which the upstream operation sends
+            elements depends on the degree of parallelism of both the upstream and downstream operation.
+            For example, if the upstream operation has parallelism 2 and the downstream operation
+            has parallelism 6, then one upstream operation would distribute elements to three
+            downstream operations while the other upstream operation would distribute to the other
+            three downstream operations. If, on the other hand, the downstream operation has parallelism
+            2 while the upstream operation has parallelism 6 then three upstream operations would
+            distribute to one downstream operation while the other three upstream operations would
+            distribute to the other downstream operation.
+        </p>
+        <p>
+            In cases where the different parallelisms are not multiples of each other one or several
+            downstream operations will have a differing number of inputs from upstream operations.
+        </p>
+        <p>
+            Please see this figure for a visualization of the connection pattern in the above
+            example:
+        </p>
+
+        <div style="text-align: center">
+            <img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/rescale.svg" alt="Checkpoint barriers in data streams" />
+            </div>
+
+
+        <p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span><span class="p">.</span><span class="n">rescale</span><span class="p">()</span></code></pre></figure>
+
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td><h5><strong>Broadcasting</strong></h5>DataStream &rarr; DataStream</td>
+      <td>
+        <p>
+            Broadcasts elements to every partition.
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data_stream</span><span class="p">.</span><span class="n">broadcast</span><span class="p">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+</div>
+
+<h1 id="task-chaining-and-resource-groups">Task chaining and resource groups</h1>
+
+<div class="codetabs">
+  <div data-lang="java">
+    <p>Chaining two subsequent transformations means co-locating them within the same thread for better
+performance. Flink by default chains operators if this is possible (e.g., two subsequent map
+transformations). The API gives fine-grained control over chaining if desired:</p>
+
+    <p>Use <code class="highlighter-rouge">StreamExecutionEnvironment.disableOperatorChaining()</code> if you want to disable chaining in
+the whole job. For more fine grained control, the following functions are available. Note that
+these functions can only be used right after a DataStream transformation as they refer to the
+previous transformation. For example, you can use <code class="highlighter-rouge">someStream.map(...).startNewChain()</code>, but
+you cannot use <code class="highlighter-rouge">someStream.startNewChain()</code>.</p>
+
+    <p>A resource group is a slot in Flink, see
+<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html#configuring-taskmanager-processing-slots">slots</a>. You can
+manually isolate operators in separate slots if desired.</p>
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td>Start new chain</td>
+      <td>
+        <p>Begin a new chain, starting with this operator. The two
+	mappers will be chained, and filter will not be chained to
+	the first mapper.
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">someStream</span><span class="o">.</span><span class="na">filter</span><span class="o">(...).</span><span class="na">map</span><span class="o">(...).</span><span class="na">startNewChain</span><span class="o">().</span><span class="na">map</span><span class="o">(...);</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td>Disable chaining</td>
+      <td>
+        <p>Do not chain the map operator
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">someStream</span><span class="o">.</span><span class="na">map</span><span class="o">(...).</span><span class="na">disableChaining</span><span class="o">();</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>Set slot sharing group</td>
+      <td>
+        <p>Set the slot sharing group of an operation. Flink will put operations with the same
+        slot sharing group into the same slot while keeping operations that don't have the
+        slot sharing group in other slots. This can be used to isolate slots. The slot sharing
+        group is inherited from input operations if all input operations are in the same slot
+        sharing group.
+        The name of the default slot sharing group is "default", operations can explicitly
+        be put into this group by calling slotSharingGroup("default").
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">someStream</span><span class="o">.</span><span class="na">filter</span><span class="o">(...).</span><span class="na">slotSharingGroup</span><span class="o">(</span><span class="s">"name"</span><span class="o">);</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+  <div data-lang="scala">
+    <p>Chaining two subsequent transformations means co-locating them within the same thread for better
+performance. Flink by default chains operators if this is possible (e.g., two subsequent map
+transformations). The API gives fine-grained control over chaining if desired:</p>
+
+    <p>Use <code class="highlighter-rouge">StreamExecutionEnvironment.disableOperatorChaining()</code> if you want to disable chaining in
+the whole job. For more fine grained control, the following functions are available. Note that
+these functions can only be used right after a DataStream transformation as they refer to the
+previous transformation. For example, you can use <code class="highlighter-rouge">someStream.map(...).startNewChain()</code>, but
+you cannot use <code class="highlighter-rouge">someStream.startNewChain()</code>.</p>
+
+    <p>A resource group is a slot in Flink, see
+<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html#configuring-taskmanager-processing-slots">slots</a>. You can
+manually isolate operators in separate slots if desired.</p>
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td>Start new chain</td>
+      <td>
+        <p>Begin a new chain, starting with this operator. The two
+	mappers will be chained, and filter will not be chained to
+	the first mapper.
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">someStream</span><span class="o">.</span><span class="py">filter</span><span class="o">(...).</span><span class="py">map</span><span class="o">(...).</span><span class="py">startNewChain</span><span class="o">().</span><span class="py">map</span><span class="o">(...)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td>Disable chaining</td>
+      <td>
+        <p>Do not chain the map operator
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">someStream</span><span class="o">.</span><span class="py">map</span><span class="o">(...).</span><span class="py">disableChaining</span><span class="o">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  <tr>
+      <td>Set slot sharing group</td>
+      <td>
+        <p>Set the slot sharing group of an operation. Flink will put operations with the same
+        slot sharing group into the same slot while keeping operations that don't have the
+        slot sharing group in other slots. This can be used to isolate slots. The slot sharing
+        group is inherited from input operations if all input operations are in the same slot
+        sharing group.
+        The name of the default slot sharing group is "default", operations can explicitly
+        be put into this group by calling slotSharingGroup("default").
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">someStream</span><span class="o">.</span><span class="na">filter</span><span class="o">(...).</span><span class="na">slotSharingGroup</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+  <div data-lang="python">
+    <p>Chaining two subsequent transformations means co-locating them within the same thread for better
+performance. Flink by default chains operators if this is possible (e.g., two subsequent map
+transformations). The API gives fine-grained control over chaining if desired:</p>
+
+    <p>Use <code class="highlighter-rouge">stream_execution_environment.disable_operator_chaining()</code> if you want to disable chaining in
+the whole job. For more fine grained control, the following functions are available. Note that
+these functions can only be used right after a DataStream transformation as they refer to the
+previous transformation. For example, you can use <code class="highlighter-rouge">some_stream.map(...).start_new_chain()</code>, but
+you cannot use <code class="highlighter-rouge">some_stream.start_new_chain()</code>.</p>
+
+    <p>A resource group is a slot in Flink, see
+<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html#configuring-taskmanager-processing-slots">slots</a>. You can
+manually isolate operators in separate slots if desired.</p>
+
+    <p><br /></p>
+
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Transformation</th>
+      <th class="text-center">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+   <tr>
+      <td>Start new chain</td>
+      <td>
+        <p>Begin a new chain, starting with this operator. The two
+	mappers will be chained, and filter will not be chained to
+	the first mapper.
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">some_stream</span><span class="p">.</span><span class="nb">filter</span><span class="p">(...).</span><span class="nb">map</span><span class="p">(...).</span><span class="n">start_new_chain</span><span class="p">().</span><span class="nb">map</span><span class="p">(...)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+   <tr>
+      <td>Disable chaining</td>
+      <td>
+        <p>Do not chain the map operator
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">some_stream</span><span class="p">.</span><span class="nb">map</span><span class="p">(...).</span><span class="n">disable_chaining</span><span class="p">()</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>Set slot sharing group</td>
+      <td>
+        <p>Set the slot sharing group of an operation. Flink will put operations with the same
+        slot sharing group into the same slot while keeping operations that don't have the
+        slot sharing group in other slots. This can be used to isolate slots. The slot sharing
+        group is inherited from input operations if all input operations are in the same slot
+        sharing group.
+        The name of the default slot sharing group is "default", operations can explicitly
+        be put into this group by calling slotSharingGroup("default").
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">some_stream</span><span class="p">.</span><span class="nb">filter</span><span class="p">(...).</span><span class="n">slot_sharing_group</span><span class="p">(</span><span class="s">"name"</span><span class="p">)</span></code></pre></figure>
+
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      Want to contribute translation?
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

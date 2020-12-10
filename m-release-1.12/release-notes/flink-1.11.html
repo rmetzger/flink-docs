@@ -1,0 +1,768 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: Release Notes - Flink 1.11</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/release-notes/flink-1.11.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html">Local Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/datastream_api.html">Fraud Detection with the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/table_api.html">Real Time Reporting with the Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/flink-operations-playground.html">Flink Operations Playground</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> Learn Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/datastream_api.html">Intro to the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/etl.html">Data Pipelines & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/streaming_analytics.html">Streaming Analytics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/event_driven.html">Event-driven Applications</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/fault_tolerance.html">Fault Tolerance</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/index.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/stateful-stream-processing.html">Stateful Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html">Timely Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/flink-architecture.html">Flink Architecture</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/glossary.html">Glossary</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_api.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">Event Time<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_time.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamps_watermarks.html">Generating Watermarks</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamp_extractors.html">Builtin Watermark Generators</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/broadcast_state.html">The Broadcast State Pattern</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/schema_evolution.html">State Schema Evolution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/custom_serialization.html">Custom State Serialization</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/user_defined_functions.html">User-Defined Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">Operators<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/windows.html">Windows</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/asyncio.html">Async I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/side_output.html">Side Outputs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/testing.html">Testing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/experimental.html">Experimental Features</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/java_lambdas.html">Java Lambda Expressions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/iterations.html">Iterations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/hadoop_compatibility.html">Hadoop Compatibility</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/local_execution.html">Local Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/cluster_execution.html">Cluster Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/examples.html">Batch Examples</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/common.html">Concepts & Common API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">Streaming Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/dynamic_tables.html">Dynamic Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html">Time Attributes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/joins.html">Joins in Continuous Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/temporal_tables.html">Temporal Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/match_recognize.html">Detecting Patterns</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/queries.html">Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/create.html">CREATE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/drop.html">DROP Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/alter.html">ALTER Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/insert.html">INSERT Statement</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/describe.html">DESCRIBE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/explain.html">EXPLAIN Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/use.html">USE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/show.html">SHOW Statements</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html">System (Built-in) Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/modules.html">Modules</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sqlClient.html">SQL Client</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/config.html">Configuration</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tuning/streaming_aggregation_optimization.html">Streaming Aggregation</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/installation.html">Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table_api_tutorial.html">Table API Tutorial</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream_tutorial.html">DataStream API Tutorial</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/intro_to_table_api.html">Intro to the Python Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/built_in_functions.html">System (Built-in) Functions</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">User Defined Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/python_udfs.html">General User-defined Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">Vectorized User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/conversion_of_pandas.html">Conversions between PyFlink Table and Pandas DataFrame</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/dependency_management.html">Dependency Management</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_table_api_connectors.html">Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/data_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/operators.html">Operators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/dependency_management.html">Dependency Management</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/python_config.html">Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/environment_variables.html">Environment Variables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/faq.html">FAQ</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">Data Types & Serialization<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/types_serialization.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/custom_serializers.html">Custom Serializers</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">Managing Execution<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_configuration.html">Execution Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/packaging.html">Program Packaging</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/parallel.html">Parallel Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_plans.html">Execution Plans</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/task_failure_recovery.html">Task Failure Recovery</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/migration.html">API Migration Guides</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/cep.html">Event Processing (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">Graphs: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/guarantees.html">Fault Tolerance Guarantees</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">Overview</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_dialect.html">Hive Dialect</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_functions.html">Hive Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/downloads.html">Download</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/">Overview</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/local.html">Local Cluster</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html">Configuration</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">Memory Configuration<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup.html">Set up Flink's Process Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_tm.html">Set up TaskManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_jobmanager.html">Set up JobManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_tuning.html">Memory tuning guide</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_trouble.html">Troubleshooting</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_migration.html">Migration Guide</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">File Systems<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/common.html">Common Configurations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/oss.html">Aliyun OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/azure.html">Azure Blob Storage</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-ssl.html">SSL Setup</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/external_resources.html">External Resources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/logging.html">Logging</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/large_state_tuning.html">Tuning Checkpoints and Large State</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_event_time.html">Debugging Windows & Event Time</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_classloading.html">Debugging Classloading</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/application_profiling.html">Application Profiling & Debugging</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/checkpoint_monitoring.html">Monitoring Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/back_pressure.html">Monitoring Back Pressure</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/upgrading.html">Upgrading Applications and Flink Versions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/production_ready.html">Production Readiness Checklist</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/ide_setup.html">Importing Flink into an IDE</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/building.html">Building Flink from Source</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> Internals<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/job_scheduling.html">Jobs and Scheduling</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/task_lifecycle.html">Task Lifecycle</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/filesystems.html">File Systems</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Pick Docs Version<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><!-- link to the Chinese home page when current is blog page -->
+    <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/release-notes/flink-1.11.html">
+      <button type="submit" class="btn btn-default">中文版</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li class="active">Release Notes - Flink 1.11</li>
+</ol>
+
+<h1>Release Notes - Flink 1.11</h1>
+
+
+
+
+<p>These release notes discuss important aspects, such as configuration, behavior,
+or dependencies, that changed between Flink 1.10 and Flink 1.11. Please read
+these notes carefully if you are planning to upgrade your Flink version to 1.11.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#clusters--deployment" id="markdown-toc-clusters--deployment">Clusters &amp; Deployment</a></li>
+  <li><a href="#memory-management" id="markdown-toc-memory-management">Memory Management</a></li>
+  <li><a href="#table-api--sql" id="markdown-toc-table-api--sql">Table API &amp; SQL</a></li>
+  <li><a href="#configuration" id="markdown-toc-configuration">Configuration</a></li>
+  <li><a href="#state" id="markdown-toc-state">State</a></li>
+  <li><a href="#pyflink" id="markdown-toc-pyflink">PyFlink</a></li>
+  <li><a href="#monitoring" id="markdown-toc-monitoring">Monitoring</a></li>
+  <li><a href="#connectors" id="markdown-toc-connectors">Connectors</a></li>
+  <li><a href="#runtime" id="markdown-toc-runtime">Runtime</a></li>
+  <li><a href="#miscellaneous-interface-changes" id="markdown-toc-miscellaneous-interface-changes">Miscellaneous Interface Changes</a></li>
+</ul>
+
+<h3 id="clusters--deployment">Clusters &amp; Deployment</h3>
+<h4 id="support-for-application-mode-flip-85">Support for Application Mode (<a href="https://cwiki.apache.org/confluence/display/FLINK/FLIP-85+Flink+Application+Mode">FLIP-85</a>)</h4>
+<p>The user can now submit applications and choose to execute their <code class="highlighter-rouge">main()</code> method on the cluster rather than the client.
+This allows for more light-weight application submission. For more details,
+see the <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/#application-mode">Application Mode documentation</a>.</p>
+
+<h4 id="web-submission-behaves-the-same-as-detached-mode">Web Submission behaves the same as detached mode.</h4>
+<p>With <a href="https://issues.apache.org/jira/browse/FLINK-16657">FLINK-16657</a> the web submission logic changes and it exposes
+the same behavior as submitting a job through the CLI in detached mode. This implies that, for instance, jobs based on 
+the DataSet API that were using sinks like <code class="highlighter-rouge">print()</code>, <code class="highlighter-rouge">count()</code> or <code class="highlighter-rouge">collect()</code> will now throw an exception while 
+before the output was simply never printed. See also comments on related <a href="https://github.com/apache/flink/pull/11460">PR</a>.</p>
+
+<h4 id="support-for-hadoop-300-and-higher-flink-11086">Support for Hadoop 3.0.0 and higher (<a href="https://issues.apache.org/jira/browse/FLINK-11086">FLINK-11086</a>)</h4>
+<p>Flink project does not provide any updated “flink-shaded-hadoop-*” jars.
+Users need to provide Hadoop dependencies through the HADOOP_CLASSPATH environment variable (recommended) or via <code class="highlighter-rouge">lib/</code> folder.
+Also, the <code class="highlighter-rouge">include-hadoop</code> Maven profile has been removed.</p>
+
+<h4 id="flink-csv-and-flink-json-are-bundled-in-lib-folder-flink-18173"><code class="highlighter-rouge">flink-csv</code> and <code class="highlighter-rouge">flink-json</code> are bundled in lib folder (<a href="https://issues.apache.org/jira/browse/FLINK-18173">FLINK-18173</a>)</h4>
+<p>There is no need to download manually jar files for <code class="highlighter-rouge">flink-csv</code> and <code class="highlighter-rouge">flink-json</code> formats as they are now bundled in the <code class="highlighter-rouge">lib</code> folder.</p>
+
+<h4 id="removal-of-legacyscheduler-flink-15629">Removal of <code class="highlighter-rouge">LegacyScheduler</code> (<a href="https://issues.apache.org/jira/browse/FLINK-15629">FLINK-15629</a>)</h4>
+<p>Flink no longer supports the legacy scheduler. 
+Hence, setting <code class="highlighter-rouge">jobmanager.scheduler: legacy</code> will no longer work and fail with an <code class="highlighter-rouge">IllegalArgumentException</code>. 
+The only valid option for <code class="highlighter-rouge">jobmanager.scheduler</code> is the default value <code class="highlighter-rouge">ng</code>.</p>
+
+<h4 id="bind-user-code-class-loader-to-lifetime-of-a-slot-flink-16408">Bind user code class loader to lifetime of a slot (<a href="https://issues.apache.org/jira/browse/FLINK-16408">FLINK-16408</a>)</h4>
+<p>The user code class loader is being reused by the <code class="highlighter-rouge">TaskExecutor</code> as long as there is at least a single slot allocated for the respective job. 
+This changes Flink’s recovery behaviour slightly so that it will not reload static fields.
+The benefit is that this change drastically reduces pressure on the JVM’s metaspace.</p>
+
+<h4 id="replaced-slave-file-name-with-workers-flink-18307">Replaced <code class="highlighter-rouge">slave</code> file name with <code class="highlighter-rouge">workers</code> (<a href="https://issues.apache.org/jira/browse/FLINK-18307">FLINK-18307</a>)</h4>
+<p>For Standalone Setups, the file with the worker nodes is no longer called <code class="highlighter-rouge">slaves</code> but <code class="highlighter-rouge">workers</code>.
+Previous setups that use the <code class="highlighter-rouge">start-cluster.sh</code> and <code class="highlighter-rouge">stop-cluster.sh</code> scripts need to rename that file.</p>
+
+<h4 id="flink-docker-integration-improvements">Flink Docker Integration Improvements</h4>
+<p>The examples of <code class="highlighter-rouge">Dockerfiles</code> and docker image <code class="highlighter-rouge">build.sh</code> scripts have been removed from <a href="https://github.com/apache/flink">the Flink Github repository</a>. The examples will no longer be maintained by community in the Flink Github repository, including the examples of integration with Bluemix. Therefore, the following modules have been deleted from the Flink Github repository:</p>
+<ul>
+  <li><code class="highlighter-rouge">flink-contrib/docker-flink</code></li>
+  <li><code class="highlighter-rouge">flink-container/docker</code></li>
+  <li><code class="highlighter-rouge">flink-container/kubernetes</code></li>
+</ul>
+
+<p>Check the updated user documentation for <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html">Flink Docker integration</a> instead. It now describes in detail how to <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#how-to-run-a-flink-image">use</a> and <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#customize-flink-image">customize</a> <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#docker-hub-flink-images">the Flink official docker image</a>: configuration options, logging, plugins, adding more dependencies and installing software. The documentation also includes examples for Session and Job cluster deployments with:</p>
+<ul>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#how-to-run-flink-image">docker run</a></li>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#flink-with-docker-compose">docker compose</a></li>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/docker.html#flink-with-docker-swarm">docker swarm</a></li>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/resource-providers/standalone/kubernetes.html">standalone Kubernetes</a></li>
+</ul>
+
+<h3 id="memory-management">Memory Management</h3>
+<h4 id="new-jobmanager-memory-model">New JobManager Memory Model</h4>
+<h5 id="overview">Overview</h5>
+<p>With <a href="https://cwiki.apache.org/confluence/display/FLINK/FLIP-116%3A+Unified+Memory+Configuration+for+Job+Managers">FLIP-116</a>, a new memory model has been introduced for the JobManager. New configuration options have been introduced to control the memory consumption of the JobManager process. This affects all types of deployments: standalone, YARN, Mesos, and the new active Kubernetes integration.</p>
+
+<p>Please, check the user documentation for <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_setup_jobmanager.html">more details</a>.</p>
+
+<p>If you try to reuse your previous Flink configuration without any adjustments, the new memory model can result in differently computed memory parameters for the JVM and, thus, performance changes or even failures.
+In order to start the JobManager process, you have to specify at least one of the following options <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-flink-size"><code class="highlighter-rouge">jobmanager.memory.flink.size</code></a>, <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-process-size"><code class="highlighter-rouge">jobmanager.memory.process.size</code></a> or <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-heap-size"><code class="highlighter-rouge">jobmanager.memory.heap.size</code></a>.
+See also <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_migration.html#migrate-job-manager-memory-configuration">the migration guide</a> for more information.</p>
+
+<h5 id="deprecation-and-breaking-changes">Deprecation and breaking changes</h5>
+<p>The following options are deprecated:</p>
+<ul>
+  <li><code class="highlighter-rouge">jobmanager.heap.size</code></li>
+  <li><code class="highlighter-rouge">jobmanager.heap.mb</code></li>
+</ul>
+
+<p>If these deprecated options are still used, they will be interpreted as one of the following new options in order to maintain backwards compatibility:</p>
+<ul>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_setup_jobmanager.html#configure-jvm-heap">JVM Heap</a> (<a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-heap-size"><code class="highlighter-rouge">jobmanager.memory.heap.size</code></a>) for standalone and Mesos deployments</li>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_setup_jobmanager.html#configure-total-memory">Total Process Memory</a> (<a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-process-size"><code class="highlighter-rouge">jobmanager.memory.process.size</code></a>) for containerized deployments (Kubernetes and Yarn)</li>
+</ul>
+
+<p>The following options have been removed and have no effect anymore:</p>
+<ul>
+  <li><code class="highlighter-rouge">containerized.heap-cutoff-ratio</code></li>
+  <li><code class="highlighter-rouge">containerized.heap-cutoff-min</code></li>
+</ul>
+
+<p>There is <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_migration.html#container-cut-off-memory">no container cut-off</a> anymore.</p>
+
+<h5 id="jvm-arguments">JVM arguments</h5>
+<p>The <code class="highlighter-rouge">direct</code> and <code class="highlighter-rouge">metaspace</code> memory of the JobManager’s JVM process are now limited by configurable values:</p>
+<ul>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-off-heap-size"><code class="highlighter-rouge">jobmanager.memory.off-heap.size</code></a></li>
+  <li><a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/config.html#jobmanager-memory-jvm-metaspace-size"><code class="highlighter-rouge">jobmanager.memory.jvm-metaspace.size</code></a></li>
+</ul>
+
+<p>See also <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_setup.html#jvm-parameters">JVM Parameters</a>.</p>
+
+<p><span class="label label-warning">Attention</span> These new limits can produce the respective <code class="highlighter-rouge">OutOfMemoryError</code> exceptions if they are not configured properly or there is a respective memory leak. See also <a href="https://ci.apache.org/projects/flink/flink-docs-master/deployment/memory/mem_trouble.html#outofmemoryerror-direct-buffer-memory">the troubleshooting guide</a>.</p>
+
+<h4 id="removal-of-deprecated-mesosresourcemanagertasksmem-flink-15198">Removal of deprecated mesos.resourcemanager.tasks.mem (<a href="https://issues.apache.org/jira/browse/FLINK-15198">FLINK-15198</a>)</h4>
+<p>The <code class="highlighter-rouge">mesos.resourcemanager.tasks.mem</code> option, deprecated in 1.10 in favour of <code class="highlighter-rouge">taskmanager.memory.process.size</code>, has been completely removed and will have no effect anymore in 1.11+.</p>
+
+<h3 id="table-api--sql">Table API &amp; SQL</h3>
+<h4 id="blink-is-now-the-default-planner-flink-16934">Blink is now the default planner (<a href="https://issues.apache.org/jira/browse/FLINK-16934">FLINK-16934</a>)</h4>
+<p>The default table planner has been changed to blink.</p>
+
+<h4 id="changed-package-structure-for-table-api-flink-15947">Changed package structure for Table API (<a href="https://issues.apache.org/jira/browse/FLINK-15947">FLINK-15947</a>)</h4>
+<p>Due to various issues with packages <code class="highlighter-rouge">org.apache.flink.table.api.scala/java</code> all classes from those packages were relocated. 
+Moreover the scala expressions were moved to <code class="highlighter-rouge">org.apache.flink.table.api</code> as announced in Flink 1.9.</p>
+
+<p>If you used one of:</p>
+<ul>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.java.StreamTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.scala.StreamTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.java.BatchTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.scala.BatchTableEnvironment</code></li>
+</ul>
+
+<p>And you do not convert to/from DataStream, switch to:</p>
+<ul>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.TableEnvironment</code></li>
+</ul>
+
+<p>If you do convert to/from DataStream/DataSet, change your imports to one of:</p>
+<ul>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.bridge.java.StreamTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.bridge.scala.StreamTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.bridge.java.BatchTableEnvironment</code></li>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api.bridge.scala.BatchTableEnvironment</code></li>
+</ul>
+
+<p>For the Scala expressions use the import:</p>
+<ul>
+  <li><code class="highlighter-rouge">org.apache.flink.table.api._</code> instead of <code class="highlighter-rouge">org.apache.flink.table.api.bridge.scala._</code></li>
+</ul>
+
+<p>Additionally, if you use Scala’s implicit conversions to/from DataStream/DataSet, import <code class="highlighter-rouge">org.apache.flink.table.api.bridge.scala._</code> instead of <code class="highlighter-rouge">org.apache.flink.table.api.scala._</code></p>
+
+<h4 id="removal-of-deprecated-streamtablesink-flink-16362">Removal of deprecated <code class="highlighter-rouge">StreamTableSink</code> (<a href="https://issues.apache.org/jira/browse/FLINK-16362">FLINK-16362</a>)</h4>
+<p>The existing <code class="highlighter-rouge">StreamTableSink</code> implementations should remove <code class="highlighter-rouge">emitDataStream</code> method.</p>
+
+<h4 id="removal-of-batchtablesinkemitdataset-flink-16535">Removal of <code class="highlighter-rouge">BatchTableSink#emitDataSet</code> (<a href="https://issues.apache.org/jira/browse/FLINK-16535">FLINK-16535</a>)</h4>
+<p>The existing <code class="highlighter-rouge">BatchTableSink</code> implementations should rename <code class="highlighter-rouge">emitDataSet</code> to <code class="highlighter-rouge">consumeDataSet</code> and return <code class="highlighter-rouge">DataSink</code>.</p>
+
+<h4 id="corrected-execution-behavior-of-tableenvironmentexecute-and-streamtableenvironmentexecute-flink-16363">Corrected execution behavior of TableEnvironment.execute() and StreamTableEnvironment.execute() (<a href="https://issues.apache.org/jira/browse/FLINK-16363">FLINK-16363</a>)</h4>
+<p>In previous versions, <code class="highlighter-rouge">TableEnvironment.execute()</code> and <code class="highlighter-rouge">StreamExecutionEnvironment.execute()</code> can both trigger table and DataStream programs.
+Since Flink 1.11.0, table programs can only be triggered by <code class="highlighter-rouge">TableEnvironment.execute()</code>. 
+Once table program is converted into DataStream program (through <code class="highlighter-rouge">toAppendStream()</code> or <code class="highlighter-rouge">toRetractStream()</code> method), it can only be triggered by <code class="highlighter-rouge">StreamExecutionEnvironment.execute()</code>.</p>
+
+<h4 id="corrected-execution-behavior-of-executionenvironmentexecute-and-batchtableenvironmentexecute-flink-17126">Corrected execution behavior of ExecutionEnvironment.execute() and BatchTableEnvironment.execute() (<a href="https://issues.apache.org/jira/browse/FLINK-17126">FLINK-17126</a>)</h4>
+<p>In previous versions, <code class="highlighter-rouge">BatchTableEnvironment.execute()</code> and <code class="highlighter-rouge">ExecutionEnvironment.execute()</code> can both trigger table and DataSet programs for legacy batch planner.
+Since Flink 1.11.0, batch table programs can only be triggered by <code class="highlighter-rouge">BatchEnvironment.execute()</code>.
+Once table program is converted into DataSet program (through <code class="highlighter-rouge">toDataSet()</code> method), it can only be triggered by <code class="highlighter-rouge">ExecutionEnvironment.execute()</code>.</p>
+
+<h4 id="added-a-changeflag-to-row-type-flink-16998">Added a changeflag to Row type (<a href="https://issues.apache.org/jira/browse/FLINK-16998">FLINK-16998</a>)</h4>
+<p>An additional change flag called <code class="highlighter-rouge">RowKind</code> was added to the <code class="highlighter-rouge">Row</code> type.
+This changed the serialization format and will trigger a state migration.</p>
+
+<h3 id="configuration">Configuration</h3>
+<h4 id="renamed-log4j-yarn-sessionproperties-and-logback-yarnxml-properties-files-flink-17527">Renamed log4j-yarn-session.properties and logback-yarn.xml properties files (<a href="https://issues.apache.org/jira/browse/FLINK-17527">FLINK-17527</a>)</h4>
+<p>The logging properties files <code class="highlighter-rouge">log4j-yarn-session.properties</code> and <code class="highlighter-rouge">logback-yarn.xml</code> have been renamed to <code class="highlighter-rouge">log4j-session.properties</code> and <code class="highlighter-rouge">logback-session.xml</code>.
+Moreover, <code class="highlighter-rouge">yarn-session.sh</code> and <code class="highlighter-rouge">kubernetes-session.sh</code> use these logging properties files.</p>
+
+<h3 id="state">State</h3>
+<h4 id="removal-of-deprecated-background-cleanup-toggle-state-ttl-flink-15620">Removal of deprecated background cleanup toggle (State TTL) (<a href="https://issues.apache.org/jira/browse/FLINK-15620">FLINK-15620</a>)</h4>
+<p>The <code class="highlighter-rouge">StateTtlConfig#cleanupInBackground</code> has been removed, because the method was deprecated and the background TTL was enabled by default in 1.10.</p>
+
+<h4 id="removal-of-deprecated-option-to-disable-ttl-compaction-filter-flink-15621">Removal of deprecated option to disable TTL compaction filter (<a href="https://issues.apache.org/jira/browse/FLINK-15621">FLINK-15621</a>)</h4>
+<p>The TTL compaction filter in RocksDB has been enabled in 1.10 by default and it is now always enabled in 1.11+.
+Because of that the following option and methods have been removed in 1.11:</p>
+<ul>
+  <li><code class="highlighter-rouge">state.backend.rocksdb.ttl.compaction.filter.enabled</code></li>
+  <li><code class="highlighter-rouge">StateTtlConfig#cleanupInRocksdbCompactFilter()</code></li>
+  <li><code class="highlighter-rouge">RocksDBStateBackend#isTtlCompactionFilterEnabled</code></li>
+  <li><code class="highlighter-rouge">RocksDBStateBackend#enableTtlCompactionFilter</code></li>
+  <li><code class="highlighter-rouge">RocksDBStateBackend#disableTtlCompactionFilter</code></li>
+  <li>(state_backend.py) <code class="highlighter-rouge">is_ttl_compaction_filter_enabled</code></li>
+  <li>(state_backend.py) <code class="highlighter-rouge">enable_ttl_compaction_filter</code></li>
+  <li>(state_backend.py) <code class="highlighter-rouge">disable_ttl_compaction_filter</code></li>
+</ul>
+
+<h4 id="changed-argument-type-of-statebackendfactorycreatefromconfig-flink-16913">Changed argument type of StateBackendFactory#createFromConfig (<a href="https://issues.apache.org/jira/browse/FLINK-16913">FLINK-16913</a>)</h4>
+<p>Starting from Flink 1.11 the <code class="highlighter-rouge">StateBackendFactory#createFromConfig</code> interface now takes <code class="highlighter-rouge">ReadableConfig</code> instead of <code class="highlighter-rouge">Configuration</code>.
+A <code class="highlighter-rouge">Configuration</code> class is still a valid argument to that method, as it implements the ReadableConfig interface.
+Implementors of custom <code class="highlighter-rouge">StateBackend</code> should adjust their implementations.</p>
+
+<h4 id="removal-of-deprecated-optionsfactory-and-configurableoptionsfactory-classes-flink-18242">Removal of deprecated OptionsFactory and ConfigurableOptionsFactory classes (<a href="https://issues.apache.org/jira/browse/FLINK-18242">FLINK-18242</a>)</h4>
+<p>The deprecated <code class="highlighter-rouge">OptionsFactory</code> and <code class="highlighter-rouge">ConfigurableOptionsFactory</code> classes have been removed.
+Please use <code class="highlighter-rouge">RocksDBOptionsFactory</code> and <code class="highlighter-rouge">ConfigurableRocksDBOptionsFactory</code> instead.
+Please also recompile your application codes if any class extends <code class="highlighter-rouge">DefaultConfigurableOptionsFactory</code>.</p>
+
+<h4 id="enabled-by-default-settotalorderseek-flink-17800">Enabled by default setTotalOrderSeek (<a href="https://issues.apache.org/jira/browse/FLINK-17800">FLINK-17800</a>)</h4>
+<p>Since Flink-1.11 the option <code class="highlighter-rouge">setTotalOrderSeek</code> will be enabled by default for RocksDB’s <code class="highlighter-rouge">ReadOptions</code>.
+This is in order to prevent user from miss using <code class="highlighter-rouge">optimizeForPointLookup</code>.
+For backward compatibility we support customizing <code class="highlighter-rouge">ReadOptions</code> through <code class="highlighter-rouge">RocksDBOptionsFactory</code>.
+Please set <code class="highlighter-rouge">setTotalOrderSeek</code> back to false if any performance regression observed (it shouldn’t happen according to our testing).</p>
+
+<h4 id="increased-default-size-of-statebackendfsmemory-threshold-flink-17865">Increased default size of <code class="highlighter-rouge">state.backend.fs.memory-threshold</code> (<a href="https://issues.apache.org/jira/browse/FLINK-17865">FLINK-17865</a>)</h4>
+<p>The default value of <code class="highlighter-rouge">state.backend.fs.memory-threshold</code> has been increased from 1K to 20K to prevent too many small files created on remote FS for small states.
+Jobs with large parallelism on source or stateful operators may have “JM OOM” or “RPC message exceeding maximum frame size” problem with this change.
+If you encounter such issues please manually set the configuration back to 1K.</p>
+
+<h3 id="pyflink">PyFlink</h3>
+<h4 id="throw-exceptions-for-the-unsupported-data-types-flink-16606">Throw exceptions for the unsupported data types (<a href="https://issues.apache.org/jira/browse/FLINK-16606">FLINK-16606</a>)</h4>
+<p>DataTypes can be configured with some parameters, e.g., precision.
+However in previous releases, the precision provided by users was not taking any effect and default value for the precision was being used.
+To avoid confusion since Flink 1.11 exceptions will be thrown if the value is not supported to make it more visible to users. 
+Changes include:</p>
+<ul>
+  <li>the precision for <code class="highlighter-rouge">TimeType</code> can only be <code class="highlighter-rouge">0</code></li>
+  <li>the length for <code class="highlighter-rouge">VarBinaryType</code>/<code class="highlighter-rouge">VarCharType</code> can only be <code class="highlighter-rouge">0x7fffffff</code></li>
+  <li>the precision/scale for <code class="highlighter-rouge">DecimalType</code> can only be <code class="highlighter-rouge">38</code>/<code class="highlighter-rouge">18</code></li>
+  <li>the precision for <code class="highlighter-rouge">TimestampType</code>/<code class="highlighter-rouge">LocalZonedTimestampType</code> can only be <code class="highlighter-rouge">3</code></li>
+  <li>the resolution for <code class="highlighter-rouge">DayTimeIntervalType</code> can only be <code class="highlighter-rouge">SECOND</code> and the <code class="highlighter-rouge">fractionalPrecision</code> can only be <code class="highlighter-rouge">3</code></li>
+  <li>the resolution for <code class="highlighter-rouge">YearMonthIntervalType</code> can only be <code class="highlighter-rouge">MONTH</code> and the <code class="highlighter-rouge">yearPrecision</code> can only be <code class="highlighter-rouge">2</code></li>
+  <li>the <code class="highlighter-rouge">CharType</code>/<code class="highlighter-rouge">BinaryType</code>/<code class="highlighter-rouge">ZonedTimestampType</code> is not supported</li>
+</ul>
+
+<h3 id="monitoring">Monitoring</h3>
+<h4 id="converted-all-metricreporters-to-plugins-flink-16963">Converted all MetricReporters to plugins (<a href="https://issues.apache.org/jira/browse/FLINK-16963">FLINK-16963</a>)</h4>
+<p>All MetricReporters that come with Flink have been converted to plugins.
+They should no longer be placed into <code class="highlighter-rouge">/lib</code> directory (doing so may result in dependency conflicts!), but <code class="highlighter-rouge">/plugins/&lt;some_directory&gt;</code> instead.</p>
+
+<h4 id="changed-of-datadogs-metric-reporter-counter-metrics-flink-15438">Changed of DataDog’s metric reporter Counter metrics (<a href="https://issues.apache.org/jira/browse/FLINK-15438">FLINK-15438</a>)</h4>
+<p>The DataDog metrics reporter now reports counts as the number of events over the reporting interval, instead of the total count. 
+This aligns the count semantics with the DataDog documentation.</p>
+
+<h4 id="switch-to-log4j-2-by-default-flink-15672">Switch to Log4j 2 by default (<a href="https://issues.apache.org/jira/browse/FLINK-15672">FLINK-15672</a>)</h4>
+<p>Flink now uses Log4j2 by default. 
+Users who wish to revert back to Log4j1 can find instructions to do so in the logging documentation.</p>
+
+<h4 id="changed-behaviour-of-jobmanager-apis-log-request-flink-16303">Changed behaviour of JobManager API’s log request (<a href="https://issues.apache.org/jira/browse/FLINK-16303">FLINK-16303</a>)</h4>
+<p>Requesting an unavailable log or stdout file from the JobManager’s HTTP server returns status code 404 now. 
+In previous releases, the HTTP server would return a file with <code class="highlighter-rouge">(file unavailable)</code> as its content.</p>
+
+<h4 id="removal-of-lastcheckpointalignmentbuffered-metric-flink-16404">Removal of lastCheckpointAlignmentBuffered metric (<a href="https://issues.apache.org/jira/browse/FLINK-16404">FLINK-16404</a>)</h4>
+<p>Note that the metric <code class="highlighter-rouge">lastCheckpointAlignmentBuffered</code> has been removed, because the upstream task will not send any data after emitting a checkpoint barrier until the alignment has been completed on the downstream side. 
+The web UI still displays this value but it is always <code class="highlighter-rouge">0</code> now.</p>
+
+<h3 id="connectors">Connectors</h3>
+<h4 id="dropped-kafka-0809-connectors-flink-15115">Dropped Kafka 0.8/0.9 connectors (<a href="https://issues.apache.org/jira/browse/FLINK-15115">FLINK-15115</a>)</h4>
+<p>The Kafka 0.8 and 0.9 connectors are no longer under active development and were removed.</p>
+
+<h4 id="dropped-elasticsearch-2x-connector-flink-16046">Dropped Elasticsearch 2.x connector (<a href="https://issues.apache.org/jira/browse/FLINK-16046">FLINK-16046</a>)</h4>
+<p>The Elasticsearch 2 connector is no longer under active development and was removed.
+Prior version of these connectors will continue to work with Flink.</p>
+
+<h4 id="removal-of-deprecated-kafkapartitioner-flink-15862">Removal of deprecated <code class="highlighter-rouge">KafkaPartitioner</code> (<a href="https://issues.apache.org/jira/browse/FLINK-15862">FLINK-15862</a>)</h4>
+<p>Deprecated <code class="highlighter-rouge">KafkaPartitioner</code> was removed. Please see the release notes of Flink 1.3.0 how to migrate from that interface.</p>
+
+<h4 id="refined-fallback-filesystems-to-only-handle-specific-filesystems-flink-16015">Refined fallback filesystems to only handle specific filesystems (<a href="https://issues.apache.org/jira/browse/FLINK-16015">FLINK-16015</a>)</h4>
+<p>By default, if there is an official filesystem plugin for a given schema, it will not be allowed to use fallback filesystem factories (like HADOOP libraries on the classpath) to load it. 
+Added <code class="highlighter-rouge">fs.allowed-fallback-filesystems</code> configuration option to override this behaviour.</p>
+
+<h4 id="deprecation-of-filesystemgetkind-flink-16400">Deprecation of FileSystem#getKind (<a href="https://issues.apache.org/jira/browse/FLINK-16400">FLINK-16400</a>)</h4>
+<p><code class="highlighter-rouge">org.apache.flink.core.fs.FileSystem#getKind</code> method has been formally deprecated, as it was not used by Flink.</p>
+
+<h3 id="runtime">Runtime</h3>
+<h4 id="streaming-jobs-will-always-fail-immediately-on-failures-in-synchronous-part-of-a-checkpoint-flink-17350">Streaming jobs will always fail immediately on failures in synchronous part of a checkpoint (<a href="https://issues.apache.org/jira/browse/FLINK-17350">FLINK-17350</a>)</h4>
+<p>Failures in synchronous part of checkpointing (like an exceptions thrown by an operator) will fail its Task (and job) immediately, regardless of the configuration parameters.
+Since Flink 1.5 such failures could be ignored by setting <code class="highlighter-rouge">setTolerableCheckpointFailureNumber(...)</code> or its deprecated <code class="highlighter-rouge">setFailTaskOnCheckpointError(...)</code> predecessor.
+Now both options will only affect asynchronous failures.</p>
+
+<h4 id="checkpoint-timeouts-are-no-longer-ignored-by-checkpointconfigsettolerablecheckpointfailurenumber-flink-17351">Checkpoint timeouts are no longer ignored by CheckpointConfig#setTolerableCheckpointFailureNumber (<a href="https://issues.apache.org/jira/browse/FLINK-17351">FLINK-17351</a>)</h4>
+<p>Checkpoint timeouts will now be treated as normal checkpoint failures and checked against value configured by <code class="highlighter-rouge">CheckpointConfig#setTolerableCheckpointFailureNumber(...)</code>.</p>
+
+<h3 id="miscellaneous-interface-changes">Miscellaneous Interface Changes</h3>
+<h4 id="removal-of-deprecated-streamtaskgetcheckpointlock-flink-12484">Removal of deprecated StreamTask#getCheckpointLock() (<a href="https://issues.apache.org/jira/browse/FLINK-12484">FLINK-12484</a>)</h4>
+<p>DataStream API no longer provides <code class="highlighter-rouge">StreamTask#getCheckpointLock</code> method, which was deprecated in Flink 1.10. 
+Users should use <code class="highlighter-rouge">MailboxExecutor</code> to run actions that require synchronization with the task’s thread (e.g. collecting output produced by an external thread). 
+<code class="highlighter-rouge">MailboxExecutor#yield</code> or <code class="highlighter-rouge">MailboxExecutor#tryYield</code> methods can be used for actions that should give control to other actions temporarily (equivalent of <code class="highlighter-rouge">StreamTask#getCheckpointLock().wait()</code>), if the current operator is blocked. 
+<code class="highlighter-rouge">MailboxExecutor</code> can be accessed by using <code class="highlighter-rouge">YieldingOperatorFactory</code>. Example usage can be found in the <code class="highlighter-rouge">AsyncWaitOperator</code>.</p>
+
+<p>Note, <code class="highlighter-rouge">SourceFunction.SourceContext.getCheckpointLock</code> is still available for custom implementations of <code class="highlighter-rouge">SourceFunction</code> interface.</p>
+
+<h4 id="reversed-dependency-from-flink-streaming-java-to-flink-client-flink-15090">Reversed dependency from flink-streaming-java to flink-client (<a href="https://issues.apache.org/jira/browse/FLINK-15090">FLINK-15090</a>)</h4>
+<p>Starting from Flink 1.11.0, the <code class="highlighter-rouge">flink-streaming-java</code> module does not have a dependency on <code class="highlighter-rouge">flink-clients</code> anymore. If your project was depending on this transitive dependency you now have to add <code class="highlighter-rouge">flink-clients</code> as an explicit dependency.</p>
+
+<h4 id="asyncwaitoperator-is-chainable-again-flink-16219">AsyncWaitOperator is chainable again (<a href="https://issues.apache.org/jira/browse/FLINK-16219">FLINK-16219</a>)</h4>
+<p><code class="highlighter-rouge">AsyncWaitOperator</code> will be allowed to be chained by default with all operators, except of tasks with <code class="highlighter-rouge">SourceFunction</code>.
+This mostly revert limitation introduced as a bug fix for <a href="https://issues.apache.org/jira/browse/FLINK-13063">FLINK-13063</a>.</p>
+
+<h4 id="changed-argument-types-of-shuffleenvironmentcreateinputgates-and-createresultpartitionwriters-methods-flink-16586">Changed argument types of ShuffleEnvironment#createInputGates and #createResultPartitionWriters methods (<a href="https://issues.apache.org/jira/browse/FLINK-16586">FLINK-16586</a>)</h4>
+<p>The argument type of methods <code class="highlighter-rouge">ShuffleEnvironment#createInputGates</code> and <code class="highlighter-rouge">#createResultPartitionWriters</code> are adjusted from <code class="highlighter-rouge">Collection</code> to <code class="highlighter-rouge">List</code> for satisfying the order guarantee requirement in unaligned checkpoint.
+It will break the compatibility if users already implemented a custom <code class="highlighter-rouge">ShuffleService</code> based on <code class="highlighter-rouge">ShuffleServiceFactory</code> interface.</p>
+
+<h4 id="deprecation-of-compositetypeserializersnapshotisoutersnapshotcompatible-flink-17520">Deprecation of CompositeTypeSerializerSnapshot#isOuterSnapshotCompatible (<a href="https://issues.apache.org/jira/browse/FLINK-17520">FLINK-17520</a>)</h4>
+<p>The <code class="highlighter-rouge">boolean isOuterSnapshotCompatible(TypeSerializer)</code> on the <code class="highlighter-rouge">CompositeTypeSerializerSnapshot</code> class has been deprecated, in favor of a new <code class="highlighter-rouge">OuterSchemaCompatibility resolveOuterSchemaCompatibility(TypeSerializer)</code> method.
+Please implement that instead.
+Compared to the old method, the new method allows composite serializers to signal state schema migration based on outer schema and configuration.</p>
+
+<h4 id="removal-of-deprecated-timestampextractor-flink-17655">Removal of deprecated TimestampExtractor (<a href="https://issues.apache.org/jira/browse/FLINK-17655">FLINK-17655</a>)</h4>
+<p>The long-deprecated <code class="highlighter-rouge">TimestampExtractor</code> was removed along with API methods in the DataStream API.
+Please use the new <code class="highlighter-rouge">TimestampAssigner</code> and <code class="highlighter-rouge">WatermarkStrategies</code> for working with timestamps and watermarks in the DataStream API.</p>
+
+<h4 id="deprecation-of-listcheckpointed-interface-flink-6258">Deprecation of ListCheckpointed interface (<a href="https://issues.apache.org/jira/browse/FLINK-6258">FLINK-6258</a>)</h4>
+<p>The <code class="highlighter-rouge">ListCheckpointed</code> interface has been deprecated because it uses Java Serialization for checkpointing state which is problematic for savepoint compatibility.
+Use the <code class="highlighter-rouge">CheckpointedFunction</code> interface instead, which gives more control over state serialization.</p>
+
+<h4 id="removal-of-deprecated-state-access-methods-flink-17376">Removal of deprecated state access methods (<a href="https://issues.apache.org/jira/browse/FLINK-17376">FLINK-17376</a>)</h4>
+<p>We removed deprecated state access methods <code class="highlighter-rouge">RuntimeContext#getFoldingState()</code>, <code class="highlighter-rouge">OperatorStateStore#getSerializableListState()</code> and <code class="highlighter-rouge">OperatorStateStore#getOperatorState()</code>.
+This means that some code that was compiled against Flink 1.10 will not work with a Flink 1.11 cluster.
+An example of this is our Kafka connector which internally used <code class="highlighter-rouge">OperatorStateStore.getSerializableListState</code>.</p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      Want to contribute translation?
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

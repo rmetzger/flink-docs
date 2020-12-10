@@ -1,0 +1,2184 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: FlinkCEP - Flink的复杂事件处理</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/dev/libs/cep.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">流式概念<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"class="active"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries</a><div class="collapse in" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html" class="active">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/cep.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries</li>
+  
+    <li class="active">事件处理 (CEP)</li>
+</ol>
+
+<h1>FlinkCEP - Flink的复杂事件处理</h1>
+
+
+
+
+<p>FlinkCEP是在Flink上层实现的复杂事件处理库。
+它可以让你在无限事件流中检测出特定的事件模型，有机会掌握数据中重要的那部分。</p>
+
+<p>本页讲述了Flink CEP中可用的API，我们首先讲述<a href="#模式api">模式API</a>，它可以让你指定想在数据流中检测的模式，然后讲述如何<a href="#检测模式">检测匹配的事件序列并进行处理</a>。
+再然后我们讲述Flink在按照事件时间<a href="#按照事件时间处理迟到事件">处理迟到事件</a>时的假设，
+以及如何从旧版本的Flink向1.3之后的版本<a href="#从旧版本迁移13之前">迁移作业</a>。</p>
+
+<ul id="markdown-toc">
+  <li><a href="#开始" id="markdown-toc-开始">开始</a></li>
+  <li><a href="#模式api" id="markdown-toc-模式api">模式API</a>    <ul>
+      <li><a href="#单个模式" id="markdown-toc-单个模式">单个模式</a></li>
+      <li><a href="#组合模式" id="markdown-toc-组合模式">组合模式</a></li>
+      <li><a href="#模式组" id="markdown-toc-模式组">模式组</a></li>
+      <li><a href="#匹配后跳过策略" id="markdown-toc-匹配后跳过策略">匹配后跳过策略</a></li>
+    </ul>
+  </li>
+  <li><a href="#检测模式" id="markdown-toc-检测模式">检测模式</a>    <ul>
+      <li><a href="#从模式中选取" id="markdown-toc-从模式中选取">从模式中选取</a></li>
+    </ul>
+  </li>
+  <li><a href="#cep库中的时间" id="markdown-toc-cep库中的时间">CEP库中的时间</a>    <ul>
+      <li><a href="#按照事件时间处理迟到事件" id="markdown-toc-按照事件时间处理迟到事件">按照事件时间处理迟到事件</a></li>
+      <li><a href="#时间上下文" id="markdown-toc-时间上下文">时间上下文</a></li>
+    </ul>
+  </li>
+  <li><a href="#例子" id="markdown-toc-例子">例子</a></li>
+  <li><a href="#从旧版本迁移13之前" id="markdown-toc-从旧版本迁移13之前">从旧版本迁移（1.3之前）</a>    <ul>
+      <li><a href="#迁移到14" id="markdown-toc-迁移到14">迁移到1.4+</a></li>
+      <li><a href="#迁移到13x" id="markdown-toc-迁移到13x">迁移到1.3.x</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="开始">开始</h2>
+
+<p>如果你想现在开始尝试，<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">创建一个Flink程序</a>，
+添加FlinkCEP的依赖到项目的<code class="highlighter-rouge">pom.xml</code>文件中。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.apache.flink<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>flink-cep_2.11<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.12.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.apache.flink<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>flink-cep-scala_2.11<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.12.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><span class="label label-info">提示</span> FlinkCEP不是二进制发布包的一部分。在集群上执行如何链接它可以看<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">这里</a>。</p>
+
+<p>现在可以开始使用Pattern API写你的第一个CEP程序了。</p>
+
+<p><span class="label label-danger">注意</span> <code class="highlighter-rouge">DataStream</code>中的事件，如果你想在上面进行模式匹配的话，必须实现合适的 <code class="highlighter-rouge">equals()</code>和<code class="highlighter-rouge">hashCode()</code>方法，
+因为FlinkCEP使用它们来比较和匹配事件。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">input</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">pattern</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">event</span><span class="o">.</span><span class="na">getId</span><span class="o">()</span> <span class="o">==</span> <span class="mi">42</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">).</span><span class="na">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">subtype</span><span class="o">(</span><span class="nc">SubEvent</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">where</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">SubEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">SubEvent</span> <span class="n">subEvent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">subEvent</span><span class="o">.</span><span class="na">getVolume</span><span class="o">()</span> <span class="o">&gt;=</span> <span class="mf">10.0</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"end"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span>
+         <span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">event</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"end"</span><span class="o">);</span>
+            <span class="o">}</span>
+         <span class="o">}</span>
+    <span class="o">);</span>
+
+<span class="nc">PatternStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">patternStream</span> <span class="o">=</span> <span class="no">CEP</span><span class="o">.</span><span class="na">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">);</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">patternStream</span><span class="o">.</span><span class="na">process</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nc">PatternProcessFunction</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processMatch</span><span class="o">(</span>
+                <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;&gt;</span> <span class="n">pattern</span><span class="o">,</span>
+                <span class="nc">Context</span> <span class="n">ctx</span><span class="o">,</span>
+                <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+            <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">createAlertFrom</span><span class="o">(</span><span class="n">pattern</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">});</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">input</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="nv">pattern</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getId</span> <span class="o">==</span> <span class="mi">42</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">subtype</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">SubEvent</span><span class="o">]).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getVolume</span> <span class="o">&gt;=</span> <span class="mf">10.0</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"end"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span> <span class="o">==</span> <span class="s">"end"</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">patternStream</span> <span class="k">=</span> <span class="nv">CEP</span><span class="o">.</span><span class="py">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">result</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Alert</span><span class="o">]</span> <span class="k">=</span> <span class="nv">patternStream</span><span class="o">.</span><span class="py">process</span><span class="o">(</span>
+    <span class="k">new</span> <span class="nc">PatternProcessFunction</span><span class="o">[</span><span class="kt">Event</span>, <span class="kt">Alert</span><span class="o">]()</span> <span class="o">{</span>
+        <span class="k">override</span> <span class="k">def</span> <span class="nf">processMatch</span><span class="o">(</span>
+              <span class="n">`match`</span><span class="k">:</span> <span class="kt">util.Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">util.List</span><span class="o">[</span><span class="kt">Event</span><span class="o">]],</span>
+              <span class="n">ctx</span><span class="k">:</span> <span class="kt">PatternProcessFunction.Context</span><span class="o">,</span>
+              <span class="n">out</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="nv">out</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="nf">createAlertFrom</span><span class="o">(</span><span class="n">pattern</span><span class="o">))</span>
+        <span class="o">}</span>
+    <span class="o">})</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h2 id="模式api">模式API</h2>
+
+<p>模式API可以让你定义想从输入流中抽取的复杂模式序列。</p>
+
+<p>每个复杂的模式序列包括多个简单的模式，比如，寻找拥有相同属性事件序列的模式。从现在开始，我们把这些简单的模式称作<strong>模式</strong>，
+把我们在数据流中最终寻找的复杂模式序列称作<strong>模式序列</strong>，你可以把模式序列看作是这样的模式构成的图，
+这些模式基于用户指定的<strong>条件</strong>从一个转换到另外一个，比如 <code class="highlighter-rouge">event.getName().equals("end")</code>。
+一个<strong>匹配</strong>是输入事件的一个序列，这些事件通过一系列有效的模式转换，能够访问到复杂模式图中的所有模式。</p>
+
+<p><span class="label label-danger">注意</span> 每个模式必须有一个独一无二的名字，你可以在后面使用它来识别匹配到的事件。</p>
+
+<p><span class="label label-danger">注意</span> 模式的名字不能包含字符<code class="highlighter-rouge">":"</code>.</p>
+
+<p>这一节的剩余部分我们会先讲述如何定义<a href="#单个模式">单个模式</a>，然后讲如何将单个模式组合成<a href="#组合模式">复杂模式</a>。</p>
+
+<h3 id="单个模式">单个模式</h3>
+
+<p>一个<strong>模式</strong>可以是一个<strong>单例</strong>或者<strong>循环</strong>模式。单例模式只接受一个事件，循环模式可以接受多个事件。
+在模式匹配表达式中，模式<code class="highlighter-rouge">"a b+ c? d"</code>（或者<code class="highlighter-rouge">"a"</code>，后面跟着一个或者多个<code class="highlighter-rouge">"b"</code>，再往后可选择的跟着一个<code class="highlighter-rouge">"c"</code>，最后跟着一个<code class="highlighter-rouge">"d"</code>），
+<code class="highlighter-rouge">a</code>，<code class="highlighter-rouge">c?</code>，和 <code class="highlighter-rouge">d</code>都是单例模式，<code class="highlighter-rouge">b+</code>是一个循环模式。默认情况下，模式都是单例的，你可以通过使用<a href="#量词">量词</a>把它们转换成循环模式。
+每个模式可以有一个或者多个<a href="#条件">条件</a>来决定它接受哪些事件。</p>
+
+<h4 id="量词">量词</h4>
+
+<p>在FlinkCEP中，你可以通过这些方法指定循环模式：<code class="highlighter-rouge">pattern.oneOrMore()</code>，指定期望一个给定事件出现一次或者多次的模式（例如前面提到的<code class="highlighter-rouge">b+</code>模式）；
+<code class="highlighter-rouge">pattern.times(#ofTimes)</code>，指定期望一个给定事件出现特定次数的模式，例如出现4次<code class="highlighter-rouge">a</code>；
+<code class="highlighter-rouge">pattern.times(#fromTimes, #toTimes)</code>，指定期望一个给定事件出现次数在一个最小值和最大值中间的模式，比如出现2-4次<code class="highlighter-rouge">a</code>。</p>
+
+<p>你可以使用<code class="highlighter-rouge">pattern.greedy()</code>方法让循环模式变成贪心的，但现在还不能让模式组贪心。
+你可以使用<code class="highlighter-rouge">pattern.optional()</code>方法让所有的模式变成可选的，不管是否是循环模式。</p>
+
+<p>对一个命名为<code class="highlighter-rouge">start</code>的模式，以下量词是有效的：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 期望出现4次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
+
+<span class="c1">// 期望出现0或者4次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="na">optional</span><span class="o">();</span>
+
+<span class="c1">// 期望出现2、3或者4次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>
+
+<span class="c1">// 期望出现2、3或者4次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="na">greedy</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0、2、3或者4次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="na">optional</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0、2、3或者4次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="na">optional</span><span class="o">().</span><span class="na">greedy</span><span class="o">();</span>
+
+<span class="c1">// 期望出现1到多次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">();</span>
+
+<span class="c1">// 期望出现1到多次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">greedy</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0到多次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">optional</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0到多次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">optional</span><span class="o">().</span><span class="na">greedy</span><span class="o">();</span>
+
+<span class="c1">// 期望出现2到多次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+
+<span class="c1">// 期望出现2到多次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">greedy</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0、2或多次</span>
+<span class="n">start</span><span class="o">.</span><span class="na">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">optional</span><span class="o">();</span>
+
+<span class="c1">// 期望出现0、2或多次，并且尽可能的重复次数多</span>
+<span class="n">start</span><span class="o">.</span><span class="na">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">optional</span><span class="o">().</span><span class="na">greedy</span><span class="o">();</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// 期望出现4次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span>
+
+<span class="c1">// 期望出现0或者4次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="py">optional</span><span class="o">()</span>
+
+<span class="c1">// 期望出现2、3或者4次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+
+<span class="c1">// 期望出现2、3或者4次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="py">greedy</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0、2、3或者4次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="py">optional</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0、2、3或者4次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">).</span><span class="py">optional</span><span class="o">().</span><span class="py">greedy</span><span class="o">()</span>
+
+<span class="c1">// 期望出现1到多次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">()</span>
+
+<span class="c1">// 期望出现1到多次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">greedy</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0到多次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">optional</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0到多次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">optional</span><span class="o">().</span><span class="py">greedy</span><span class="o">()</span>
+
+<span class="c1">// 期望出现2到多次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+
+<span class="c1">// 期望出现2到多次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">greedy</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0、2或多次</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">optional</span><span class="o">()</span>
+
+<span class="c1">// 期望出现0、2或多次，并且尽可能的重复次数多</span>
+<span class="nv">start</span><span class="o">.</span><span class="py">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="py">optional</span><span class="o">().</span><span class="py">greedy</span><span class="o">()</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h4 id="条件">条件</h4>
+
+<p>对每个模式你可以指定一个条件来决定一个进来的事件是否被接受进入这个模式，例如，它的value字段应该大于5，或者大于前面接受的事件的平均值。
+指定判断事件属性的条件可以通过<code class="highlighter-rouge">pattern.where()</code>、<code class="highlighter-rouge">pattern.or()</code>或者<code class="highlighter-rouge">pattern.until()</code>方法。
+这些可以是<code class="highlighter-rouge">IterativeCondition</code>或者<code class="highlighter-rouge">SimpleCondition</code>。</p>
+
+<p><strong>迭代条件:</strong> 这是最普遍的条件类型。使用它可以指定一个基于前面已经被接受的事件的属性或者它们的一个子集的统计数据来决定是否接受时间序列的条件。</p>
+
+<p>下面是一个迭代条件的代码，它接受”middle”模式下一个事件的名称开头是”foo”， 并且前面已经匹配到的事件加上这个事件的价格小于5.0。
+迭代条件非常强大，尤其是跟循环模式结合使用时。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">middle</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">subtype</span><span class="o">(</span><span class="nc">SubEvent</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">IterativeCondition</span><span class="o">&lt;</span><span class="nc">SubEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">SubEvent</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Context</span><span class="o">&lt;</span><span class="nc">SubEvent</span><span class="o">&gt;</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"foo"</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">Event</span> <span class="n">event</span> <span class="o">:</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getEventsForPattern</span><span class="o">(</span><span class="s">"middle"</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">event</span><span class="o">.</span><span class="na">getPrice</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="nc">Double</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">sum</span><span class="o">,</span> <span class="mf">5.0</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">});</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">middle</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">()</span>
+    <span class="o">.</span><span class="py">subtype</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">SubEvent</span><span class="o">])</span>
+    <span class="o">.</span><span class="py">where</span><span class="o">(</span>
+        <span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="n">ctx</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+            <span class="k">lazy</span> <span class="k">val</span> <span class="nv">sum</span> <span class="k">=</span> <span class="nv">ctx</span><span class="o">.</span><span class="py">getEventsForPattern</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getPrice</span><span class="o">).</span><span class="py">sum</span>
+            <span class="nv">value</span><span class="o">.</span><span class="py">getName</span><span class="o">.</span><span class="py">startsWith</span><span class="o">(</span><span class="s">"foo"</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">sum</span> <span class="o">+</span> <span class="nv">value</span><span class="o">.</span><span class="py">getPrice</span> <span class="o">&lt;</span> <span class="mf">5.0</span>
+        <span class="o">}</span>
+    <span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><span class="label label-danger">注意</span> 调用<code class="highlighter-rouge">ctx.getEventsForPattern(...)</code>可以获得所有前面已经接受作为可能匹配的事件。
+调用这个操作的代价可能很小也可能很大，所以在实现你的条件时，尽量少使用它。</p>
+
+<p>描述的上下文提供了获取事件时间属性的方法。更多细节可以看<a href="#时间上下文">时间上下文</a>。</p>
+
+<p><strong>简单条件：</strong> 这种类型的条件扩展了前面提到的<code class="highlighter-rouge">IterativeCondition</code>类，它决定是否接受一个事件只取决于事件自身的属性。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">start</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"foo"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">start</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="nv">event</span><span class="o">.</span><span class="py">getName</span><span class="o">.</span><span class="py">startsWith</span><span class="o">(</span><span class="s">"foo"</span><span class="o">))</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>最后，你可以通过<code class="highlighter-rouge">pattern.subtype(subClass)</code>方法限制接受的事件类型是初始事件的子类型。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">start</span><span class="o">.</span><span class="na">subtype</span><span class="o">(</span><span class="nc">SubEvent</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">SubEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">SubEvent</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 一些判断条件</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">start</span><span class="o">.</span><span class="py">subtype</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">SubEvent</span><span class="o">]).</span><span class="py">where</span><span class="o">(</span><span class="n">subEvent</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 一些判断条件 */</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><strong>组合条件：</strong> 如上所示，你可以把<code class="highlighter-rouge">subtype</code>条件和其他的条件结合起来使用。这适用于任何条件，你可以通过依次调用<code class="highlighter-rouge">where()</code>来组合条件。
+最终的结果是每个单一条件的结果的逻辑<strong>AND</strong>。如果想使用<strong>OR</strong>来组合条件，你可以像下面这样使用<code class="highlighter-rouge">or()</code>方法。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 一些判断条件</span>
+    <span class="o">}</span>
+<span class="o">}).</span><span class="na">or</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 一些判断条件</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 一些判断条件 */</span><span class="o">).</span><span class="py">or</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 一些判断条件 */</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><strong>停止条件：</strong> 如果使用循环模式（<code class="highlighter-rouge">oneOrMore()</code>和<code class="highlighter-rouge">oneOrMore().optional()</code>），你可以指定一个停止条件，例如，接受事件的值大于5直到值的和小于50。</p>
+
+<p>为了更好的理解它，看下面的例子。给定</p>
+
+<ul>
+  <li>
+    <p>模式如<code class="highlighter-rouge">"(a+ until b)"</code> (一个或者更多的<code class="highlighter-rouge">"a"</code>直到<code class="highlighter-rouge">"b"</code>)</p>
+  </li>
+  <li>
+    <p>到来的事件序列<code class="highlighter-rouge">"a1" "c" "a2" "b" "a3"</code></p>
+  </li>
+  <li>
+    <p>输出结果会是： <code class="highlighter-rouge">{a1 a2} {a1} {a2} {a3}</code>.</p>
+  </li>
+</ul>
+
+<p>你可以看到<code class="highlighter-rouge">{a1 a2 a3}</code>和<code class="highlighter-rouge">{a2 a3}</code>由于停止条件没有被输出。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+       <tr>
+            <td><strong>where(condition)</strong></td>
+            <td>
+                <p>为当前模式定义一个条件。为了匹配这个模式，一个事件必须满足某些条件。
+                 多个连续的where()语句取与组成判断条件：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">IterativeCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 一些判断条件</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>or(condition)</strong></td>
+            <td>
+                <p>增加一个新的判断，和当前的判断取或。一个事件只要满足至少一个判断条件就匹配到模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">IterativeCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 一些判断条件</span>
+    <span class="o">}</span>
+<span class="o">}).</span><span class="na">or</span><span class="o">(</span><span class="k">new</span> <span class="nc">IterativeCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 替代条件</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+                    </td>
+       </tr>
+              <tr>
+                 <td><strong>until(condition)</strong></td>
+                 <td>
+                     <p>为循环模式指定一个停止条件。意思是满足了给定的条件的事件出现后，就不会再有事件被接受进入模式了。</p>
+                     <p>只适用于和<code>oneOrMore()</code>同时使用。</p>
+                     <p><b>NOTE:</b> 在基于事件的条件中，它可用于清理对应模式的状态。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">until</span><span class="o">(</span><span class="k">new</span> <span class="nc">IterativeCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">...</span> <span class="c1">// 替代条件</span>
+    <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+                 </td>
+              </tr>
+       <tr>
+           <td><strong>subtype(subClass)</strong></td>
+           <td>
+               <p>为当前模式定义一个子类型条件。一个事件只有是这个子类型的时候才能匹配到模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">subtype</span><span class="o">(</span><span class="nc">SubEvent</span><span class="o">.</span><span class="na">class</span><span class="o">);</span></code></pre></figure>
+
+           </td>
+       </tr>
+       <tr>
+          <td><strong>oneOrMore()</strong></td>
+          <td>
+              <p>指定模式期望匹配到的事件至少出现一次。.</p>
+              <p>默认（在子事件间）使用松散的内部连续性。
+              关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+              <p><b>NOTE:</b> 推荐使用<code>until()</code>或者<code>within()</code>来清理状态。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">();</span></code></pre></figure>
+
+          </td>
+       </tr>
+           <tr>
+              <td><strong>timesOrMore(#times)</strong></td>
+              <td>
+                  <p>指定模式期望匹配到的事件至少出现<strong>#times</strong>次。.</p>
+                  <p>默认（在子事件间）使用松散的内部连续性。
+                  关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span></code></pre></figure>
+
+           </td>
+       </tr>
+       <tr>
+          <td><strong>times(#ofTimes)</strong></td>
+          <td>
+              <p>指定模式期望匹配到的事件正好出现的次数。</p>
+              <p>默认（在子事件间）使用松散的内部连续性。
+              关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+          <td><strong>times(#fromTimes, #toTimes)</strong></td>
+          <td>
+              <p>指定模式期望匹配到的事件出现次数在<strong>#fromTimes</strong>和<strong>#toTimes</strong>之间。</p>
+              <p>默认（在子事件间）使用松散的内部连续性。
+              关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+          <td><strong>optional()</strong></td>
+          <td>
+              <p>指定这个模式是可选的，也就是说，它可能根本不出现。这对所有之前提到的量词都适用。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">optional</span><span class="o">();</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+          <td><strong>greedy()</strong></td>
+          <td>
+              <p>指定这个模式是贪心的，也就是说，它会重复尽可能多的次数。这只对量词适用，现在还不支持模式组。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">greedy</span><span class="o">();</span></code></pre></figure>
+
+          </td>
+       </tr>
+  </tbody>
+</table>
+  </div>
+
+  <div data-lang="scala">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+	    </thead>
+    <tbody>
+
+        <tr>
+            <td><strong>where(condition)</strong></td>
+            <td>
+              <p>为当前模式定义一个条件。为了匹配这个模式，一个事件必须满足某些条件。
+              多个连续的where()语句取与组成判断条件：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 一些判断条件 */</span><span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>or(condition)</strong></td>
+            <td>
+                <p>增加一个新的判断，和当前的判断取或。一个事件只要满足至少一个判断条件就匹配到模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 一些判断条件 */</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">or</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 替代条件 */</span><span class="o">)</span></code></pre></figure>
+
+                    </td>
+                </tr>
+<tr>
+          <td><strong>until(condition)</strong></td>
+          <td>
+              <p>为循环模式指定一个停止条件。意思是满足了给定的条件的事件出现后，就不会再有事件被接受进入模式了。</p>
+              <p>只适用于和<code>oneOrMore()</code>同时使用。</p>
+              <p><b>提示：</b> 在基于事件的条件中，它可用于清理对应模式的状态。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">until</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="cm">/* 替代条件 */</span><span class="o">)</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+           <td><strong>subtype(subClass)</strong></td>
+           <td>
+               <p>为当前模式定义一个子类型条件。一个事件只有是这个子类型的时候才能匹配到模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">subtype</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">SubEvent</span><span class="o">])</span></code></pre></figure>
+
+           </td>
+       </tr>
+       <tr>
+          <td><strong>oneOrMore()</strong></td>
+          <td>
+               <p>指定模式期望匹配到的事件至少出现一次。.</p>
+               <p>默认（在子事件间）使用松散的内部连续性。
+               关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+               <p><b>提示：</b> 推荐使用<code>until()</code>或者<code>within()</code>来清理状态。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">()</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+          <td><strong>timesOrMore(#times)</strong></td>
+          <td>
+              <p>指定模式期望匹配到的事件至少出现<strong>#times</strong>次。.</p>
+              <p>默认（在子事件间）使用松散的内部连续性。
+              关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">timesOrMore</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span></code></pre></figure>
+
+           </td>
+       </tr>
+       <tr>
+          <td><strong>times(#ofTimes)</strong></td>
+          <td>
+              <p>指定模式期望匹配到的事件正好出现的次数。</p>
+              <p>默认（在子事件间）使用松散的内部连续性。
+              关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span></code></pre></figure>
+
+                 </td>
+       </tr>
+       <tr>
+         <td><strong>times(#fromTimes, #toTimes)</strong></td>
+         <td>
+             <p>指定模式期望匹配到的事件出现次数在<strong>#fromTimes</strong>和<strong>#toTimes</strong>之间。</p>
+             <p>默认（在子事件间）使用松散的内部连续性。
+             关于内部连续性的更多信息可以参考<a href="#consecutive_java">连续性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">times</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span></code></pre></figure>
+
+         </td>
+       </tr>
+       <tr>
+          <td><strong>optional()</strong></td>
+          <td>
+             <p>指定这个模式是可选的，也就是说，它可能根本不出现。这对所有之前提到的量词都适用。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">optional</span><span class="o">()</span></code></pre></figure>
+
+          </td>
+       </tr>
+       <tr>
+          <td><strong>greedy()</strong></td>
+          <td>
+             <p>指定这个模式是贪心的，也就是说，它会重复尽可能多的次数。这只对量词适用，现在还不支持模式组。</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">greedy</span><span class="o">()</span></code></pre></figure>
+
+          </td>
+       </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<h3 id="组合模式">组合模式</h3>
+
+<p>现在你已经看到单个的模式是什么样的了，该去看看如何把它们连接起来组成一个完整的模式序列。</p>
+
+<p>模式序列由一个初始模式作为开头，如下所示：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">start</span> <span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>接下来，你可以增加更多的模式到模式序列中并指定它们之间所需的<em>连续条件</em>。FlinkCEP支持事件之间如下形式的连续策略：</p>
+
+<ol>
+  <li>
+    <p><strong>严格连续</strong>: 期望所有匹配的事件严格的一个接一个出现，中间没有任何不匹配的事件。</p>
+  </li>
+  <li>
+    <p><strong>松散连续</strong>: 忽略匹配的事件之间的不匹配的事件。</p>
+  </li>
+  <li>
+    <p><strong>不确定的松散连续</strong>: 更进一步的松散连续，允许忽略掉一些匹配事件的附加匹配。</p>
+  </li>
+</ol>
+
+<p>可以使用下面的方法来指定模式之间的连续策略：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">next()</code>，指定<em>严格连续</em>，</li>
+  <li><code class="highlighter-rouge">followedBy()</code>，指定<em>松散连续</em>，</li>
+  <li><code class="highlighter-rouge">followedByAny()</code>，指定<em>不确定的松散</em>连续。</li>
+</ol>
+
+<p>或者</p>
+
+<ol>
+  <li><code class="highlighter-rouge">notNext()</code>，如果不想后面直接连着一个特定事件</li>
+  <li><code class="highlighter-rouge">notFollowedBy()</code>，如果不想一个特定事件发生在两个事件之间的任何地方。</li>
+</ol>
+
+<p><span class="label label-danger">注意</span> 模式序列不能以<code class="highlighter-rouge">notFollowedBy()</code>结尾。</p>
+
+<p><span class="label label-danger">注意</span> 一个<code class="highlighter-rouge">NOT</code>模式前面不能是可选的模式。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 严格连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">strict</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...);</span>
+
+<span class="c1">// 松散连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">relaxed</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...);</span>
+
+<span class="c1">// 不确定的松散连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">nonDetermin</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedByAny</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...);</span>
+
+<span class="c1">// 严格连续的NOT模式</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">strictNot</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">notNext</span><span class="o">(</span><span class="s">"not"</span><span class="o">).</span><span class="na">where</span><span class="o">(...);</span>
+
+<span class="c1">// 松散连续的NOT模式</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">relaxedNot</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">notFollowedBy</span><span class="o">(</span><span class="s">"not"</span><span class="o">).</span><span class="na">where</span><span class="o">(...);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="c1">// 严格连续</span>
+<span class="k">val</span> <span class="nv">strict</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+
+<span class="c1">// 松散连续</span>
+<span class="k">val</span> <span class="nv">relaxed</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+
+<span class="c1">// 不确定的松散连续</span>
+<span class="k">val</span> <span class="nv">nonDetermin</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedByAny</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+
+<span class="c1">// 严格连续的NOT模式</span>
+<span class="k">val</span> <span class="nv">strictNot</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">notNext</span><span class="o">(</span><span class="s">"not"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+
+<span class="c1">// 松散连续的NOT模式</span>
+<span class="k">val</span> <span class="nv">relaxedNot</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">notFollowedBy</span><span class="o">(</span><span class="s">"not"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>松散连续意味着跟着的事件中，只有第一个可匹配的事件会被匹配上，而不确定的松散连接情况下，有着同样起始的多个匹配会被输出。
+举例来说，模式<code class="highlighter-rouge">"a b"</code>，给定事件序列<code class="highlighter-rouge">"a"，"c"，"b1"，"b2"</code>，会产生如下的结果：</p>
+
+<ol>
+  <li>
+    <p><code class="highlighter-rouge">"a"</code>和<code class="highlighter-rouge">"b"</code>之间严格连续： <code class="highlighter-rouge">{}</code> （没有匹配），<code class="highlighter-rouge">"a"</code>之后的<code class="highlighter-rouge">"c"</code>导致<code class="highlighter-rouge">"a"</code>被丢弃。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"a"</code>和<code class="highlighter-rouge">"b"</code>之间松散连续： <code class="highlighter-rouge">{a b1}</code>，松散连续会”跳过不匹配的事件直到匹配上的事件”。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">"a"</code>和<code class="highlighter-rouge">"b"</code>之间不确定的松散连续： <code class="highlighter-rouge">{a b1}</code>, <code class="highlighter-rouge">{a b2}</code>，这是最常见的情况。</p>
+  </li>
+</ol>
+
+<p>也可以为模式定义一个有效时间约束。
+例如，你可以通过<code class="highlighter-rouge">pattern.within()</code>方法指定一个模式应该在10秒内发生。
+这种时间模式支持<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">处理时间和事件时间</a>.</p>
+
+<p><span class="label label-danger">注意</span> 一个模式序列只能有一个时间限制。如果限制了多个时间在不同的单个模式上，会使用最小的那个时间限制。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">next</span><span class="o">.</span><span class="na">within</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">next</span><span class="o">.</span><span class="py">within</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h4 id="循环模式中的连续性">循环模式中的连续性</h4>
+
+<p>你可以在循环模式中使用和前面<a href="#组合模式">章节</a>讲过的同样的连续性。
+连续性会被运用在被接受进入模式的事件之间。
+用这个例子来说明上面所说的连续性，一个模式序列<code class="highlighter-rouge">"a b+ c"</code>（<code class="highlighter-rouge">"a"</code>后面跟着一个或者多个（不确定连续的）<code class="highlighter-rouge">"b"</code>，然后跟着一个<code class="highlighter-rouge">"c"</code>）
+输入为<code class="highlighter-rouge">"a"，"b1"，"d1"，"b2"，"d2"，"b3"，"c"</code>，输出结果如下：</p>
+
+<ol>
+  <li>
+    <p><strong>严格连续</strong>: <code class="highlighter-rouge">{a b3 c}</code> – <code class="highlighter-rouge">"b1"</code>之后的<code class="highlighter-rouge">"d1"</code>导致<code class="highlighter-rouge">"b1"</code>被丢弃，同样<code class="highlighter-rouge">"b2"</code>因为<code class="highlighter-rouge">"d2"</code>被丢弃。</p>
+  </li>
+  <li>
+    <p><strong>松散连续</strong>: <code class="highlighter-rouge">{a b1 c}</code>，<code class="highlighter-rouge">{a b1 b2 c}</code>，<code class="highlighter-rouge">{a b1 b2 b3 c}</code>，<code class="highlighter-rouge">{a b2 c}</code>，<code class="highlighter-rouge">{a b2 b3 c}</code>，<code class="highlighter-rouge">{a b3 c}</code> - <code class="highlighter-rouge">"d"</code>都被忽略了。</p>
+  </li>
+  <li>
+    <p><strong>不确定松散连续</strong>: <code class="highlighter-rouge">{a b1 c}</code>，<code class="highlighter-rouge">{a b1 b2 c}</code>，<code class="highlighter-rouge">{a b1 b3 c}</code>，<code class="highlighter-rouge">{a b1 b2 b3 c}</code>，<code class="highlighter-rouge">{a b2 c}</code>，<code class="highlighter-rouge">{a b2 b3 c}</code>，<code class="highlighter-rouge">{a b3 c}</code> -
+注意<code class="highlighter-rouge">{a b1 b3 c}</code>，这是因为<code class="highlighter-rouge">"b"</code>之间是不确定松散连续产生的。</p>
+  </li>
+</ol>
+
+<p>对于循环模式（例如<code class="highlighter-rouge">oneOrMore()</code>和<code class="highlighter-rouge">times()</code>)），默认是<em>松散连续</em>。如果想使用<em>严格连续</em>，你需要使用<code class="highlighter-rouge">consecutive()</code>方法明确指定，
+如果想使用<em>不确定松散连续</em>，你可以使用<code class="highlighter-rouge">allowCombinations()</code>方法。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+       <tr>
+          <td><strong>consecutive()</strong><a name="consecutive_java"></a></td>
+          <td>
+              <p>与<code>oneOrMore()</code>和<code>times()</code>一起使用， 在匹配的事件之间施加严格的连续性，
+              也就是说，任何不匹配的事件都会终止匹配（和<code>next()</code>一样）。</p>
+              <p>如果不使用它，那么就是松散连续（和<code>followedBy()</code>一样）。</p>
+
+              <p>例如，一个如下的模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"c"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">})</span>
+<span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}).</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">consecutive</span><span class="o">()</span>
+<span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"end1"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+              <p>输入：C D A1 A2 A3 D A4 B，会产生下面的输出：</p>
+
+              <p>如果施加严格连续性： {C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}</p>
+              <p>不施加严格连续性： {C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}，{C A1 A2 A3 A4 B}</p>
+          </td>
+       </tr>
+       <tr>
+       <td><strong>allowCombinations()</strong><a name="allow_comb_java"></a></td>
+       <td>
+              <p>与<code>oneOrMore()</code>和<code>times()</code>一起使用，
+              在匹配的事件中间施加不确定松散连续性（和<code>followedByAny()</code>一样）。</p>
+              <p>如果不使用，就是松散连续（和<code>followedBy()</code>一样）。</p>
+
+              <p>例如，一个如下的模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"c"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">})</span>
+<span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}).</span><span class="na">oneOrMore</span><span class="o">().</span><span class="na">allowCombinations</span><span class="o">()</span>
+<span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"end1"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+               <p>输入：C D A1 A2 A3 D A4 B，会产生如下的输出：</p>
+
+               <p>如果使用不确定松散连续： {C A1 B}，{C A1 A2 B}，{C A1 A3 B}，{C A1 A4 B}，{C A1 A2 A3 B}，{C A1 A2 A4 B}，{C A1 A3 A4 B}，{C A1 A2 A3 A4 B}</p>
+               <p>如果不使用：{C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}，{C A1 A2 A3 A4 B}</p>
+       </td>
+       </tr>
+  </tbody>
+</table>
+  </div>
+
+  <div data-lang="scala">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+           <tr>
+              <td><strong>consecutive()</strong><a name="consecutive_scala"></a></td>
+              <td>
+                <p>与<code>oneOrMore()</code>和<code>times()</code>一起使用， 在匹配的事件之间施加严格的连续性，
+                也就是说，任何不匹配的事件都会终止匹配（和<code>next()</code>一样）。</p>
+                <p>如果不使用它，那么就是松散连续（和<code>followedBy()</code>一样）。</p>
+
+          <p>例如，一个如下的模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"c"</span><span class="o">))</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"a"</span><span class="o">))</span>
+                       <span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">consecutive</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"end1"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"b"</span><span class="o">))</span></code></pre></figure>
+
+
+                <p>输入：C D A1 A2 A3 D A4 B，会产生下面的输出：</p>
+
+                <p>如果施加严格连续性： {C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}</p>
+                <p>不施加严格连续性： {C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}，{C A1 A2 A3 A4 B}</p>
+              </td>
+           </tr>
+           <tr>
+                  <td><strong>allowCombinations()</strong><a name="allow_comb_java"></a></td>
+                  <td>
+                    <p>与<code>oneOrMore()</code>和<code>times()</code>一起使用，
+                    在匹配的事件中间施加不确定松散连续性（和<code>followedByAny()</code>一样）。</p>
+                    <p>如果不使用，就是松散连续（和<code>followedBy()</code>一样）。</p>
+
+           <p>例如，一个如下的模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"c"</span><span class="o">))</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"a"</span><span class="o">))</span>
+                       <span class="o">.</span><span class="py">oneOrMore</span><span class="o">().</span><span class="py">allowCombinations</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"end1"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span><span class="o">().</span><span class="py">equals</span><span class="o">(</span><span class="s">"b"</span><span class="o">))</span></code></pre></figure>
+
+
+                          <p>输入：C D A1 A2 A3 D A4 B，会产生如下的输出：</p>
+
+                          <p>如果使用不确定松散连续： {C A1 B}，{C A1 A2 B}，{C A1 A3 B}，{C A1 A4 B}，{C A1 A2 A3 B}，{C A1 A2 A4 B}，{C A1 A3 A4 B}，{C A1 A2 A3 A4 B}</p>
+                          <p>如果不使用：{C A1 B}，{C A1 A2 B}，{C A1 A2 A3 B}，{C A1 A2 A3 A4 B}</p>
+                  </td>
+                  </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+<h3 id="模式组">模式组</h3>
+
+<p>也可以定义一个模式序列作为<code class="highlighter-rouge">begin</code>，<code class="highlighter-rouge">followedBy</code>，<code class="highlighter-rouge">followedByAny</code>和<code class="highlighter-rouge">next</code>的条件。这个模式序列在逻辑上会被当作匹配的条件，
+并且返回一个<code class="highlighter-rouge">GroupPattern</code>，可以在<code class="highlighter-rouge">GroupPattern</code>上使用<code class="highlighter-rouge">oneOrMore()</code>，<code class="highlighter-rouge">times(#ofTimes)</code>，
+<code class="highlighter-rouge">times(#fromTimes, #toTimes)</code>，<code class="highlighter-rouge">optional()</code>，<code class="highlighter-rouge">consecutive()</code>，<code class="highlighter-rouge">allowCombinations()</code>。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"start_middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">);</span>
+
+<span class="c1">// 严格连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">strict</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">next</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"next_start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"next_middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="na">times</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
+
+<span class="c1">// 松散连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">relaxed</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedBy</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"followedby_start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"followedby_middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="na">oneOrMore</span><span class="o">();</span>
+
+<span class="c1">// 不确定松散连续</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">nonDetermin</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedByAny</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"followedbyany_start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"followedbyany_middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="na">optional</span><span class="o">();</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">start</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"start_middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">)</span>
+
+<span class="c1">// 严格连续</span>
+<span class="k">val</span> <span class="nv">strict</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">next</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"next_start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"next_middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="py">times</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span>
+
+<span class="c1">// 松散连续</span>
+<span class="k">val</span> <span class="nv">relaxed</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedBy</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"followedby_start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"followedby_middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="py">oneOrMore</span><span class="o">()</span>
+
+<span class="c1">// 不确定松散连续</span>
+<span class="k">val</span> <span class="nv">nonDetermin</span><span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedByAny</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"followedbyany_start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"followedbyany_middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">).</span><span class="py">optional</span><span class="o">()</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><br /></p>
+
+<div class="codetabs">
+  <div data-lang="java">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>begin(#name)</strong></td>
+            <td>
+            <p>定义一个开始的模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>begin(#pattern_sequence)</strong></td>
+            <td>
+            <p>定义一个开始的模式：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>next(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式。匹配的事件必须是直接跟在前面匹配到的事件后面（严格连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>next(#pattern_sequence)</strong></td>
+            <td>
+                <p>增加一个新的模式。匹配的事件序列必须是直接跟在前面匹配到的事件后面（严格连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">next</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedBy(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式。可以有其他事件出现在匹配的事件和之前匹配到的事件中间（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">followedBy</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedBy(#pattern_sequence)</strong></td>
+            <td>
+                 <p>增加一个新的模式。可以有其他事件出现在匹配的事件序列和之前匹配到的事件中间（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">followedBy</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedBy</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">);</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedByAny(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式。可以有其他事件出现在匹配的事件和之前匹配到的事件中间，
+                每个可选的匹配事件都会作为可选的匹配结果输出（不确定的松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">followedByAny</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedByAny</span><span class="o">(</span><span class="s">"middle"</span><span class="o">);</span></code></pre></figure>
+
+             </td>
+        </tr>
+        <tr>
+             <td><strong>followedByAny(#pattern_sequence)</strong></td>
+             <td>
+                 <p>增加一个新的模式。可以有其他事件出现在匹配的事件序列和之前匹配到的事件中间，
+                 每个可选的匹配事件序列都会作为可选的匹配结果输出（不确定的松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">followedByAny</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">followedByAny</span><span class="o">(</span>
+    <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">where</span><span class="o">(...).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(...)</span>
+<span class="o">);</span></code></pre></figure>
+
+             </td>
+        </tr>
+        <tr>
+                    <td><strong>notNext()</strong></td>
+                    <td>
+                        <p>增加一个新的否定模式。匹配的（否定）事件必须直接跟在前面匹配到的事件之后（严格连续）来丢弃这些部分匹配：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">notNext</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">notNext</span><span class="o">(</span><span class="s">"not"</span><span class="o">);</span></code></pre></figure>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>notFollowedBy()</strong></td>
+                    <td>
+                        <p>增加一个新的否定模式。即使有其他事件在匹配的（否定）事件和之前匹配的事件之间发生，
+                        部分匹配的事件序列也会被丢弃（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">notFollowedBy</span> <span class="o">=</span> <span class="n">start</span><span class="o">.</span><span class="na">notFollowedBy</span><span class="o">(</span><span class="s">"not"</span><span class="o">);</span></code></pre></figure>
+
+                    </td>
+                </tr>
+       <tr>
+          <td><strong>within(time)</strong></td>
+          <td>
+              <p>定义匹配模式的事件序列出现的最大时间间隔。如果未完成的事件序列超过了这个事件，就会被丢弃：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">pattern</span><span class="o">.</span><span class="na">within</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span></code></pre></figure>
+
+          </td>
+       </tr>
+  </tbody>
+</table>
+  </div>
+
+  <div data-lang="scala">
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="text-left" style="width: 25%">模式操作</th>
+            <th class="text-center">描述</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>begin(#name)</strong></td>
+            <td>
+            <p>定一个开始模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">start</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+       <tr>
+            <td><strong>begin(#pattern_sequence)</strong></td>
+            <td>
+            <p>定一个开始模式：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">start</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>next(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式，匹配的事件必须是直接跟在前面匹配到的事件后面（严格连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">next</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>next(#pattern_sequence)</strong></td>
+            <td>
+                <p>增加一个新的模式。匹配的事件序列必须是直接跟在前面匹配到的事件后面（严格连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">next</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">next</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedBy(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式。可以有其他事件出现在匹配的事件和之前匹配到的事件中间（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">followedBy</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedBy(#pattern_sequence)</strong></td>
+            <td>
+                <p>增加一个新的模式。可以有其他事件出现在匹配的事件和之前匹配到的事件中间（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">followedBy</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedBy</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">)</span></code></pre></figure>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>followedByAny(#name)</strong></td>
+            <td>
+                <p>增加一个新的模式。可以有其他事件出现在匹配的事件和之前匹配到的事件中间，
+                每个可选的匹配事件都会作为可选的匹配结果输出（不确定的松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">followedByAny</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedByAny</span><span class="o">(</span><span class="s">"middle"</span><span class="o">)</span></code></pre></figure>
+
+            </td>
+         </tr>
+         <tr>
+             <td><strong>followedByAny(#pattern_sequence)</strong></td>
+             <td>
+                 <p>增加一个新的模式。可以有其他事件出现在匹配的事件序列和之前匹配到的事件中间，
+                 每个可选的匹配事件序列都会作为可选的匹配结果输出（不确定的松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">followedByAny</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">followedByAny</span><span class="o">(</span>
+    <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">).</span><span class="py">where</span><span class="o">(...).</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(...)</span>
+<span class="o">)</span></code></pre></figure>
+
+             </td>
+         </tr>
+
+                <tr>
+                                    <td><strong>notNext()</strong></td>
+                                    <td>
+                                        <p>增加一个新的否定模式。匹配的（否定）事件必须直接跟在前面匹配到的事件之后
+                                        （严格连续）来丢弃这些部分匹配：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">notNext</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">notNext</span><span class="o">(</span><span class="s">"not"</span><span class="o">)</span></code></pre></figure>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>notFollowedBy()</strong></td>
+                                    <td>
+                                        <p>增加一个新的否定模式。即使有其他事件在匹配的（否定）事件和之前匹配的事件之间发生，
+                                        部分匹配的事件序列也会被丢弃（松散连续）：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">notFollowedBy</span> <span class="k">=</span> <span class="nv">start</span><span class="o">.</span><span class="py">notFollowedBy</span><span class="o">(</span><span class="s">"not"</span><span class="o">)</span></code></pre></figure>
+
+                                    </td>
+                                </tr>
+
+       <tr>
+          <td><strong>within(time)</strong></td>
+          <td>
+              <p>定义匹配模式的事件序列出现的最大时间间隔。如果未完成的事件序列超过了这个事件，就会被丢弃：</p>
+
+<figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">pattern</span><span class="o">.</span><span class="py">within</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span></code></pre></figure>
+
+          </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+
+</div>
+
+<h3 id="匹配后跳过策略">匹配后跳过策略</h3>
+
+<p>对于一个给定的模式，同一个事件可能会分配到多个成功的匹配上。为了控制一个事件会分配到多少个匹配上，你需要指定跳过策略<code class="highlighter-rouge">AfterMatchSkipStrategy</code>。
+有五种跳过策略，如下：</p>
+
+<ul>
+  <li><strong><em>NO_SKIP</em></strong>: 每个成功的匹配都会被输出。</li>
+  <li><strong><em>SKIP_TO_NEXT</em></strong>: 丢弃以相同事件开始的所有部分匹配。</li>
+  <li><strong><em>SKIP_PAST_LAST_EVENT</em></strong>: 丢弃起始在这个匹配的开始和结束之间的所有部分匹配。</li>
+  <li><strong><em>SKIP_TO_FIRST</em></strong>: 丢弃起始在这个匹配的开始和第一个出现的名称为<em>PatternName</em>事件之间的所有部分匹配。</li>
+  <li><strong><em>SKIP_TO_LAST</em></strong>: 丢弃起始在这个匹配的开始和最后一个出现的名称为<em>PatternName</em>事件之间的所有部分匹配。</li>
+</ul>
+
+<p>注意当使用<em>SKIP_TO_FIRST</em>和<em>SKIP_TO_LAST</em>策略时，需要指定一个合法的<em>PatternName</em>.</p>
+
+<p>例如，给定一个模式<code class="highlighter-rouge">b+ c</code>和一个数据流<code class="highlighter-rouge">b1 b2 b3 c</code>，不同跳过策略之间的不同如下：</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th class="text-left" style="width: 25%">跳过策略</th>
+        <th class="text-center" style="width: 25%">结果</th>
+        <th class="text-center"> 描述</th>
+    </tr>
+    <tr>
+        <td><strong>NO_SKIP</strong></td>
+        <td>
+            <code>b1 b2 b3 c</code><br />
+            <code>b2 b3 c</code><br />
+            <code>b3 c</code><br />
+        </td>
+        <td>找到匹配<code>b1 b2 b3 c</code>之后，不会丢弃任何结果。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_TO_NEXT</strong></td>
+        <td>
+            <code>b1 b2 b3 c</code><br />
+            <code>b2 b3 c</code><br />
+            <code>b3 c</code><br />
+        </td>
+        <td>找到匹配<code>b1 b2 b3 c</code>之后，不会丢弃任何结果，因为没有以<code>b1</code>开始的其他匹配。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_PAST_LAST_EVENT</strong></td>
+        <td>
+            <code>b1 b2 b3 c</code><br />
+        </td>
+        <td>找到匹配<code>b1 b2 b3 c</code>之后，会丢弃其他所有的部分匹配。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_TO_FIRST</strong>[<code>b</code>]</td>
+        <td>
+            <code>b1 b2 b3 c</code><br />
+            <code>b2 b3 c</code><br />
+            <code>b3 c</code><br />
+        </td>
+        <td>找到匹配<code>b1 b2 b3 c</code>之后，会尝试丢弃所有在<code>b1</code>之前开始的部分匹配，但没有这样的匹配，所以没有任何匹配被丢弃。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_TO_LAST</strong>[<code>b</code>]</td>
+        <td>
+            <code>b1 b2 b3 c</code><br />
+            <code>b3 c</code><br />
+        </td>
+        <td>找到匹配<code>b1 b2 b3 c</code>之后，会尝试丢弃所有在<code>b3</code>之前开始的部分匹配，有一个这样的<code>b2 b3 c</code>被丢弃。</td>
+    </tr>
+</table>
+
+<p>在看另外一个例子来说明NO_SKIP和SKIP_TO_FIRST之间的差别：
+模式： <code class="highlighter-rouge">(a | b | c) (b | c) c+.greedy d</code>，输入：<code class="highlighter-rouge">a b c1 c2 c3 d</code>，结果将会是：</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th class="text-left" style="width: 25%">跳过策略</th>
+        <th class="text-center" style="width: 25%">结果</th>
+        <th class="text-center"> 描述</th>
+    </tr>
+    <tr>
+        <td><strong>NO_SKIP</strong></td>
+        <td>
+            <code>a b c1 c2 c3 d</code><br />
+            <code>b c1 c2 c3 d</code><br />
+            <code>c1 c2 c3 d</code><br />
+        </td>
+        <td>找到匹配<code>a b c1 c2 c3 d</code>之后，不会丢弃任何结果。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_TO_FIRST</strong>[<code>c*</code>]</td>
+        <td>
+            <code>a b c1 c2 c3 d</code><br />
+            <code>c1 c2 c3 d</code><br />
+        </td>
+        <td>找到匹配<code>a b c1 c2 c3 d</code>之后，会丢弃所有在<code>c1</code>之前开始的部分匹配，有一个这样的<code>b c1 c2 c3 d</code>被丢弃。</td>
+    </tr>
+</table>
+
+<p>为了更好的理解NO_SKIP和SKIP_TO_NEXT之间的差别，看下面的例子：
+模式：<code class="highlighter-rouge">a b+</code>，输入：<code class="highlighter-rouge">a b1 b2 b3</code>，结果将会是：</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th class="text-left" style="width: 25%">跳过策略</th>
+        <th class="text-center" style="width: 25%">结果</th>
+        <th class="text-center"> 描述</th>
+    </tr>
+    <tr>
+        <td><strong>NO_SKIP</strong></td>
+        <td>
+            <code>a b1</code><br />
+            <code>a b1 b2</code><br />
+            <code>a b1 b2 b3</code><br />
+        </td>
+        <td>找到匹配<code>a b1</code>之后，不会丢弃任何结果。</td>
+    </tr>
+    <tr>
+        <td><strong>SKIP_TO_NEXT</strong></td>
+        <td>
+            <code>a b1</code><br />
+        </td>
+        <td>找到匹配<code>a b1</code>之后，会丢弃所有以<code>a</code>开始的部分匹配。这意味着不会产生<code>a b1 b2</code>和<code>a b1 b2 b3</code>了。</td>
+    </tr>
+</table>
+
+<p>想指定要使用的跳过策略，只需要调用下面的方法创建<code class="highlighter-rouge">AfterMatchSkipStrategy</code>：</p>
+<table class="table table-bordered">
+    <tr>
+        <th class="text-left" width="25%">方法</th>
+        <th class="text-center">描述</th>
+    </tr>
+    <tr>
+        <td><code>AfterMatchSkipStrategy.noSkip()</code></td>
+        <td>创建<strong>NO_SKIP</strong>策略</td>
+    </tr>
+    <tr>
+        <td><code>AfterMatchSkipStrategy.skipToNext()</code></td>
+        <td>创建<strong>SKIP_TO_NEXT</strong>策略</td>
+    </tr>
+    <tr>
+        <td><code>AfterMatchSkipStrategy.skipPastLastEvent()</code></td>
+        <td>创建<strong>SKIP_PAST_LAST_EVENT</strong>策略</td>
+    </tr>
+    <tr>
+        <td><code>AfterMatchSkipStrategy.skipToFirst(patternName)</code></td>
+        <td>创建引用模式名称为<i>patternName</i>的<strong>SKIP_TO_FIRST</strong>策略</td>
+    </tr>
+    <tr>
+        <td><code>AfterMatchSkipStrategy.skipToLast(patternName)</code></td>
+        <td>创建引用模式名称为<i>patternName</i>的<strong>SKIP_TO_LAST</strong>策略</td>
+    </tr>
+</table>
+
+<p>可以通过调用下面方法将跳过策略应用到模式上：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">AfterMatchSkipStrategy</span> <span class="n">skipStrategy</span> <span class="o">=</span> <span class="o">...</span>
+<span class="nc">Pattern</span><span class="o">.</span><span class="na">begin</span><span class="o">(</span><span class="s">"patternName"</span><span class="o">,</span> <span class="n">skipStrategy</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">skipStrategy</span> <span class="k">=</span> <span class="o">...</span>
+<span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">(</span><span class="s">"patternName"</span><span class="o">,</span> <span class="n">skipStrategy</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><span class="label label-danger">注意</span> 使用SKIP_TO_FIRST/LAST时，有两个选项可以用来处理没有事件可以映射到对应的变量名上的情况。
+默认情况下会使用NO_SKIP策略，另外一个选项是抛出异常。
+可以使用如下的选项：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">AfterMatchSkipStrategy</span><span class="o">.</span><span class="na">skipToFirst</span><span class="o">(</span><span class="n">patternName</span><span class="o">).</span><span class="na">throwExceptionOnMiss</span><span class="o">()</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">AfterMatchSkipStrategy</span><span class="o">.</span><span class="py">skipToFirst</span><span class="o">(</span><span class="n">patternName</span><span class="o">).</span><span class="py">throwExceptionOnMiss</span><span class="o">()</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h2 id="检测模式">检测模式</h2>
+
+<p>在指定了要寻找的模式后，该把它们应用到输入流上来发现可能的匹配了。为了在事件流上运行你的模式，需要创建一个<code class="highlighter-rouge">PatternStream</code>。
+给定一个输入流<code class="highlighter-rouge">input</code>，一个模式<code class="highlighter-rouge">pattern</code>和一个可选的用来对使用事件时间时有同样时间戳或者同时到达的事件进行排序的比较器<code class="highlighter-rouge">comparator</code>，
+你可以通过调用如下方法来创建<code class="highlighter-rouge">PatternStream</code>：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">input</span> <span class="o">=</span> <span class="o">...</span>
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">pattern</span> <span class="o">=</span> <span class="o">...</span>
+<span class="nc">EventComparator</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">comparator</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// 可选的</span>
+
+<span class="nc">PatternStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">patternStream</span> <span class="o">=</span> <span class="no">CEP</span><span class="o">.</span><span class="na">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="n">comparator</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">input</span> <span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+<span class="k">val</span> <span class="nv">pattern</span> <span class="k">:</span> <span class="kt">Pattern</span><span class="o">[</span><span class="kt">Event</span>, <span class="k">_</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+<span class="k">var</span> <span class="n">comparator</span> <span class="k">:</span> <span class="kt">EventComparator</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span> <span class="c1">// 可选的</span>
+
+<span class="k">val</span> <span class="nv">patternStream</span><span class="k">:</span> <span class="kt">PatternStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="nv">CEP</span><span class="o">.</span><span class="py">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">,</span> <span class="n">comparator</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>输入流根据你的使用场景可以是<em>keyed</em>或者<em>non-keyed</em>。</p>
+
+<p><span class="label label-danger">注意</span> 在<em>non-keyed</em>流上使用模式将会使你的作业并发度被设为1。</p>
+
+<h3 id="从模式中选取">从模式中选取</h3>
+
+<p>在获得到一个<code class="highlighter-rouge">PatternStream</code>之后，你可以应用各种转换来发现事件序列。推荐使用<code class="highlighter-rouge">PatternProcessFunction</code>。</p>
+
+<p><code class="highlighter-rouge">PatternProcessFunction</code>有一个<code class="highlighter-rouge">processMatch</code>的方法在每找到一个匹配的事件序列时都会被调用。
+它按照<code class="highlighter-rouge">Map&lt;String, List&lt;IN&gt;&gt;</code>的格式接收一个匹配，映射的键是你的模式序列中的每个模式的名称，值是被接受的事件列表（<code class="highlighter-rouge">IN</code>是输入事件的类型）。
+模式的输入事件按照时间戳进行排序。为每个模式返回一个接受的事件列表的原因是当使用循环模式（比如<code class="highlighter-rouge">oneToMany()</code>和<code class="highlighter-rouge">times()</code>）时，
+对一个模式会有不止一个事件被接受。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">MyPatternProcessFunction</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">,</span> <span class="no">OUT</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">PatternProcessFunction</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">,</span> <span class="no">OUT</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processMatch</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">&gt;&gt;</span> <span class="n">match</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="no">OUT</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+        <span class="no">IN</span> <span class="n">startEvent</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="no">IN</span> <span class="n">endEvent</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"end"</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="no">OUT</span><span class="o">(</span><span class="n">startEvent</span><span class="o">,</span> <span class="n">endEvent</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><code class="highlighter-rouge">PatternProcessFunction</code>可以访问<code class="highlighter-rouge">Context</code>对象。有了它之后，你可以访问时间属性，比如<code class="highlighter-rouge">currentProcessingTime</code>或者当前匹配的<code class="highlighter-rouge">timestamp</code>
+（最新分配到匹配上的事件的时间戳）。
+更多信息可以看<a href="#时间上下文">时间上下文</a>。
+通过这个上下文也可以将结果输出到<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">侧输出</a>.</p>
+
+<h4 id="处理超时的部分匹配">处理超时的部分匹配</h4>
+
+<p>当一个模式上通过<code class="highlighter-rouge">within</code>加上窗口长度后，部分匹配的事件序列就可能因为超过窗口长度而被丢弃。可以使用<code class="highlighter-rouge">TimedOutPartialMatchHandler</code>接口
+来处理超时的部分匹配。这个接口可以和其它的混合使用。也就是说你可以在自己的<code class="highlighter-rouge">PatternProcessFunction</code>里另外实现这个接口。
+<code class="highlighter-rouge">TimedOutPartialMatchHandler</code>提供了另外的<code class="highlighter-rouge">processTimedOutMatch</code>方法，这个方法对每个超时的部分匹配都会调用。</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">MyPatternProcessFunction</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">,</span> <span class="no">OUT</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">PatternProcessFunction</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">,</span> <span class="no">OUT</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="nc">TimedOutPartialMatchHandler</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processMatch</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">&gt;&gt;</span> <span class="n">match</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="no">OUT</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processTimedOutMatch</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">&gt;&gt;</span> <span class="n">match</span><span class="o">,</span> <span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+        <span class="no">IN</span> <span class="n">startEvent</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"start"</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="na">output</span><span class="o">(</span><span class="n">outputTag</span><span class="o">,</span> <span class="no">T</span><span class="o">(</span><span class="n">startEvent</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p><span class="label label-info">Note</span> <code class="highlighter-rouge">processTimedOutMatch</code>不能访问主输出。
+但你可以通过<code class="highlighter-rouge">Context</code>对象把结果输出到<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">侧输出</a>。</p>
+
+<h4 id="便捷的api">便捷的API</h4>
+
+<p>前面提到的<code class="highlighter-rouge">PatternProcessFunction</code>是在Flink 1.8之后引入的，从那之后推荐使用这个接口来处理匹配到的结果。
+用户仍然可以使用像<code class="highlighter-rouge">select</code>/<code class="highlighter-rouge">flatSelect</code>这样旧格式的API，它们会在内部被转换为<code class="highlighter-rouge">PatternProcessFunction</code>。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">PatternStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">patternStream</span> <span class="o">=</span> <span class="no">CEP</span><span class="o">.</span><span class="na">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">);</span>
+
+<span class="nc">OutputTag</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">outputTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OutputTag</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="s">"side-output"</span><span class="o">){};</span>
+
+<span class="nc">SingleOutputStreamOperator</span><span class="o">&lt;</span><span class="nc">ComplexEvent</span><span class="o">&gt;</span> <span class="n">flatResult</span> <span class="o">=</span> <span class="n">patternStream</span><span class="o">.</span><span class="na">flatSelect</span><span class="o">(</span>
+    <span class="n">outputTag</span><span class="o">,</span>
+    <span class="k">new</span> <span class="nc">PatternFlatTimeoutFunction</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">TimeoutEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">timeout</span><span class="o">(</span>
+                <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;&gt;</span> <span class="n">pattern</span><span class="o">,</span>
+                <span class="kt">long</span> <span class="n">timeoutTimestamp</span><span class="o">,</span>
+                <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">TimeoutEvent</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+            <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="k">new</span> <span class="nc">TimeoutEvent</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">},</span>
+    <span class="k">new</span> <span class="nc">PatternFlatSelectFunction</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">ComplexEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">flatSelect</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="no">IN</span><span class="o">&gt;&gt;</span> <span class="n">pattern</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="no">OUT</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+            <span class="n">out</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="k">new</span> <span class="nc">ComplexEvent</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">);</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">TimeoutEvent</span><span class="o">&gt;</span> <span class="n">timeoutFlatResult</span> <span class="o">=</span> <span class="n">flatResult</span><span class="o">.</span><span class="na">getSideOutput</span><span class="o">(</span><span class="n">outputTag</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">patternStream</span><span class="k">:</span> <span class="kt">PatternStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="nv">CEP</span><span class="o">.</span><span class="py">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">outputTag</span> <span class="k">=</span> <span class="nc">OutputTag</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"side-output"</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">result</span><span class="k">:</span> <span class="kt">SingleOutputStreamOperator</span><span class="o">[</span><span class="kt">ComplexEvent</span><span class="o">]</span> <span class="k">=</span> <span class="nv">patternStream</span><span class="o">.</span><span class="py">flatSelect</span><span class="o">(</span><span class="n">outputTag</span><span class="o">){</span>
+    <span class="o">(</span><span class="n">pattern</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Iterable</span><span class="o">[</span><span class="kt">Event</span><span class="o">]],</span> <span class="n">timestamp</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">out</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">TimeoutEvent</span><span class="o">])</span> <span class="k">=&gt;</span>
+        <span class="nv">out</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="nc">TimeoutEvent</span><span class="o">())</span>
+<span class="o">}</span> <span class="o">{</span>
+    <span class="o">(</span><span class="n">pattern</span><span class="k">:</span> <span class="kt">mutable.Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Iterable</span><span class="o">[</span><span class="kt">Event</span><span class="o">]],</span> <span class="n">out</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">ComplexEvent</span><span class="o">])</span> <span class="k">=&gt;</span>
+        <span class="nv">out</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="nc">ComplexEvent</span><span class="o">())</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">timeoutResult</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">TimeoutEvent</span><span class="o">]</span> <span class="k">=</span> <span class="nv">result</span><span class="o">.</span><span class="py">getSideOutput</span><span class="o">(</span><span class="n">outputTag</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h2 id="cep库中的时间">CEP库中的时间</h2>
+
+<h3 id="按照事件时间处理迟到事件">按照事件时间处理迟到事件</h3>
+
+<p>在<code class="highlighter-rouge">CEP</code>中，事件的处理顺序很重要。在使用事件时间时，为了保证事件按照正确的顺序被处理，一个事件到来后会先被放到一个缓冲区中，
+在缓冲区里事件都按照时间戳从小到大排序，当水位线到达后，缓冲区中所有小于水位线的事件被处理。这意味着水位线之间的数据都按照时间戳被顺序处理。</p>
+
+<p><span class="label label-danger">注意</span> 这个库假定按照事件时间时水位线一定是正确的。</p>
+
+<p>为了保证跨水位线的事件按照事件时间处理，Flink CEP库假定<em>水位线一定是正确的</em>，并且把时间戳小于最新水位线的事件看作是<em>晚到</em>的。
+晚到的事件不会被处理。你也可以指定一个侧输出标志来收集比最新水位线晚到的事件，你可以这样做：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">PatternStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">patternStream</span> <span class="o">=</span> <span class="no">CEP</span><span class="o">.</span><span class="na">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">);</span>
+
+<span class="nc">OutputTag</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">lateDataOutputTag</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OutputTag</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="s">"late-data"</span><span class="o">){};</span>
+
+<span class="nc">SingleOutputStreamOperator</span><span class="o">&lt;</span><span class="nc">ComplexEvent</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">patternStream</span>
+    <span class="o">.</span><span class="na">sideOutputLateData</span><span class="o">(</span><span class="n">lateDataOutputTag</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">PatternSelectFunction</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">ComplexEvent</span><span class="o">&gt;()</span> <span class="o">{...}</span>
+    <span class="o">);</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">lateData</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="na">getSideOutput</span><span class="o">(</span><span class="n">lateDataOutputTag</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">patternStream</span><span class="k">:</span> <span class="kt">PatternStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="nv">CEP</span><span class="o">.</span><span class="py">pattern</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">pattern</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">lateDataOutputTag</span> <span class="k">=</span> <span class="nc">OutputTag</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"late-data"</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">result</span><span class="k">:</span> <span class="kt">SingleOutputStreamOperator</span><span class="o">[</span><span class="kt">ComplexEvent</span><span class="o">]</span> <span class="k">=</span> <span class="n">patternStream</span>
+      <span class="o">.</span><span class="py">sideOutputLateData</span><span class="o">(</span><span class="n">lateDataOutputTag</span><span class="o">)</span>
+      <span class="o">.</span><span class="py">select</span><span class="o">{</span>
+          <span class="n">pattern</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Iterable</span><span class="o">[</span><span class="kt">ComplexEvent</span><span class="o">]]</span> <span class="k">=&gt;</span> <span class="nc">ComplexEvent</span><span class="o">()</span>
+      <span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">lateData</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">result</span><span class="o">.</span><span class="py">getSideOutput</span><span class="o">(</span><span class="n">lateDataOutputTag</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h3 id="时间上下文">时间上下文</h3>
+
+<p>在<a href="#从模式中选取">PatternProcessFunction</a>中，用户可以和<a href="#条件">IterativeCondition</a>中
+一样按照下面的方法使用实现了<code class="highlighter-rouge">TimeContext</code>的上下文：</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="cm">/**
+ * 支持获取事件属性比如当前处理事件或当前正处理的事件的时间。
+ * 用在{@link PatternProcessFunction}和{@link org.apache.flink.cep.pattern.conditions.IterativeCondition}中
+ */</span>
+<span class="nd">@PublicEvolving</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">TimeContext</span> <span class="o">{</span>
+
+	<span class="cm">/**
+	 * 当前正处理的事件的时间戳。
+	 *
+	 * &lt;p&gt;如果是{@link org.apache.flink.streaming.api.TimeCharacteristic#ProcessingTime}，这个值会被设置为事件进入CEP算子的时间。
+	 */</span>
+	<span class="kt">long</span> <span class="nf">timestamp</span><span class="o">();</span>
+
+	<span class="cm">/** 返回当前的处理时间。 */</span>
+	<span class="kt">long</span> <span class="nf">currentProcessingTime</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>这个上下文让用户可以获取处理的事件（在<code class="highlighter-rouge">IterativeCondition</code>时候是进来的记录，在<code class="highlighter-rouge">PatternProcessFunction</code>是匹配的结果）的时间属性。
+调用<code class="highlighter-rouge">TimeContext#currentProcessingTime</code>总是返回当前的处理时间，而且尽量去调用这个函数而不是调用其它的比如说<code class="highlighter-rouge">System.currentTimeMillis()</code>。</p>
+
+<p>使用<code class="highlighter-rouge">EventTime</code>时，<code class="highlighter-rouge">TimeContext#timestamp()</code>返回的值等于分配的时间戳。
+使用<code class="highlighter-rouge">ProcessingTime</code>时，这个值等于事件进入CEP算子的时间点（在<code class="highlighter-rouge">PatternProcessFunction</code>中是匹配产生的时间）。
+这意味着多次调用这个方法得到的值是一致的。</p>
+
+<h2 id="例子">例子</h2>
+
+<p>下面的例子在一个分片的<code class="highlighter-rouge">Events</code>流上检测模式<code class="highlighter-rouge">start, middle(name = "error") -&gt; end(name = "critical")</code>。
+事件按照<code class="highlighter-rouge">id</code>分片，一个有效的模式需要发生在10秒内。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">input</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">partitionedInput</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="k">new</span> <span class="nc">KeySelector</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getKey</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getId</span><span class="o">();</span>
+	<span class="o">}</span>
+<span class="o">});</span>
+
+<span class="nc">Pattern</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">pattern</span> <span class="o">=</span> <span class="nc">Pattern</span><span class="o">.&lt;</span><span class="nc">Event</span><span class="o">&gt;</span><span class="n">begin</span><span class="o">(</span><span class="s">"start"</span><span class="o">)</span>
+	<span class="o">.</span><span class="na">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"error"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}).</span><span class="na">followedBy</span><span class="o">(</span><span class="s">"end"</span><span class="o">).</span><span class="na">where</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleCondition</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;()</span> <span class="o">{</span>
+		<span class="nd">@Override</span>
+		<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">filter</span><span class="o">(</span><span class="nc">Event</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="na">getName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"critical"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}).</span><span class="na">within</span><span class="o">(</span><span class="nc">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">));</span>
+
+<span class="nc">PatternStream</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;</span> <span class="n">patternStream</span> <span class="o">=</span> <span class="no">CEP</span><span class="o">.</span><span class="na">pattern</span><span class="o">(</span><span class="n">partitionedInput</span><span class="o">,</span> <span class="n">pattern</span><span class="o">);</span>
+
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">alerts</span> <span class="o">=</span> <span class="n">patternStream</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="k">new</span> <span class="nc">PatternSelectFunction</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;()</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="nc">Alert</span> <span class="nf">select</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Event</span><span class="o">&gt;&gt;</span> <span class="n">pattern</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="nf">createAlert</span><span class="o">(</span><span class="n">pattern</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">});</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">:</span> <span class="kt">StreamExecutionEnvironment</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="nv">input</span> <span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Event</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="nv">partitionedInput</span> <span class="k">=</span> <span class="nv">input</span><span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="n">event</span> <span class="k">=&gt;</span> <span class="nv">event</span><span class="o">.</span><span class="py">getId</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">pattern</span> <span class="k">=</span> <span class="nv">Pattern</span><span class="o">.</span><span class="py">begin</span><span class="o">[</span><span class="kt">Event</span><span class="o">](</span><span class="s">"start"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">next</span><span class="o">(</span><span class="s">"middle"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span> <span class="o">==</span> <span class="s">"error"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">followedBy</span><span class="o">(</span><span class="s">"end"</span><span class="o">).</span><span class="py">where</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">getName</span> <span class="o">==</span> <span class="s">"critical"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">within</span><span class="o">(</span><span class="nv">Time</span><span class="o">.</span><span class="py">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span>
+
+<span class="k">val</span> <span class="nv">patternStream</span> <span class="k">=</span> <span class="nv">CEP</span><span class="o">.</span><span class="py">pattern</span><span class="o">(</span><span class="n">partitionedInput</span><span class="o">,</span> <span class="n">pattern</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">alerts</span> <span class="k">=</span> <span class="nv">patternStream</span><span class="o">.</span><span class="py">select</span><span class="o">(</span><span class="nf">createAlert</span><span class="o">(</span><span class="k">_</span><span class="o">))</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h2 id="从旧版本迁移13之前">从旧版本迁移（1.3之前）</h2>
+
+<h3 id="迁移到14">迁移到1.4+</h3>
+
+<p>在Flink-1.4放弃了和&lt;= Flink 1.2版本的兼容性。很不幸，不能再恢复用1.2.x运行过的CEP作业。</p>
+
+<h3 id="迁移到13x">迁移到1.3.x</h3>
+
+<p>CEP库在Flink-1.3发布的一系列的新特性引入了一些API上的修改。这里我们描述你需要对旧的CEP作业所做的修改，以能够用Flink-1.3来运行它们。
+在做完这些修改并重新编译你的作业之后，可以从旧版本作业的保存点之后继续运行，<em>也就是说</em>不需要再重新处理旧的数据。</p>
+
+<p>需要的修改是：</p>
+
+<ol>
+  <li>
+    <p>修改你的条件（在<code class="highlighter-rouge">where(...)</code>语句中的）来继承<code class="highlighter-rouge">SimpleCondition</code>类而不是实现<code class="highlighter-rouge">FilterFunction</code>接口。</p>
+  </li>
+  <li>
+    <p>修改你作为<code class="highlighter-rouge">select(...)</code>和<code class="highlighter-rouge">flatSelect(...)</code>方法的参数的函数为期望每个模式关联一个事件列表（<code class="highlighter-rouge">Java</code>中<code class="highlighter-rouge">List</code>，<code class="highlighter-rouge">Scala</code>中<code class="highlighter-rouge">Iterable</code>）。
+这是因为增加了循环模式后，多个事件可能匹配一个单一的（循环）模式。</p>
+  </li>
+  <li>
+    <p>在Flink 1.1和1.2中，<code class="highlighter-rouge">followedBy()</code>隐含了<code class="highlighter-rouge">不确定的松散连续</code> (参见<a href="#组合模式">这里</a>)。
+在Flink 1.3中，这里发生了变化， <code class="highlighter-rouge">followedBy()</code>隐含了<code class="highlighter-rouge">松散连续</code>，如果需要<code class="highlighter-rouge">不确定的松散连续</code>，应该使用<code class="highlighter-rouge">followedByAny()</code>。</p>
+  </li>
+</ol>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

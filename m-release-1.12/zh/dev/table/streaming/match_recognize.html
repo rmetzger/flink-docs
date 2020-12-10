@@ -1,0 +1,1421 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: 表中的模式检测</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/dev/table/streaming/match_recognize.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"class="active"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</a><div class="collapse in" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse"class="active">Table API & SQL</a><div class="collapse in" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse"class="active">流式概念</a><div class="collapse in" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html" class="active">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/match_recognize.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">Table API & SQL</a></li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">流式概念</a></li>
+  
+    <li class="active">模式检测</li>
+</ol>
+
+<h1>表中的模式检测</h1>
+
+
+
+
+<p>搜索一组事件模式（event pattern）是一种常见的用例，尤其是在数据流情景中。Flink 提供<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">复杂事件处理（CEP）库</a>，该库允许在事件流中进行模式检测。此外，Flink 的 SQL API 提供了一种关系式的查询表达方式，其中包含大量内置函数和基于规则的优化，可以开箱即用。</p>
+
+<p>2016 年 12 月，国际标准化组织（ISO）发布了新版本的 SQL 标准，其中包括在 <em>SQL 中的行模式识别（Row Pattern Recognition in SQL）</em>(<a href="https://standards.iso.org/ittf/PubliclyAvailableStandards/c065143_ISO_IEC_TR_19075-5_2016.zip">ISO/IEC TR 19075-5:2016</a>)。它允许 Flink 使用 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句融合 CEP 和 SQL API，以便在 SQL 中进行复杂事件处理。</p>
+
+<p><code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句启用以下任务：</p>
+<ul>
+  <li>使用 <code class="highlighter-rouge">PARTITION BY</code> 和 <code class="highlighter-rouge">ORDER BY</code> 子句对数据进行逻辑分区和排序。</li>
+  <li>使用 <code class="highlighter-rouge">PATTERN</code> 子句定义要查找的行模式。这些模式使用类似于正则表达式的语法。</li>
+  <li>在 <code class="highlighter-rouge">DEFINE</code> 子句中指定行模式变量的逻辑组合。</li>
+  <li>measures 是指在 <code class="highlighter-rouge">MEASURES</code> 子句中定义的表达式，这些表达式可用于 SQL 查询中的其他部分。</li>
+</ul>
+
+<p>下面的示例演示了基本模式识别的语法：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">T</span><span class="p">.</span><span class="n">aid</span><span class="p">,</span> <span class="n">T</span><span class="p">.</span><span class="n">bid</span><span class="p">,</span> <span class="n">T</span><span class="p">.</span><span class="n">cid</span>
+<span class="k">FROM</span> <span class="n">MyTable</span>
+    <span class="n">MATCH_RECOGNIZE</span> <span class="p">(</span>
+      <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">userid</span>
+      <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">proctime</span>
+      <span class="n">MEASURES</span>
+        <span class="n">A</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">aid</span><span class="p">,</span>
+        <span class="n">B</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">bid</span><span class="p">,</span>
+        <span class="k">C</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">cid</span>
+      <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span> <span class="k">C</span><span class="p">)</span>
+      <span class="n">DEFINE</span>
+        <span class="n">A</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'a'</span><span class="p">,</span>
+        <span class="n">B</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'b'</span><span class="p">,</span>
+        <span class="k">C</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'c'</span>
+    <span class="p">)</span> <span class="k">AS</span> <span class="n">T</span></code></pre></figure>
+
+<p>本页将更详细地解释每个关键字，并演示说明更复杂的示例。</p>
+
+<p><span class="label label-info">注意</span>  Flink 的 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句实现是一个完整标准子集。仅支持以下部分中记录的功能。基于社区反馈，可能会支持其他功能，请查看<a href="#known-limitations">已知的局限</a>。</p>
+
+<ul id="markdown-toc">
+  <li><a href="#介绍和示例" id="markdown-toc-介绍和示例">介绍和示例</a>    <ul>
+      <li><a href="#安装指南" id="markdown-toc-安装指南">安装指南</a></li>
+      <li><a href="#sql-语义" id="markdown-toc-sql-语义">SQL 语义</a></li>
+      <li><a href="#示例" id="markdown-toc-示例">示例</a></li>
+    </ul>
+  </li>
+  <li><a href="#分区" id="markdown-toc-分区">分区</a></li>
+  <li><a href="#事件顺序" id="markdown-toc-事件顺序">事件顺序</a></li>
+  <li><a href="#define--measures" id="markdown-toc-define--measures">Define &amp; Measures</a>    <ul>
+      <li><a href="#aggregations" id="markdown-toc-aggregations">Aggregations</a></li>
+    </ul>
+  </li>
+  <li><a href="#定义模式" id="markdown-toc-定义模式">定义模式</a>    <ul>
+      <li><a href="#贪婪量词和勉强量词" id="markdown-toc-贪婪量词和勉强量词">贪婪量词和勉强量词</a></li>
+      <li><a href="#时间约束" id="markdown-toc-时间约束">时间约束</a></li>
+    </ul>
+  </li>
+  <li><a href="#输出方式" id="markdown-toc-输出方式">输出方式</a></li>
+  <li><a href="#模式导航" id="markdown-toc-模式导航">模式导航</a>    <ul>
+      <li><a href="#引用模式变量" id="markdown-toc-引用模式变量">引用模式变量</a></li>
+      <li><a href="#logical-offsets" id="markdown-toc-logical-offsets">Logical Offsets</a></li>
+    </ul>
+  </li>
+  <li><a href="#匹配后的策略" id="markdown-toc-匹配后的策略">匹配后的策略</a></li>
+  <li><a href="#时间属性" id="markdown-toc-时间属性">时间属性</a></li>
+  <li><a href="#控制内存消耗" id="markdown-toc-控制内存消耗">控制内存消耗</a></li>
+  <li><a href="#已知的局限" id="markdown-toc-已知的局限">已知的局限</a></li>
+</ul>
+
+<p><a name="introduction-and-examples"></a></p>
+
+<h2 id="介绍和示例">介绍和示例</h2>
+
+<p><a name="installation-guide"></a></p>
+
+<h3 id="安装指南">安装指南</h3>
+
+<p>模式识别特性使用 Apache Flink 内部的 CEP 库。为了能够使用 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句，需要将库作为依赖项添加到 Maven 项目中。</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.apache.flink<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>flink-cep_2.11<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>1.12.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+<p>或者，也可以将依赖项添加到集群的 classpath（查看 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">dependency section</a> 获取更多相关依赖信息）。</p>
+
+<p>如果你想在 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL Client</a> 中使用 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句，你无需执行任何操作，因为默认情况下包含所有依赖项。</p>
+
+<p><a name="sql-semantics"></a></p>
+
+<h3 id="sql-语义">SQL 语义</h3>
+
+<p>每个 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 查询都包含以下子句：</p>
+
+<ul>
+  <li><a href="#partitioning">PARTITION BY</a> - 定义表的逻辑分区；类似于 <code class="highlighter-rouge">GROUP BY</code> 操作。</li>
+  <li><a href="#order-of-events">ORDER BY</a> - 指定传入行的排序方式；这是必须的，因为模式依赖于顺序。</li>
+  <li><a href="#define--measures">MEASURES</a> - 定义子句的输出；类似于 <code class="highlighter-rouge">SELECT</code> 子句。</li>
+  <li><a href="#output-mode">ONE ROW PER MATCH</a> - 输出方式，定义每个匹配项应产生多少行。</li>
+  <li><a href="#after-match-strategy">AFTER MATCH SKIP</a> - 指定下一个匹配的开始位置；这也是控制单个事件可以属于多少个不同匹配项的方法。</li>
+  <li><a href="#defining-a-pattern">PATTERN</a> - 允许使用类似于 <em>正则表达式</em> 的语法构造搜索的模式。</li>
+  <li><a href="#define--measures">DEFINE</a> - 本部分定义了模式变量必须满足的条件。</li>
+</ul>
+
+<p><span class="label label-danger">注意</span> 目前，<code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句只能应用于<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html#update-and-append-queries">追加表</a>。此外，它也总是生成一个追加表。</p>
+
+<p><a name="examples"></a></p>
+
+<h3 id="示例">示例</h3>
+
+<p>对于我们的示例，我们假设已经注册了一个表 <code class="highlighter-rouge">Ticker</code>。该表包含特定时间点的股票价格。</p>
+
+<p>这张表的 schema 如下：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Ticker
+     |-- symbol: String                           # 股票的代号
+     |-- price: Long                              # 股票的价格
+     |-- tax: Long                                # 股票应纳税额
+     |-- rowtime: TimeIndicatorTypeInfo(rowtime)  # 更改这些值的时间点</code></pre></figure>
+
+<p>为了简化，我们只考虑单个股票 <code class="highlighter-rouge">ACME</code> 的传入数据。Ticker 可以类似于下表，其中的行是连续追加的。</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">symbol         rowtime         price    tax
+======  ====================  ======= =======
+'ACME'  '01-Apr-11 10:00:00'   12      1
+'ACME'  '01-Apr-11 10:00:01'   17      2
+'ACME'  '01-Apr-11 10:00:02'   19      1
+'ACME'  '01-Apr-11 10:00:03'   21      3
+'ACME'  '01-Apr-11 10:00:04'   25      2
+'ACME'  '01-Apr-11 10:00:05'   18      1
+'ACME'  '01-Apr-11 10:00:06'   15      1
+'ACME'  '01-Apr-11 10:00:07'   14      2
+'ACME'  '01-Apr-11 10:00:08'   24      2
+'ACME'  '01-Apr-11 10:00:09'   25      2
+'ACME'  '01-Apr-11 10:00:10'   19      1</code></pre></figure>
+
+<p>现在的任务是找出一个单一股票价格不断下降的时期。为此，可以编写如下查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span> <span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="n">START_ROW</span><span class="p">.</span><span class="n">rowtime</span> <span class="k">AS</span> <span class="n">start_tstamp</span><span class="p">,</span>
+            <span class="k">LAST</span><span class="p">(</span><span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">bottom_tstamp</span><span class="p">,</span>
+            <span class="k">LAST</span><span class="p">(</span><span class="n">PRICE_UP</span><span class="p">.</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">end_tstamp</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="k">AFTER</span> <span class="k">MATCH</span> <span class="n">SKIP</span> <span class="k">TO</span> <span class="k">LAST</span> <span class="n">PRICE_UP</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">START_ROW</span> <span class="n">PRICE_DOWN</span><span class="o">+</span> <span class="n">PRICE_UP</span><span class="p">)</span>
+        <span class="n">DEFINE</span>
+            <span class="n">PRICE_DOWN</span> <span class="k">AS</span>
+                <span class="p">(</span><span class="k">LAST</span><span class="p">(</span><span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">IS</span> <span class="k">NULL</span> <span class="k">AND</span> <span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="n">START_ROW</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="k">OR</span>
+                    <span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="k">LAST</span><span class="p">(</span><span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">PRICE_UP</span> <span class="k">AS</span>
+                <span class="n">PRICE_UP</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="k">LAST</span><span class="p">(</span><span class="n">PRICE_DOWN</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span> <span class="n">MR</span><span class="p">;</span></code></pre></figure>
+
+<p>此查询将 <code class="highlighter-rouge">Ticker</code> 表按照 <code class="highlighter-rouge">symbol</code> 列进行分区并按照 <code class="highlighter-rouge">rowtime</code> 属性进行排序。</p>
+
+<p><code class="highlighter-rouge">PATTERN</code> 子句指定我们对以下模式感兴趣：该模式具有开始事件 <code class="highlighter-rouge">START_ROW</code>，然后是一个或多个 <code class="highlighter-rouge">PRICE_DOWN</code> 事件，并以 <code class="highlighter-rouge">PRICE_UP</code> 事件结束。如果可以找到这样的模式，如 <code class="highlighter-rouge">AFTER MATCH SKIP TO LAST</code> 子句所示，则从最后一个 <code class="highlighter-rouge">PRICE_UP</code> 事件开始寻找下一个模式匹配。</p>
+
+<p><code class="highlighter-rouge">DEFINE</code> 子句指定 <code class="highlighter-rouge">PRICE_DOWN</code> 和 <code class="highlighter-rouge">PRICE_UP</code> 事件需要满足的条件。尽管不存在 <code class="highlighter-rouge">START_ROW</code> 模式变量，但它具有一个始终被评估为 <code class="highlighter-rouge">TRUE</code> 隐式条件。</p>
+
+<p>模式变量 <code class="highlighter-rouge">PRICE_DOWN</code> 定义为价格小于满足 <code class="highlighter-rouge">PRICE_DOWN</code> 条件的最后一行。对于初始情况或没有满足 <code class="highlighter-rouge">PRICE_DOWN</code> 条件的最后一行时，该行的价格应小于该模式中前一行（由 <code class="highlighter-rouge">START_ROW</code> 引用）的价格。</p>
+
+<p>模式变量 <code class="highlighter-rouge">PRICE_UP</code> 定义为价格大于满足 <code class="highlighter-rouge">PRICE_DOWN</code> 条件的最后一行。</p>
+
+<p>此查询为股票价格持续下跌的每个期间生成摘要行。</p>
+
+<p>在查询的 <code class="highlighter-rouge">MEASURES</code> 子句部分定义确切的输出行信息。输出行数由 <code class="highlighter-rouge">ONE ROW PER MATCH</code> 输出方式定义。</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol       start_tstamp       bottom_tstamp         end_tstamp
+=========  ==================  ==================  ==================
+ACME       01-APR-11 10:00:04  01-APR-11 10:00:07  01-APR-11 10:00:08</code></pre></figure>
+
+<p>该行结果描述了从 <code class="highlighter-rouge">01-APR-11 10:00:04</code> 开始的价格下跌期，在 <code class="highlighter-rouge">01-APR-11 10:00:07</code> 达到最低价格，到 <code class="highlighter-rouge">01-APR-11 10:00:08</code> 再次上涨。</p>
+
+<p><a name="partitioning"></a></p>
+
+<h2 id="分区">分区</h2>
+
+<p>可以在分区数据中寻找模式，例如单个股票行情或特定用户的趋势。这可以用 <code class="highlighter-rouge">PARTITION BY</code> 子句来表示。该子句类似于对 aggregation 使用 <code class="highlighter-rouge">GROUP BY</code>。</p>
+
+<p><span class="label label-danger">注意</span> 强烈建议对传入的数据进行分区，否则 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句将被转换为非并行算子，以确保全局排序。</p>
+
+<p><a name="order-of-events"></a></p>
+
+<h2 id="事件顺序">事件顺序</h2>
+
+<p>Apache Flink 可以根据时间（<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">处理时间或者事件时间</a>）进行模式搜索。</p>
+
+<p>如果是事件时间，则在将事件传递到内部模式状态机之前对其进行排序。所以，无论行添加到表的顺序如何，生成的输出都是正确的。而模式是按照每行中所包含的时间指定顺序计算的。</p>
+
+<p><code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句假定升序的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a> 是 <code class="highlighter-rouge">ORDER BY</code> 子句的第一个参数。</p>
+
+<p>对于示例 <code class="highlighter-rouge">Ticker</code> 表，诸如 <code class="highlighter-rouge">ORDER BY rowtime ASC, price DESC</code> 的定义是有效的，但 <code class="highlighter-rouge">ORDER BY price, rowtime</code> 或者 <code class="highlighter-rouge">ORDER BY rowtime DESC, price ASC</code> 是无效的。</p>
+
+<h2 id="define--measures">Define &amp; Measures</h2>
+
+<p><code class="highlighter-rouge">DEFINE</code> 和 <code class="highlighter-rouge">MEASURES</code> 关键字与简单 SQL 查询中的 <code class="highlighter-rouge">WHERE</code> 和 <code class="highlighter-rouge">SELECT</code> 子句具有相近的含义。</p>
+
+<p><code class="highlighter-rouge">MEASURES</code> 子句定义匹配模式的输出中要包含哪些内容。它可以投影列并定义表达式进行计算。产生的行数取决于<a href="#output-mode">输出方式</a>设置。</p>
+
+<p><code class="highlighter-rouge">DEFINE</code> 子句指定行必须满足的条件才能被分类到相应的<a href="#defining-a-pattern">模式变量</a>。如果没有为模式变量定义条件，则将对每一行使用计算结果为 <code class="highlighter-rouge">true</code> 的默认条件。</p>
+
+<p>有关在这些子句中可使用的表达式的更详细的说明，请查看<a href="#pattern-navigation">事件流导航</a>部分。</p>
+
+<h3 id="aggregations">Aggregations</h3>
+
+<p>Aggregations 可以在 <code class="highlighter-rouge">DEFINE</code> 和 <code class="highlighter-rouge">MEASURES</code> 子句中使用。支持<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">内置函数</a>和<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">用户自定义函数</a>。</p>
+
+<p>对相应匹配项的行子集可以使用 Aggregate functions。请查看<a href="#pattern-navigation">事件流导航</a>部分以了解如何计算这些子集。</p>
+
+<p>下面这个示例的任务是找出股票平均价格没有低于某个阈值的最长时间段。它展示了 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 在 aggregation 中的可表达性。可以使用以下查询执行此任务：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span> <span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="k">FIRST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">start_tstamp</span><span class="p">,</span>
+            <span class="k">LAST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">end_tstamp</span><span class="p">,</span>
+            <span class="k">AVG</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="k">AS</span> <span class="n">avgPrice</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="k">AFTER</span> <span class="k">MATCH</span> <span class="n">SKIP</span> <span class="n">PAST</span> <span class="k">LAST</span> <span class="k">ROW</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span><span class="o">+</span> <span class="n">B</span><span class="p">)</span>
+        <span class="n">DEFINE</span>
+            <span class="n">A</span> <span class="k">AS</span> <span class="k">AVG</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">15</span>
+    <span class="p">)</span> <span class="n">MR</span><span class="p">;</span></code></pre></figure>
+
+<p>给定此查询和以下输入值：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">symbol         rowtime         price    tax
+======  ====================  ======= =======
+'ACME'  '01-Apr-11 10:00:00'   12      1
+'ACME'  '01-Apr-11 10:00:01'   17      2
+'ACME'  '01-Apr-11 10:00:02'   13      1
+'ACME'  '01-Apr-11 10:00:03'   16      3
+'ACME'  '01-Apr-11 10:00:04'   25      2
+'ACME'  '01-Apr-11 10:00:05'   2       1
+'ACME'  '01-Apr-11 10:00:06'   4       1
+'ACME'  '01-Apr-11 10:00:07'   10      2
+'ACME'  '01-Apr-11 10:00:08'   15      2
+'ACME'  '01-Apr-11 10:00:09'   25      2
+'ACME'  '01-Apr-11 10:00:10'   25      1
+'ACME'  '01-Apr-11 10:00:11'   30      1</code></pre></figure>
+
+<p>只要事件的平均价格不超过 <code class="highlighter-rouge">15</code>，查询就会将事件作为模式变量 <code class="highlighter-rouge">A</code> 的一部分进行累积。
+例如，这种限制发生在 <code class="highlighter-rouge">01-Apr-11 10：00：04</code>。接下来的时间段在 <code class="highlighter-rouge">01-Apr-11 10:00:11</code> 再次超过平均价格 <code class="highlighter-rouge">15</code>。因此，所述查询的结果将是：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol       start_tstamp       end_tstamp          avgPrice
+=========  ==================  ==================  ============
+ACME       01-APR-11 10:00:00  01-APR-11 10:00:03     14.5
+ACME       01-APR-11 10:00:05  01-APR-11 10:00:10     13.5</code></pre></figure>
+
+<p><span class="label label-info">注意</span> Aggregation 可以应用于表达式，但前提是它们引用单个模式变量。因此，<code class="highlighter-rouge">SUM(A.price * A.tax)</code> 是有效的，而 <code class="highlighter-rouge">AVG(A.price * B.tax)</code> 则是无效的。</p>
+
+<p><span class="label label-danger">注意</span> 不支持 <code class="highlighter-rouge">DISTINCT</code> aggregation。</p>
+
+<p><a name="defining-a-pattern"></a></p>
+
+<h2 id="定义模式">定义模式</h2>
+
+<p><code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句允许用户在事件流中使用功能强大、表达力强的语法搜索模式，这种语法与广泛使用的正则表达式语法有些相似。</p>
+
+<p>每个模式都是由基本的构建块构造的，称为 <em>模式变量</em>，可以应用算子（量词和其他修饰符）到这些模块中。整个模式必须用括号括起来。</p>
+
+<p>示例模式如下所示：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+</span> <span class="k">C</span><span class="o">*</span> <span class="n">D</span><span class="p">)</span></code></pre></figure>
+
+<p>可以使用以下算子：</p>
+
+<ul>
+  <li><em>Concatenation</em> - 像 <code class="highlighter-rouge">(A B)</code> 这样的模式意味着 <code class="highlighter-rouge">A</code> 和 <code class="highlighter-rouge">B</code> 之间的连接是严格的。因此，在它们之间不能存在没有映射到 <code class="highlighter-rouge">A</code> 或 <code class="highlighter-rouge">B</code> 的行。</li>
+  <li><em>Quantifiers</em> - 修改可以映射到模式变量的行数。
+    <ul>
+      <li><code class="highlighter-rouge">*</code> — <em>0</em> 或者多行</li>
+      <li><code class="highlighter-rouge">+</code> — <em>1</em> 或者多行</li>
+      <li><code class="highlighter-rouge">?</code> — <em>0</em> 或者 <em>1</em> 行</li>
+      <li><code class="highlighter-rouge">{ n }</code> — 严格 <em>n</em> 行（<em>n &gt; 0</em>）</li>
+      <li><code class="highlighter-rouge">{ n, }</code> — <em>n</em> 或者更多行（<em>n ≥ 0</em>）</li>
+      <li><code class="highlighter-rouge">{ n, m }</code> — 在 <em>n</em> 到 <em>m</em>（包含）行之间（<em>0 ≤ n ≤ m，0 &lt; m</em>）</li>
+      <li><code class="highlighter-rouge">{ , m }</code> — 在 <em>0</em> 到 <em>m</em>（包含）行之间（<em>m &gt; 0</em>）</li>
+    </ul>
+  </li>
+</ul>
+
+<p><span class="label label-danger">注意</span> 不支持可能产生空匹配的模式。此类模式的示例如 <code class="highlighter-rouge">PATTERN (A*)</code>，<code class="highlighter-rouge">PATTERN  (A? B*)</code>，<code class="highlighter-rouge">PATTERN (A{0,} B{0,} C*)</code> 等。</p>
+
+<p><a name="greedy--reluctant-quantifiers"></a></p>
+
+<h3 id="贪婪量词和勉强量词">贪婪量词和勉强量词</h3>
+
+<p>每一个量词可以是 <em>贪婪</em>（默认行为）的或者 <em>勉强</em> 的。贪婪的量词尝试匹配尽可能多的行，而勉强的量词则尝试匹配尽可能少的行。</p>
+
+<p>为了说明区别，可以通过查询查看以下示例，其中贪婪量词应用于 <code class="highlighter-rouge">B</code> 变量：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span><span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="k">AS</span> <span class="n">lastPrice</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="k">AFTER</span> <span class="k">MATCH</span> <span class="n">SKIP</span> <span class="n">PAST</span> <span class="k">LAST</span> <span class="k">ROW</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">*</span> <span class="k">C</span><span class="p">)</span>
+        <span class="n">DEFINE</span>
+            <span class="n">A</span> <span class="k">AS</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="n">B</span> <span class="k">AS</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="mi">15</span><span class="p">,</span>
+            <span class="k">C</span> <span class="k">AS</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">12</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p>假设我们有以下输入：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol  tax   price          rowtime
+======= ===== ======== =====================
+ XYZ     1     10       2018-09-17 10:00:02
+ XYZ     2     11       2018-09-17 10:00:03
+ XYZ     1     12       2018-09-17 10:00:04
+ XYZ     2     13       2018-09-17 10:00:05
+ XYZ     1     14       2018-09-17 10:00:06
+ XYZ     2     16       2018-09-17 10:00:07</code></pre></figure>
+
+<p>上面的模式将产生以下输出：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   lastPrice
+======== ===========
+ XYZ      16</code></pre></figure>
+
+<p>将 <code class="highlighter-rouge">B*</code> 修改为 <code class="highlighter-rouge">B*?</code> 的同一查询，这意味着 <code class="highlighter-rouge">B*</code> 应该是勉强的，将产生：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   lastPrice
+======== ===========
+ XYZ      13
+ XYZ      16</code></pre></figure>
+
+<p>模式变量 <code class="highlighter-rouge">B</code> 只匹配价格为 <code class="highlighter-rouge">12</code> 的行，而不是包含价格为 <code class="highlighter-rouge">12</code>、<code class="highlighter-rouge">13</code> 和 <code class="highlighter-rouge">14</code> 的行。</p>
+
+<p><span class="label label-danger">注意</span> 模式的最后一个变量不能使用贪婪量词。因此，不允许使用类似 <code class="highlighter-rouge">(A B*)</code> 的模式。通过引入条件为 <code class="highlighter-rouge">B</code> 的人工状态（例如 <code class="highlighter-rouge">C</code>），可以轻松解决此问题。因此，你可以使用类似以下的查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">*</span> <span class="k">C</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+    <span class="n">A</span> <span class="k">AS</span> <span class="n">condA</span><span class="p">(),</span>
+    <span class="n">B</span> <span class="k">AS</span> <span class="n">condB</span><span class="p">(),</span>
+    <span class="k">C</span> <span class="k">AS</span> <span class="k">NOT</span> <span class="n">condB</span><span class="p">()</span></code></pre></figure>
+
+<p><span class="label label-danger">注意</span> 目前不支持可选的勉强量词（<code class="highlighter-rouge">A??</code> 或者 <code class="highlighter-rouge">A{0,1}?</code>）。</p>
+
+<p><a name="time-constraint"></a></p>
+
+<h3 id="时间约束">时间约束</h3>
+
+<p>特别是对于流的使用场景，通常需要在给定的时间内完成模式。这要求限制住 Flink 在内部必须保持的状态总体大小（即已经过期的状态就不需要再维护了），即使在贪婪的量词的情况下也是如此。</p>
+
+<p>因此，Flink SQL 支持附加的（非标准 SQL）<code class="highlighter-rouge">WITHIN</code> 子句来定义模式的时间约束。子句可以在 <code class="highlighter-rouge">PATTERN</code> 子句之后定义，并以毫秒为间隔进行解析。</p>
+
+<p>如果潜在匹配的第一个和最后一个事件之间的时间长于给定值，则不会将这种匹配追加到结果表中。</p>
+
+<p><span class="label label-info">注意</span> 通常鼓励使用 <code class="highlighter-rouge">WITHIN</code> 子句，因为它有助于 Flink 进行有效的内存管理。一旦达到阈值，即可修剪基础状态。</p>
+
+<p><span class="label label-danger">注意</span> 然而，<code class="highlighter-rouge">WITHIN</code> 子句不是 SQL 标准的一部分。时间约束处理的方法已被提议将来可能会改变。</p>
+
+<p>下面的示例查询说明了 <code class="highlighter-rouge">WITHIN</code> 子句的用法：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span><span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="k">C</span><span class="p">.</span><span class="n">rowtime</span> <span class="k">AS</span> <span class="n">dropTime</span><span class="p">,</span>
+            <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">-</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="k">AS</span> <span class="n">dropDiff</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="k">AFTER</span> <span class="k">MATCH</span> <span class="n">SKIP</span> <span class="n">PAST</span> <span class="k">LAST</span> <span class="k">ROW</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">*</span> <span class="k">C</span><span class="p">)</span> <span class="n">WITHIN</span> <span class="n">INTERVAL</span> <span class="s1">'1'</span> <span class="n">HOUR</span>
+        <span class="n">DEFINE</span>
+            <span class="n">B</span> <span class="k">AS</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">-</span> <span class="mi">10</span>
+            <span class="k">C</span> <span class="k">AS</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p>该查询检测到在 1 小时的间隔内价格下降了 <code class="highlighter-rouge">10</code>。</p>
+
+<p>假设该查询用于分析以下股票数据：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">symbol         rowtime         price    tax
+======  ====================  ======= =======
+'ACME'  '01-Apr-11 10:00:00'   20      1
+'ACME'  '01-Apr-11 10:20:00'   17      2
+'ACME'  '01-Apr-11 10:40:00'   18      1
+'ACME'  '01-Apr-11 11:00:00'   11      3
+'ACME'  '01-Apr-11 11:20:00'   14      2
+'ACME'  '01-Apr-11 11:40:00'   9       1
+'ACME'  '01-Apr-11 12:00:00'   15      1
+'ACME'  '01-Apr-11 12:20:00'   14      2
+'ACME'  '01-Apr-11 12:40:00'   24      2
+'ACME'  '01-Apr-11 13:00:00'   1       2
+'ACME'  '01-Apr-11 13:20:00'   19      1</code></pre></figure>
+
+<p>查询将生成以下结果：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">symbol         dropTime         dropDiff
+======  ====================  =============
+'ACME'  '01-Apr-11 13:00:00'      14</code></pre></figure>
+
+<p>结果行代表价格从 <code class="highlighter-rouge">15</code>（在<code class="highlighter-rouge">01-Apr-11 12:00:00</code>）下降到 <code class="highlighter-rouge">1</code>（在<code class="highlighter-rouge">01-Apr-11 13:00:00</code>）。<code class="highlighter-rouge">dropDiff</code> 列包含价格差异。</p>
+
+<p>请注意，即使价格也下降了较高的值，例如，下降了 <code class="highlighter-rouge">11</code>（在 <code class="highlighter-rouge">01-Apr-11 10:00:00</code> 和 <code class="highlighter-rouge">01-Apr-11 11:40:00</code> 之间），这两个事件之间的时间差大于 1 小时。因此，它们不会产生匹配。</p>
+
+<p><a name="output-mode"></a></p>
+
+<h2 id="输出方式">输出方式</h2>
+
+<p><em>输出方式</em> 描述每个找到的匹配项应该输出多少行。SQL 标准描述了两种方式：</p>
+<ul>
+  <li><code class="highlighter-rouge">ALL ROWS PER MATCH</code></li>
+  <li><code class="highlighter-rouge">ONE ROW PER MATCH</code></li>
+</ul>
+
+<p>目前，唯一支持的输出方式是 <code class="highlighter-rouge">ONE ROW PER MATCH</code>，它将始终为每个找到的匹配项生成一个输出摘要行。</p>
+
+<p>输出行的 schema 将是按特定顺序连接 <code class="highlighter-rouge">[partitioning columns] + [measures columns]</code>。</p>
+
+<p>以下示例显示了所定义的查询的输出：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span><span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="k">FIRST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="k">AS</span> <span class="n">startPrice</span><span class="p">,</span>
+            <span class="k">LAST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="k">AS</span> <span class="n">topPrice</span><span class="p">,</span>
+            <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="k">AS</span> <span class="n">lastPrice</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span><span class="o">+</span> <span class="n">B</span><span class="p">)</span>
+        <span class="n">DEFINE</span>
+            <span class="n">A</span> <span class="k">AS</span> <span class="k">LAST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">IS</span> <span class="k">NULL</span> <span class="k">OR</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="k">LAST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">B</span> <span class="k">AS</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="k">LAST</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p>对于以下输入行：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   tax   price          rowtime
+======== ===== ======== =====================
+ XYZ      1     10       2018-09-17 10:00:02
+ XYZ      2     12       2018-09-17 10:00:03
+ XYZ      1     13       2018-09-17 10:00:04
+ XYZ      2     11       2018-09-17 10:00:05</code></pre></figure>
+
+<p>该查询将生成以下输出：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   startPrice   topPrice   lastPrice
+======== ============ ========== ===========
+ XYZ      10           13         11</code></pre></figure>
+
+<p>该模式识别由 <code class="highlighter-rouge">symbol</code> 列分区。即使在 <code class="highlighter-rouge">MEASURES</code> 子句中未明确提及，分区列仍会添加到结果的开头。</p>
+
+<p><a name="pattern-navigation"></a></p>
+
+<h2 id="模式导航">模式导航</h2>
+
+<p><code class="highlighter-rouge">DEFINE</code> 和 <code class="highlighter-rouge">MEASURES</code> 子句允许在（可能）匹配模式的行列表中进行导航。</p>
+
+<p>本节讨论用于声明条件或产生输出结果的导航。</p>
+
+<p><a name="pattern-variable-referencing"></a></p>
+
+<h3 id="引用模式变量">引用模式变量</h3>
+
+<p><em>引用模式变量</em> 允许引用一组映射到 <code class="highlighter-rouge">DEFINE</code> 或 <code class="highlighter-rouge">MEASURES</code> 子句中特定模式变量的行。</p>
+
+<p>例如，如果我们尝试将当前行与 <code class="highlighter-rouge">A</code> 进行匹配，则表达式 <code class="highlighter-rouge">A.price</code> 描述了目前为止已映射到 <code class="highlighter-rouge">A</code> 的一组行加上当前行。如果 <code class="highlighter-rouge">DEFINE</code>/<code class="highlighter-rouge">MEASURES</code> 子句中的表达式需要一行（例如 <code class="highlighter-rouge">a.price</code> 或 <code class="highlighter-rouge">a.price &gt; 10</code>），它将选择属于相应集合的最后一个值。</p>
+
+<p>如果没有指定模式变量（例如 <code class="highlighter-rouge">SUM(price)</code>），则表达式引用默认模式变量 <code class="highlighter-rouge">*</code>，该变量引用模式中的所有变量。换句话说，它创建了一个列表，其中列出了迄今为止映射到任何变量的所有行以及当前行。</p>
+
+<p><a name="example"></a></p>
+
+<h4 id="示例-1">示例</h4>
+
+<p>对于更全面的示例，可以查看以下模式和相应的条件：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">A</span> <span class="k">AS</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="n">B</span> <span class="k">AS</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="k">AND</span> <span class="k">SUM</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="k">AND</span> <span class="k">SUM</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">80</span></code></pre></figure>
+
+<p>下表描述了如何为每个传入事件计算这些条件。</p>
+
+<p>该表由以下列组成：</p>
+<ul>
+  <li><code class="highlighter-rouge">#</code> - 行标识符，用于唯一标识列表中的传入行 <code class="highlighter-rouge">[A.price]</code>/<code class="highlighter-rouge">[B.price]</code>/<code class="highlighter-rouge">[price]</code>。</li>
+  <li><code class="highlighter-rouge">price</code> - 传入行的价格。</li>
+  <li><code class="highlighter-rouge">[A.price]</code>/<code class="highlighter-rouge">[B.price]</code>/<code class="highlighter-rouge">[price]</code> - 描述 <code class="highlighter-rouge">DEFINE</code> 子句中用于计算条件的行列表。</li>
+  <li><code class="highlighter-rouge">Classifier</code> - 当前行的分类器，指示该行映射到的模式变量。</li>
+  <li><code class="highlighter-rouge">A.price</code>/<code class="highlighter-rouge">B.price</code>/<code class="highlighter-rouge">SUM(price)</code>/<code class="highlighter-rouge">SUM(B.price)</code> - 描述了这些表达式求值后的结果。</li>
+</ul>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>price</th>
+      <th>Classifier</th>
+      <th>[A.price]</th>
+      <th>[B.price]</th>
+      <th>[price]</th>
+      <th>A.price</th>
+      <th>B.price</th>
+      <th>SUM(price)</th>
+      <th>SUM(B.price)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>#1</td>
+      <td>10</td>
+      <td>-&gt; A</td>
+      <td>#1</td>
+      <td>-</td>
+      <td>-</td>
+      <td>10</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>#2</td>
+      <td>15</td>
+      <td>-&gt; B</td>
+      <td>#1</td>
+      <td>#2</td>
+      <td>#1, #2</td>
+      <td>10</td>
+      <td>15</td>
+      <td>25</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>#3</td>
+      <td>20</td>
+      <td>-&gt; B</td>
+      <td>#1</td>
+      <td>#2, #3</td>
+      <td>#1, #2, #3</td>
+      <td>10</td>
+      <td>20</td>
+      <td>45</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>#4</td>
+      <td>31</td>
+      <td>-&gt; B</td>
+      <td>#1</td>
+      <td>#2, #3, #4</td>
+      <td>#1, #2, #3, #4</td>
+      <td>10</td>
+      <td>31</td>
+      <td>76</td>
+      <td>66</td>
+    </tr>
+    <tr>
+      <td>#5</td>
+      <td>35</td>
+      <td></td>
+      <td>#1</td>
+      <td>#2, #3, #4, #5</td>
+      <td>#1, #2, #3, #4, #5</td>
+      <td>10</td>
+      <td>35</td>
+      <td>111</td>
+      <td>101</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>从表中可以看出，第一行映射到模式变量 <code class="highlighter-rouge">A</code>，随后的行映射到模式变量 <code class="highlighter-rouge">B</code>。但是，最后一行不满足 <code class="highlighter-rouge">B</code> 条件，因为所有映射行 <code class="highlighter-rouge">SUM(price)</code> 的总和与 <code class="highlighter-rouge">B</code> 中所有行的总和都超过了指定的阈值。</p>
+
+<h3 id="logical-offsets">Logical Offsets</h3>
+
+<p><em>Logical offsets</em> 在映射到指定模式变量的事件启用导航。这可以用两个相应的函数表示：</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 40%">Offset functions</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">LAST(variable.field, n)</code></pre></figure>
+
+    </td>
+    <td>
+      <p>返回映射到变量最后 n 个元素的事件中的字段值。计数从映射的最后一个元素开始。</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">FIRST(variable.field, n)</code></pre></figure>
+
+    </td>
+    <td>
+      <p>返回映射到变量的第 <i>n</i> 个元素的事件中的字段值。计数从映射的第一个元素开始。</p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p><a name="examples-1"></a></p>
+
+<h4 id="示例-2">示例</h4>
+
+<p>对于更全面的示例，可以参考以下模式和相应的条件：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">A</span> <span class="k">AS</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="n">B</span> <span class="k">AS</span> <span class="p">(</span><span class="k">LAST</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">IS</span> <span class="k">NULL</span> <span class="k">OR</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="k">LAST</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="k">AND</span>
+       <span class="p">(</span><span class="k">LAST</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">IS</span> <span class="k">NULL</span> <span class="k">OR</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="k">LAST</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">price</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></code></pre></figure>
+
+<p>下表描述了如何为每个传入事件计算这些条件。</p>
+
+<p>该表包括以下列：</p>
+<ul>
+  <li><code class="highlighter-rouge">price</code> - 传入行的价格。</li>
+  <li><code class="highlighter-rouge">Classifier</code> - 当前行的分类器，指示该行映射到的模式变量。</li>
+  <li><code class="highlighter-rouge">LAST(B.price, 1)</code>/<code class="highlighter-rouge">LAST(B.price, 2)</code> - 描述对这些表达式求值后的结果。</li>
+</ul>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+        <th style="white-space:nowrap">price</th>
+        <th style="white-space:nowrap">Classifier</th>
+        <th style="white-space:nowrap">LAST(B.price, 1)</th>
+        <th style="white-space:nowrap">LAST(B.price, 2)</th>
+        <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>-&gt; A</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>-&gt; B</td>
+      <td>null</td>
+      <td>null</td>
+      <td>注意 <code>LAST(B.price, 1)</code> 为空，因为仍然没有映射到 <code>B</code>。</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>-&gt; B</td>
+      <td>15</td>
+      <td>null</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>31</td>
+      <td>-&gt; B</td>
+      <td>20</td>
+      <td>15</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>35</td>
+      <td></td>
+      <td>31</td>
+      <td>20</td>
+      <td>因为 <code>35 &lt; 2 * 20</code> 没有映射。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>将默认模式变量与 logical offsets 一起使用也可能很有意义。</p>
+
+<p>在这种情况下，offset 会包含到目前为止映射的所有行：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">?</span> <span class="k">C</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">B</span> <span class="k">AS</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="k">C</span> <span class="k">AS</span> <span class="k">LAST</span><span class="p">(</span><span class="n">price</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span></code></pre></figure>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+        <th style="white-space:nowrap">price</th>
+        <th style="white-space:nowrap">Classifier</th>
+        <th style="white-space:nowrap">LAST(price, 1)</th>
+        <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>-&gt; A</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>15</td>
+      <td>-&gt; B</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>-&gt; C</td>
+      <td>15</td>
+      <td><code>LAST(price, 1)</code> 被计算为映射到 <code>B</code> 变量的行的价格。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>如果第二行没有映射到 <code class="highlighter-rouge">B</code> 变量，则会得到以下结果：</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+        <th style="white-space:nowrap">price</th>
+        <th style="white-space:nowrap">Classifier</th>
+        <th style="white-space:nowrap">LAST(price, 1)</th>
+        <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>-&gt; A</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>-&gt; C</td>
+      <td>10</td>
+      <td><code>LAST(price, 1)</code> 被计算为映射到 <code>A</code> 变量的行的价格。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>也可以在 <code class="highlighter-rouge">FIRST/LAST</code> 函数的第一个参数中使用多个模式变量引用。这样，可以编写访问多个列的表达式。但是，它们都必须使用相同的模式变量。换句话说，必须在一行中计算 <code class="highlighter-rouge">LAST</code>/<code class="highlighter-rouge">FIRST</code> 函数的值。</p>
+
+<p>因此，可以使用 <code class="highlighter-rouge">LAST(A.price * A.tax)</code>，但不允许使用类似 <code class="highlighter-rouge">LAST(A.price * B.tax)</code> 的表达式。</p>
+
+<p><a name="after-match-strategy"></a></p>
+
+<h2 id="匹配后的策略">匹配后的策略</h2>
+
+<p><code class="highlighter-rouge">AFTER MATCH SKIP</code> 子句指定在找到完全匹配后从何处开始新的匹配过程。</p>
+
+<p>有四种不同的策略：</p>
+<ul>
+  <li><code class="highlighter-rouge">SKIP PAST LAST ROW</code> - 在当前匹配的最后一行之后的下一行继续模式匹配。</li>
+  <li><code class="highlighter-rouge">SKIP TO NEXT ROW</code> - 继续从匹配项开始行后的下一行开始搜索新匹配项。</li>
+  <li><code class="highlighter-rouge">SKIP TO LAST variable</code> - 恢复映射到指定模式变量的最后一行的模式匹配。</li>
+  <li><code class="highlighter-rouge">SKIP TO FIRST variable</code> - 在映射到指定模式变量的第一行继续模式匹配。</li>
+</ul>
+
+<p>这也是一种指定单个事件可以属于多少个匹配项的方法。例如，使用 <code class="highlighter-rouge">SKIP PAST LAST ROW</code> 策略，每个事件最多只能属于一个匹配项。</p>
+
+<p><a name="examples-2"></a></p>
+
+<h4 id="示例-3">示例</h4>
+
+<p>为了更好地理解这些策略之间的差异，我们可以看看下面的例子。</p>
+
+<p>对于以下输入行：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   tax   price         rowtime
+======== ===== ======= =====================
+ XYZ      1     7       2018-09-17 10:00:01
+ XYZ      2     9       2018-09-17 10:00:02
+ XYZ      1     10      2018-09-17 10:00:03
+ XYZ      2     5       2018-09-17 10:00:04
+ XYZ      2     10      2018-09-17 10:00:05
+ XYZ      2     7       2018-09-17 10:00:06
+ XYZ      2     14      2018-09-17 10:00:07</code></pre></figure>
+
+<p>我们使用不同的策略评估以下查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Ticker</span>
+    <span class="n">MATCH_RECOGNIZE</span><span class="p">(</span>
+        <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">symbol</span>
+        <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">rowtime</span>
+        <span class="n">MEASURES</span>
+            <span class="k">SUM</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="k">AS</span> <span class="n">sumPrice</span><span class="p">,</span>
+            <span class="k">FIRST</span><span class="p">(</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">startTime</span><span class="p">,</span>
+            <span class="k">LAST</span><span class="p">(</span><span class="n">rowtime</span><span class="p">)</span> <span class="k">AS</span> <span class="n">endTime</span>
+        <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span>
+        <span class="p">[</span><span class="k">AFTER</span> <span class="k">MATCH</span> <span class="n">STRATEGY</span><span class="p">]</span>
+        <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span><span class="o">+</span> <span class="k">C</span><span class="p">)</span>
+        <span class="n">DEFINE</span>
+            <span class="n">A</span> <span class="k">AS</span> <span class="k">SUM</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">price</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">30</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p>该查询返回映射到 <code class="highlighter-rouge">A</code> 的总体匹配的第一个和最后一个时间戳所有行的价格之和。</p>
+
+<p>查询将根据使用的 <code class="highlighter-rouge">AFTER MATCH</code> 策略产生不同的结果：</p>
+
+<h5 id="after-match-skip-past-last-row"><code class="highlighter-rouge">AFTER MATCH SKIP PAST LAST ROW</code></h5>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   sumPrice        startTime              endTime
+======== ========== ===================== =====================
+ XYZ      26         2018-09-17 10:00:01   2018-09-17 10:00:04
+ XYZ      17         2018-09-17 10:00:05   2018-09-17 10:00:07</code></pre></figure>
+
+<p>第一个结果与 #1，#2，#3，#4 行匹配。</p>
+
+<p>第二个结果与 #5，#6, #7 行匹配。</p>
+
+<h5 id="after-match-skip-to-next-row"><code class="highlighter-rouge">AFTER MATCH SKIP TO NEXT ROW</code></h5>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   sumPrice        startTime              endTime
+======== ========== ===================== =====================
+ XYZ      26         2018-09-17 10:00:01   2018-09-17 10:00:04
+ XYZ      24         2018-09-17 10:00:02   2018-09-17 10:00:05
+ XYZ      25         2018-09-17 10:00:03   2018-09-17 10:00:06
+ XYZ      22         2018-09-17 10:00:04   2018-09-17 10:00:07
+ XYZ      17         2018-09-17 10:00:05   2018-09-17 10:00:07</code></pre></figure>
+
+<p>同样，第一个结果与 #1，#2，#3，#4 行匹配。</p>
+
+<p>与上一个策略相比，下一个匹配再次包含 #2 行匹配。因此，第二个结果与 #2，#3，#4，#5 行匹配。</p>
+
+<p>第三个结果与 #3，#4，#5, #6 行匹配。</p>
+
+<p>第四个结果与 #4，#5，#6, #7 行匹配。</p>
+
+<p>最后一个结果与 #5，#6, #7 行匹配。</p>
+
+<h5 id="after-match-skip-to-last-a"><code class="highlighter-rouge">AFTER MATCH SKIP TO LAST A</code></h5>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text"> symbol   sumPrice        startTime              endTime
+======== ========== ===================== =====================
+ XYZ      26         2018-09-17 10:00:01   2018-09-17 10:00:04
+ XYZ      25         2018-09-17 10:00:03   2018-09-17 10:00:06
+ XYZ      17         2018-09-17 10:00:05   2018-09-17 10:00:07</code></pre></figure>
+
+<p>同样，第一个结果与 #1，#2，#3，#4 行匹配。</p>
+
+<p>与前一个策略相比，下一个匹配只包含 #3 行（对应 <code class="highlighter-rouge">A</code>）用于下一个匹配。因此，第二个结果与 #3，#4，#5, #6 行匹配。</p>
+
+<p>最后一个结果与 #5，#6, #7 行匹配。</p>
+
+<h5 id="after-match-skip-to-first-a"><code class="highlighter-rouge">AFTER MATCH SKIP TO FIRST A</code></h5>
+
+<p>这种组合将产生一个运行时异常，因为人们总是试图在上一个开始的地方开始一个新的匹配。这将产生一个无限循环，因此是禁止的。</p>
+
+<p>必须记住，在 <code class="highlighter-rouge">SKIP TO FIRST/LAST variable</code> 策略的场景下，可能没有映射到该变量的行（例如，对于模式 <code class="highlighter-rouge">A*</code>）。在这种情况下，将抛出一个运行时异常，因为标准要求一个有效的行来继续匹配。</p>
+
+<p><a name="time-attributes"></a></p>
+
+<h2 id="时间属性">时间属性</h2>
+
+<p>为了在 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 之上应用一些后续查询，可能需要使用<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a>。有两个函数可供选择：</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 40%">Function</th>
+      <th class="text-left">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <code>MATCH_ROWTIME()</code><br />
+      </td>
+      <td>
+        <p>返回映射到给定模式的最后一行的时间戳。</p>
+        <p>结果属性是<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">行时间属性</a>，可用于后续基于时间的操作，例如 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html#interval-joins">interval joins</a> 和 <a href="#aggregations">group window or over window aggregations</a>。</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>MATCH_PROCTIME()</code><br />
+      </td>
+      <td>
+        <p>返回<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html#processing-time">处理时间属性</a>，该属性可用于随后的基于时间的操作，例如 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html#interval-joins">interval joins</a> 和 <a href="#aggregations">group window or over window aggregations</a>。</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a name="controlling-memory-consumption"></a></p>
+
+<h2 id="控制内存消耗">控制内存消耗</h2>
+
+<p>在编写 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 查询时，内存消耗是一个重要的考虑因素，因为潜在匹配的空间是以宽度优先的方式构建的。鉴于此，我们必须确保模式能够完成。最好使用映射到匹配项的合理数量的行，因为它们必须内存相适。</p>
+
+<p>例如，该模式不能有没有接受每一行上限的量词。这种模式可以是这样的：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+</span> <span class="k">C</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">A</span> <span class="k">as</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="k">C</span> <span class="k">as</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">20</span></code></pre></figure>
+
+<p>查询将每个传入行映射到 <code class="highlighter-rouge">B</code> 变量，因此永远不会完成。可以纠正此查询，例如，通过否定 <code class="highlighter-rouge">C</code> 的条件：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+</span> <span class="k">C</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">A</span> <span class="k">as</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="n">B</span> <span class="k">as</span> <span class="n">B</span><span class="p">.</span><span class="n">price</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="k">C</span> <span class="k">as</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">20</span></code></pre></figure>
+
+<p>或者使用 <a href="#greedy--reluctant-quantifiers">reluctant quantifier</a>：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span><span class="o">+?</span> <span class="k">C</span><span class="p">)</span>
+<span class="n">DEFINE</span>
+  <span class="n">A</span> <span class="k">as</span> <span class="n">A</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="k">C</span> <span class="k">as</span> <span class="k">C</span><span class="p">.</span><span class="n">price</span> <span class="o">&gt;</span> <span class="mi">20</span></code></pre></figure>
+
+<p><span class="label label-danger">注意</span> 请注意，<code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句未使用配置的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html#idle-state-retention-time">state retention time</a>。为此，可能需要使用 <code class="highlighter-rouge">WITHIN</code> <a href="#time-constraint">子句</a>。</p>
+
+<p><a name="known-limitations"></a></p>
+
+<h2 id="已知的局限">已知的局限</h2>
+
+<p>Flink 对 <code class="highlighter-rouge">MATCH_RECOGNIZE</code> 子句实现是一项长期持续的工作，目前尚不支持 SQL 标准的某些功能。</p>
+
+<p>不支持的功能包括：</p>
+<ul>
+  <li>模式表达式：
+    <ul>
+      <li>Pattern groups - 这意味着量词不能应用于模式的子序列。因此，<code class="highlighter-rouge">(A (B C)+)</code> 不是有效的模式。</li>
+      <li>Alterations - 像 <code class="highlighter-rouge">PATTERN((A B | C D) E)</code>这样的模式，这意味着在寻找 <code class="highlighter-rouge">E</code> 行之前必须先找到子序列 <code class="highlighter-rouge">A B</code> 或者 <code class="highlighter-rouge">C D</code>。</li>
+      <li><code class="highlighter-rouge">PERMUTE</code> operator - 这等同于它应用于所示的所有变量的排列 <code class="highlighter-rouge">PATTERN (PERMUTE (A, B, C))</code> = <code class="highlighter-rouge">PATTERN (A B C | A C B | B A C | B C A | C A B | C B A)</code>。</li>
+      <li>Anchors - <code class="highlighter-rouge">^, $</code>，表示分区的开始/结束，在流上下文中没有意义，将不被支持。</li>
+      <li>Exclusion - <code class="highlighter-rouge">PATTERN ({- A -} B)</code> 表示将查找 <code class="highlighter-rouge">A</code>，但是不会参与输出。这只适用于 <code class="highlighter-rouge">ALL ROWS PER MATCH</code> 方式。</li>
+      <li>Reluctant optional quantifier - <code class="highlighter-rouge">PATTERN A??</code> 只支持贪婪的可选量词。</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">ALL ROWS PER MATCH</code> 输出方式 - 为参与创建匹配项的每一行产生一个输出行。这也意味着：
+    <ul>
+      <li><code class="highlighter-rouge">MEASURES</code> 子句唯一支持的语义是 <code class="highlighter-rouge">FINAL</code></li>
+      <li><code class="highlighter-rouge">CLASSIFIER</code> 函数，尚不支持返回行映射到的模式变量。</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">SUBSET</code> - 它允许创建模式变量的逻辑组，并在 <code class="highlighter-rouge">DEFINE</code> 和 <code class="highlighter-rouge">MEASURES</code> 子句中使用这些组。</li>
+  <li>Physical offsets - <code class="highlighter-rouge">PREV/NEXT</code>，它为所有可见事件建立索引，而不是仅将那些映射到模式变量的事件编入索引（如 <a href="#logical-offsets">logical offsets</a> 的情况）。</li>
+  <li>提取时间属性 - 目前无法为后续基于时间的操作提取时间属性。</li>
+  <li><code class="highlighter-rouge">MATCH_RECOGNIZE</code> 仅 SQL 支持。Table API 中没有等效项。</li>
+  <li>Aggregations:
+    <ul>
+      <li>不支持 distinct aggregations。</li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

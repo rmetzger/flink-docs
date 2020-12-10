@@ -1,0 +1,2212 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: 指标</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/ops/metrics.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">流式概念<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"class="active"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations</a><div class="collapse in" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html" class="active">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations</li>
+  
+    <li class="active">指标</li>
+</ol>
+
+<h1>指标</h1>
+
+
+
+
+<p>Flink exposes a metric system that allows gathering and exposing metrics to external systems.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#registering-metrics" id="markdown-toc-registering-metrics">Registering metrics</a>    <ul>
+      <li><a href="#metric-types" id="markdown-toc-metric-types">Metric types</a></li>
+    </ul>
+  </li>
+  <li><a href="#scope" id="markdown-toc-scope">Scope</a>    <ul>
+      <li><a href="#user-scope" id="markdown-toc-user-scope">User Scope</a></li>
+      <li><a href="#system-scope" id="markdown-toc-system-scope">System Scope</a></li>
+      <li><a href="#list-of-all-variables" id="markdown-toc-list-of-all-variables">List of all Variables</a></li>
+      <li><a href="#user-variables" id="markdown-toc-user-variables">User Variables</a></li>
+    </ul>
+  </li>
+  <li><a href="#reporter" id="markdown-toc-reporter">Reporter</a></li>
+  <li><a href="#system-metrics" id="markdown-toc-system-metrics">System metrics</a>    <ul>
+      <li><a href="#cpu" id="markdown-toc-cpu">CPU</a></li>
+      <li><a href="#memory" id="markdown-toc-memory">Memory</a></li>
+      <li><a href="#threads" id="markdown-toc-threads">Threads</a></li>
+      <li><a href="#garbagecollection" id="markdown-toc-garbagecollection">GarbageCollection</a></li>
+      <li><a href="#classloader" id="markdown-toc-classloader">ClassLoader</a></li>
+      <li><a href="#network-deprecated-use-default-shuffle-service-metrics" id="markdown-toc-network-deprecated-use-default-shuffle-service-metrics">Network (Deprecated: use Default shuffle service metrics)</a></li>
+      <li><a href="#default-shuffle-service" id="markdown-toc-default-shuffle-service">Default shuffle service</a></li>
+      <li><a href="#cluster" id="markdown-toc-cluster">Cluster</a></li>
+      <li><a href="#availability" id="markdown-toc-availability">Availability</a></li>
+      <li><a href="#checkpointing" id="markdown-toc-checkpointing">Checkpointing</a></li>
+      <li><a href="#rocksdb" id="markdown-toc-rocksdb">RocksDB</a></li>
+      <li><a href="#io" id="markdown-toc-io">IO</a></li>
+      <li><a href="#connectors" id="markdown-toc-connectors">Connectors</a></li>
+      <li><a href="#system-resources" id="markdown-toc-system-resources">System resources</a></li>
+    </ul>
+  </li>
+  <li><a href="#latency-tracking" id="markdown-toc-latency-tracking">Latency tracking</a></li>
+  <li><a href="#rest-api-integration" id="markdown-toc-rest-api-integration">REST API integration</a></li>
+  <li><a href="#dashboard-integration" id="markdown-toc-dashboard-integration">Dashboard integration</a></li>
+</ul>
+
+<h2 id="registering-metrics">Registering metrics</h2>
+
+<p>You can access the metric system from any user function that extends <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html#rich-functions">RichFunction</a> by calling <code class="highlighter-rouge">getRuntimeContext().getMetricGroup()</code>.
+This method returns a <code class="highlighter-rouge">MetricGroup</code> object on which you can create and register new metrics.</p>
+
+<h3 id="metric-types">Metric types</h3>
+
+<p>Flink supports <code class="highlighter-rouge">Counters</code>, <code class="highlighter-rouge">Gauges</code>, <code class="highlighter-rouge">Histograms</code> and <code class="highlighter-rouge">Meters</code>.</p>
+
+<h4 id="counter">Counter</h4>
+
+<p>A <code class="highlighter-rouge">Counter</code> is used to count something. The current value can be in- or decremented using <code class="highlighter-rouge">inc()/inc(long n)</code> or <code class="highlighter-rouge">dec()/dec(long n)</code>.
+You can create and register a <code class="highlighter-rouge">Counter</code> by calling <code class="highlighter-rouge">counter(String name)</code> on a <code class="highlighter-rouge">MetricGroup</code>.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Counter</span> <span class="n">counter</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">counter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">map</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">counter</span><span class="o">.</span><span class="na">inc</span><span class="o">();</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">counter</span><span class="k">:</span> <span class="kt">Counter</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">counter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">counter</span><span class="o">.</span><span class="py">inc</span><span class="o">()</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<p>Alternatively you can also use your own <code class="highlighter-rouge">Counter</code> implementation:</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Counter</span> <span class="n">counter</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">counter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">counter</span><span class="o">(</span><span class="s">"myCustomCounter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">CustomCounter</span><span class="o">());</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">map</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">counter</span><span class="o">.</span><span class="na">inc</span><span class="o">();</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">counter</span><span class="k">:</span> <span class="kt">Counter</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">counter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">counter</span><span class="o">(</span><span class="s">"myCustomCounter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">CustomCounter</span><span class="o">())</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">counter</span><span class="o">.</span><span class="py">inc</span><span class="o">()</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<h4 id="gauge">Gauge</h4>
+
+<p>A <code class="highlighter-rouge">Gauge</code> provides a value of any type on demand. In order to use a <code class="highlighter-rouge">Gauge</code> you must first create a class that implements the <code class="highlighter-rouge">org.apache.flink.metrics.Gauge</code> interface.
+There is no restriction for the type of the returned value.
+You can register a gauge by calling <code class="highlighter-rouge">gauge(String name, Gauge gauge)</code> on a <code class="highlighter-rouge">MetricGroup</code>.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="kt">int</span> <span class="n">valueToExpose</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">gauge</span><span class="o">(</span><span class="s">"MyGauge"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Gauge</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="n">valueToExpose</span><span class="o">;</span>
+        <span class="o">}</span>
+      <span class="o">});</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">map</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="n">valueToExpose</span><span class="o">++;</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">new</span> <span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">valueToExpose</span> <span class="k">=</span> <span class="mi">0</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">gauge</span><span class="o">[</span><span class="kt">Int</span>, <span class="kt">ScalaGauge</span><span class="o">[</span><span class="kt">Int</span><span class="o">]](</span><span class="s">"MyGauge"</span><span class="o">,</span> <span class="nc">ScalaGauge</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="n">valueToExpose</span> <span class="o">)</span> <span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">valueToExpose</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<p>Note that reporters will turn the exposed object into a <code class="highlighter-rouge">String</code>, which means that a meaningful <code class="highlighter-rouge">toString()</code> implementation is required.</p>
+
+<h4 id="histogram">Histogram</h4>
+
+<p>A <code class="highlighter-rouge">Histogram</code> measures the distribution of long values.
+You can register one by calling <code class="highlighter-rouge">histogram(String name, Histogram histogram)</code> on a <code class="highlighter-rouge">MetricGroup</code>.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Histogram</span> <span class="n">histogram</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">histogram</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">histogram</span><span class="o">(</span><span class="s">"myHistogram"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">MyHistogram</span><span class="o">());</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">Long</span> <span class="nf">map</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">histogram</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">Long</span>,<span class="kt">Long</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">histogram</span><span class="k">:</span> <span class="kt">Histogram</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">histogram</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">histogram</span><span class="o">(</span><span class="s">"myHistogram"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">MyHistogram</span><span class="o">())</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">histogram</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="n">value</span><span class="o">)</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<p>Flink does not provide a default implementation for <code class="highlighter-rouge">Histogram</code>, but offers a <a href="https://github.com/apache/flink/blob/master/flink-metrics/flink-metrics-dropwizard/src/main/java/org/apache/flink/dropwizard/metrics/DropwizardHistogramWrapper.java">Wrapper</a> that allows usage of Codahale/DropWizard histograms.
+To use this wrapper add the following dependency in your <code class="highlighter-rouge">pom.xml</code>:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.flink<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>flink-metrics-dropwizard<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>1.12.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+<p>You can then register a Codahale/DropWizard histogram like this:</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Histogram</span> <span class="n">histogram</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">com</span><span class="o">.</span><span class="na">codahale</span><span class="o">.</span><span class="na">metrics</span><span class="o">.</span><span class="na">Histogram</span> <span class="n">dropwizardHistogram</span> <span class="o">=</span>
+      <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">codahale</span><span class="o">.</span><span class="na">metrics</span><span class="o">.</span><span class="na">Histogram</span><span class="o">(</span><span class="k">new</span> <span class="nc">SlidingWindowReservoir</span><span class="o">(</span><span class="mi">500</span><span class="o">));</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="na">histogram</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">histogram</span><span class="o">(</span><span class="s">"myHistogram"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DropwizardHistogramWrapper</span><span class="o">(</span><span class="n">dropwizardHistogram</span><span class="o">));</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">Long</span> <span class="nf">map</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">histogram</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Long</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">histogram</span><span class="k">:</span> <span class="kt">Histogram</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">config</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">com</span><span class="o">.</span><span class="py">codahale</span><span class="o">.</span><span class="py">metrics</span><span class="o">.</span><span class="py">Histogram</span> <span class="n">dropwizardHistogram</span> <span class="k">=</span>
+      <span class="k">new</span> <span class="nv">com</span><span class="o">.</span><span class="py">codahale</span><span class="o">.</span><span class="py">metrics</span><span class="o">.</span><span class="py">Histogram</span><span class="o">(</span><span class="k">new</span> <span class="nc">SlidingWindowReservoir</span><span class="o">(</span><span class="mi">500</span><span class="o">))</span>
+
+    <span class="n">histogram</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">histogram</span><span class="o">(</span><span class="s">"myHistogram"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DropwizardHistogramWrapper</span><span class="o">(</span><span class="n">dropwizardHistogram</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">histogram</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="n">value</span><span class="o">)</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<h4 id="meter">Meter</h4>
+
+<p>A <code class="highlighter-rouge">Meter</code> measures an average throughput. An occurrence of an event can be registered with the <code class="highlighter-rouge">markEvent()</code> method. Occurrence of multiple events at the same time can be registered with <code class="highlighter-rouge">markEvent(long n)</code> method.
+You can register a meter by calling <code class="highlighter-rouge">meter(String name, Meter meter)</code> on a <code class="highlighter-rouge">MetricGroup</code>.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Meter</span> <span class="n">meter</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">meter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">meter</span><span class="o">(</span><span class="s">"myMeter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">MyMeter</span><span class="o">());</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">Long</span> <span class="nf">map</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">meter</span><span class="o">.</span><span class="na">markEvent</span><span class="o">();</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">Long</span>,<span class="kt">Long</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">meter</span><span class="k">:</span> <span class="kt">Meter</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">config</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">meter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">meter</span><span class="o">(</span><span class="s">"myMeter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">MyMeter</span><span class="o">())</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">meter</span><span class="o">.</span><span class="py">markEvent</span><span class="o">()</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<p>Flink offers a <a href="https://github.com/apache/flink/blob/master/flink-metrics/flink-metrics-dropwizard/src/main/java/org/apache/flink/dropwizard/metrics/DropwizardMeterWrapper.java">Wrapper</a> that allows usage of Codahale/DropWizard meters.
+To use this wrapper add the following dependency in your <code class="highlighter-rouge">pom.xml</code>:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.apache.flink<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>flink-metrics-dropwizard<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>1.12.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span></code></pre></figure>
+
+<p>You can then register a Codahale/DropWizard meter like this:</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMapper</span> <span class="kd">extends</span> <span class="nc">RichMapFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Meter</span> <span class="n">meter</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">config</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">com</span><span class="o">.</span><span class="na">codahale</span><span class="o">.</span><span class="na">metrics</span><span class="o">.</span><span class="na">Meter</span> <span class="n">dropwizardMeter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">codahale</span><span class="o">.</span><span class="na">metrics</span><span class="o">.</span><span class="na">Meter</span><span class="o">();</span>
+
+    <span class="k">this</span><span class="o">.</span><span class="na">meter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="na">meter</span><span class="o">(</span><span class="s">"myMeter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DropwizardMeterWrapper</span><span class="o">(</span><span class="n">dropwizardMeter</span><span class="o">));</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">Long</span> <span class="nf">map</span><span class="o">(</span><span class="nc">Long</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">meter</span><span class="o">.</span><span class="na">markEvent</span><span class="o">();</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">MyMapper</span> <span class="k">extends</span> <span class="nc">RichMapFunction</span><span class="o">[</span><span class="kt">Long</span>,<span class="kt">Long</span><span class="o">]</span> <span class="o">{</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">meter</span><span class="k">:</span> <span class="kt">Meter</span> <span class="o">=</span> <span class="k">_</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">config</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">com</span><span class="o">.</span><span class="py">codahale</span><span class="o">.</span><span class="py">metrics</span><span class="o">.</span><span class="py">Meter</span> <span class="n">dropwizardMeter</span> <span class="k">=</span> <span class="k">new</span> <span class="nv">com</span><span class="o">.</span><span class="py">codahale</span><span class="o">.</span><span class="py">metrics</span><span class="o">.</span><span class="py">Meter</span><span class="o">()</span>
+
+    <span class="n">meter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+      <span class="o">.</span><span class="py">meter</span><span class="o">(</span><span class="s">"myMeter"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DropwizardMeterWrapper</span><span class="o">(</span><span class="n">dropwizardMeter</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">map</span><span class="o">(</span><span class="n">value</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">meter</span><span class="o">.</span><span class="py">markEvent</span><span class="o">()</span>
+    <span class="n">value</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<h2 id="scope">Scope</h2>
+
+<p>Every metric is assigned an identifier and a set of key-value pairs under which the metric will be reported.</p>
+
+<p>The identifier is based on 3 components: a user-defined name when registering the metric, an optional user-defined scope and a system-provided scope.
+For example, if <code class="highlighter-rouge">A.B</code> is the system scope, <code class="highlighter-rouge">C.D</code> the user scope and <code class="highlighter-rouge">E</code> the name, then the identifier for the metric will be <code class="highlighter-rouge">A.B.C.D.E</code>.</p>
+
+<p>You can configure which delimiter to use for the identifier (default: <code class="highlighter-rouge">.</code>) by setting the <code class="highlighter-rouge">metrics.scope.delimiter</code> key in <code class="highlighter-rouge">conf/flink-conf.yaml</code>.</p>
+
+<h3 id="user-scope">User Scope</h3>
+
+<p>You can define a user scope by calling <code class="highlighter-rouge">MetricGroup#addGroup(String name)</code>, <code class="highlighter-rouge">MetricGroup#addGroup(int name)</code> or <code class="highlighter-rouge">MetricGroup#addGroup(String key, String value)</code>.
+These methods affect what <code class="highlighter-rouge">MetricGroup#getMetricIdentifier</code> and <code class="highlighter-rouge">MetricGroup#getScopeComponents</code> return.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">counter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">addGroup</span><span class="o">(</span><span class="s">"MyMetrics"</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">);</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">addGroup</span><span class="o">(</span><span class="s">"MyMetricsKey"</span><span class="o">,</span> <span class="s">"MyMetricsValue"</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">counter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">addGroup</span><span class="o">(</span><span class="s">"MyMetrics"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">)</span>
+
+<span class="n">counter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">addGroup</span><span class="o">(</span><span class="s">"MyMetricsKey"</span><span class="o">,</span> <span class="s">"MyMetricsValue"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<h3 id="system-scope">System Scope</h3>
+
+<p>The system scope contains context information about the metric, for example in which task it was registered or what job that task belongs to.</p>
+
+<p>Which context information should be included can be configured by setting the following keys in <code class="highlighter-rouge">conf/flink-conf.yaml</code>.
+Each of these keys expect a format string that may contain constants (e.g. “taskmanager”) and variables (e.g. “&lt;task_id&gt;”) which will be replaced at runtime.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">metrics.scope.jm</code>
+    <ul>
+      <li>Default: &lt;host&gt;.jobmanager</li>
+      <li>Applied to all metrics that were scoped to a job manager.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">metrics.scope.jm.job</code>
+    <ul>
+      <li>Default: &lt;host&gt;.jobmanager.&lt;job_name&gt;</li>
+      <li>Applied to all metrics that were scoped to a job manager and job.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">metrics.scope.tm</code>
+    <ul>
+      <li>Default: &lt;host&gt;.taskmanager.&lt;tm_id&gt;</li>
+      <li>Applied to all metrics that were scoped to a task manager.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">metrics.scope.tm.job</code>
+    <ul>
+      <li>Default: &lt;host&gt;.taskmanager.&lt;tm_id&gt;.&lt;job_name&gt;</li>
+      <li>Applied to all metrics that were scoped to a task manager and job.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">metrics.scope.task</code>
+    <ul>
+      <li>Default: &lt;host&gt;.taskmanager.&lt;tm_id&gt;.&lt;job_name&gt;.&lt;task_name&gt;.&lt;subtask_index&gt;</li>
+      <li>Applied to all metrics that were scoped to a task.</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">metrics.scope.operator</code>
+    <ul>
+      <li>Default: &lt;host&gt;.taskmanager.&lt;tm_id&gt;.&lt;job_name&gt;.&lt;operator_name&gt;.&lt;subtask_index&gt;</li>
+      <li>Applied to all metrics that were scoped to an operator.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>There are no restrictions on the number or order of variables. Variables are case sensitive.</p>
+
+<p>The default scope for operator metrics will result in an identifier akin to <code class="highlighter-rouge">localhost.taskmanager.1234.MyJob.MyOperator.0.MyMetric</code></p>
+
+<p>If you also want to include the task name but omit the task manager information you can specify the following format:</p>
+
+<p><code class="highlighter-rouge">metrics.scope.operator: &lt;host&gt;.&lt;job_name&gt;.&lt;task_name&gt;.&lt;operator_name&gt;.&lt;subtask_index&gt;</code></p>
+
+<p>This could create the identifier <code class="highlighter-rouge">localhost.MyJob.MySource_-&gt;_MyOperator.MyOperator.0.MyMetric</code>.</p>
+
+<p>Note that for this format string an identifier clash can occur should the same job be run multiple times concurrently, which can lead to inconsistent metric data.
+As such it is advised to either use format strings that provide a certain degree of uniqueness by including IDs (e.g &lt;job_id&gt;)
+or by assigning unique names to jobs and operators.</p>
+
+<h3 id="list-of-all-variables">List of all Variables</h3>
+
+<ul>
+  <li>JobManager: &lt;host&gt;</li>
+  <li>TaskManager: &lt;host&gt;, &lt;tm_id&gt;</li>
+  <li>Job: &lt;job_id&gt;, &lt;job_name&gt;</li>
+  <li>Task: &lt;task_id&gt;, &lt;task_name&gt;, &lt;task_attempt_id&gt;, &lt;task_attempt_num&gt;, &lt;subtask_index&gt;</li>
+  <li>Operator: &lt;operator_id&gt;,&lt;operator_name&gt;, &lt;subtask_index&gt;</li>
+</ul>
+
+<p><strong>Important:</strong> For the Batch API, &lt;operator_id&gt; is always equal to &lt;task_id&gt;.</p>
+
+<h3 id="user-variables">User Variables</h3>
+
+<p>You can define a user variable by calling <code class="highlighter-rouge">MetricGroup#addGroup(String key, String value)</code>.
+This method affects what <code class="highlighter-rouge">MetricGroup#getMetricIdentifier</code>, <code class="highlighter-rouge">MetricGroup#getScopeComponents</code> and <code class="highlighter-rouge">MetricGroup#getAllVariables()</code> returns.</p>
+
+<p><strong>Important:</strong> User variables cannot be used in scope formats.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">counter</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">addGroup</span><span class="o">(</span><span class="s">"MyMetricsKey"</span><span class="o">,</span> <span class="s">"MyMetricsValue"</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="n">counter</span> <span class="k">=</span> <span class="nf">getRuntimeContext</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">getMetricGroup</span><span class="o">()</span>
+  <span class="o">.</span><span class="py">addGroup</span><span class="o">(</span><span class="s">"MyMetricsKey"</span><span class="o">,</span> <span class="s">"MyMetricsValue"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">counter</span><span class="o">(</span><span class="s">"myCounter"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+
+</div>
+
+<h2 id="reporter">Reporter</h2>
+
+<p>For information on how to set up Flink’s metric reporters please take a look at the <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">metric reporters documentation</a>.</p>
+
+<h2 id="system-metrics">System metrics</h2>
+
+<p>By default Flink gathers several metrics that provide deep insights on the current state.
+This section is a reference of all these metrics.</p>
+
+<p>The tables below generally feature 5 columns:</p>
+
+<ul>
+  <li>
+    <p>The “Scope” column describes which scope format is used to generate the system scope.
+For example, if the cell contains “Operator” then the scope format for “metrics.scope.operator” is used.
+If the cell contains multiple values, separated by a slash, then the metrics are reported multiple
+times for different entities, like for both job- and taskmanagers.</p>
+  </li>
+  <li>
+    <p>The (optional)”Infix” column describes which infix is appended to the system scope.</p>
+  </li>
+  <li>
+    <p>The “Metrics” column lists the names of all metrics that are registered for the given scope and infix.</p>
+  </li>
+  <li>
+    <p>The “Description” column provides information as to what a given metric is measuring.</p>
+  </li>
+  <li>
+    <p>The “Type” column describes which metric type is used for the measurement.</p>
+  </li>
+</ul>
+
+<p>Note that all dots in the infix/metric name columns are still subject to the “metrics.delimiter” setting.</p>
+
+<p>Thus, in order to infer the metric identifier:</p>
+
+<ol>
+  <li>Take the scope-format based on the “Scope” column</li>
+  <li>Append the value in the “Infix” column if present, and account for the “metrics.delimiter” setting</li>
+  <li>Append metric name.</li>
+</ol>
+
+<h3 id="cpu">CPU</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 20%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="2">Status.JVM.CPU</td>
+      <td>Load</td>
+      <td>The recent CPU usage of the JVM.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Time</td>
+      <td>The CPU time used by the JVM.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="memory">Memory</h3>
+<p>The memory-related metrics require Oracle’s memory management (also included in OpenJDK’s Hotspot implementation) to be in place. 
+Some metrics might not be exposed when using other JVM implementations (e.g. IBM’s J9).</p>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 20%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="17"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="15">Status.JVM.Memory</td>
+      <td>Heap.Used</td>
+      <td>The amount of heap memory currently used (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Heap.Committed</td>
+      <td>The amount of heap memory guaranteed to be available to the JVM (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Heap.Max</td>
+      <td>The maximum amount of heap memory that can be used for memory management (in bytes). <br />
+      This value might not be necessarily equal to the maximum value specified through -Xmx or 
+      the equivalent Flink configuration parameter. Some GC algorithms allocate heap memory that won't 
+      be available to the user code and, therefore, not being exposed through the heap metrics.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>NonHeap.Used</td>
+      <td>The amount of non-heap memory currently used (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>NonHeap.Committed</td>
+      <td>The amount of non-heap memory guaranteed to be available to the JVM (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>NonHeap.Max</td>
+      <td>The maximum amount of non-heap memory that can be used for memory management (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Metaspace.Used</td>
+      <td>The amount of memory currently used in the Metaspace memory pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Metaspace.Committed</td>
+      <td>The amount of memory guaranteed to be available to the JVM in the Metaspace memory pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Metaspace.Max</td>
+      <td>The maximum amount of memory that can be used in the Metaspace memory pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Direct.Count</td>
+      <td>The number of buffers in the direct buffer pool.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Direct.MemoryUsed</td>
+      <td>The amount of memory used by the JVM for the direct buffer pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Direct.TotalCapacity</td>
+      <td>The total capacity of all buffers in the direct buffer pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Mapped.Count</td>
+      <td>The number of buffers in the mapped buffer pool.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Mapped.MemoryUsed</td>
+      <td>The amount of memory used by the JVM for the mapped buffer pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Mapped.TotalCapacity</td>
+      <td>The number of buffers in the mapped buffer pool (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Status.Flink.Memory</td>
+      <td>Managed.Used</td>
+      <td>The amount of managed memory currently used.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>Managed.Total</td>
+      <td>The total amount of managed memory.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="threads">Threads</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 20%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="1"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="1">Status.JVM.Threads</td>
+      <td>Count</td>
+      <td>The total number of live threads.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="garbagecollection">GarbageCollection</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 20%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="2">Status.JVM.GarbageCollector</td>
+      <td>&lt;GarbageCollector&gt;.Count</td>
+      <td>The total number of collections that have occurred.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>&lt;GarbageCollector&gt;.Time</td>
+      <td>The total time spent performing garbage collection.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="classloader">ClassLoader</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 20%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="2">Status.JVM.ClassLoader</td>
+      <td>ClassesLoaded</td>
+      <td>The total number of classes loaded since the start of the JVM.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>ClassesUnloaded</td>
+      <td>The total number of classes unloaded since the start of the JVM.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="network-deprecated-use-default-shuffle-service-metrics">Network (Deprecated: use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>)</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 22%">Metrics</th>
+      <th class="text-left" style="width: 30%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2"><strong>TaskManager</strong></th>
+      <td rowspan="2">Status.Network</td>
+      <td>AvailableMemorySegments</td>
+      <td>The number of unused memory segments.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>TotalMemorySegments</td>
+      <td>The number of allocated memory segments.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="10">Task</th>
+      <td rowspan="6">buffers</td>
+      <td>inputQueueLength</td>
+      <td>The number of queued input buffers. (ignores LocalInputChannels which are using blocking subpartitions)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>outputQueueLength</td>
+      <td>The number of queued output buffers.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inPoolUsage</td>
+      <td>An estimate of the input buffers usage. (ignores LocalInputChannels)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inputFloatingBuffersUsage</td>
+      <td>An estimate of the floating input buffers usage. (ignores LocalInputChannels)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inputExclusiveBuffersUsage</td>
+      <td>An estimate of the exclusive input buffers usage. (ignores LocalInputChannels)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>outPoolUsage</td>
+      <td>An estimate of the output buffers usage.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td rowspan="4">Network.&lt;Input|Output&gt;.&lt;gate|partition&gt;<br />
+        <strong>(only available if <tt>taskmanager.net.detailed-metrics</tt> config option is set)</strong></td>
+      <td>totalQueueLen</td>
+      <td>Total number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>minQueueLen</td>
+      <td>Minimum number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>maxQueueLen</td>
+      <td>Maximum number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>avgQueueLen</td>
+      <td>Average number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="default-shuffle-service">Default shuffle service</h3>
+
+<p>Metrics related to data exchange between task executors using netty network communication.</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 22%">Infix</th>
+      <th class="text-left" style="width: 22%">Metrics</th>
+      <th class="text-left" style="width: 30%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="6"><strong>TaskManager</strong></th>
+      <td rowspan="6">Status.Shuffle.Netty</td>
+      <td>AvailableMemorySegments</td>
+      <td>The number of unused memory segments.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>UsedMemorySegments</td>
+      <td>The number of used memory segments.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>TotalMemorySegments</td>
+      <td>The number of allocated memory segments.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>AvailableMemory</td>
+      <td>The amount of unused memory in bytes.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>UsedMemory</td>
+      <td>The amount of used memory in bytes.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>TotalMemory</td>
+      <td>The amount of totally allocated memory in bytes.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="8">Task</th>
+      <td rowspan="2">Shuffle.Netty.Input.Buffers</td>
+      <td>inputQueueLength</td>
+      <td>The number of queued input buffers.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inPoolUsage</td>
+      <td>An estimate of the input buffers usage.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td rowspan="2">Shuffle.Netty.Output.Buffers</td>
+      <td>outputQueueLength</td>
+      <td>The number of queued output buffers.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>outPoolUsage</td>
+      <td>An estimate of the output buffers usage.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td rowspan="4">Shuffle.Netty.&lt;Input|Output&gt;.&lt;gate|partition&gt;<br />
+        <strong>(only available if <tt>taskmanager.net.detailed-metrics</tt> config option is set)</strong></td>
+      <td>totalQueueLen</td>
+      <td>Total number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>minQueueLen</td>
+      <td>Minimum number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>maxQueueLen</td>
+      <td>Maximum number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>avgQueueLen</td>
+      <td>Average number of queued buffers in all input/output channels.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="8"><strong>Task</strong></th>
+      <td rowspan="8">Shuffle.Netty.Input</td>
+      <td>numBytesInLocal</td>
+      <td>The total number of bytes this task has read from a local source.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBytesInLocalPerSecond</td>
+      <td>The number of bytes this task reads from a local source per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBytesInRemote</td>
+      <td>The total number of bytes this task has read from a remote source.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBytesInRemotePerSecond</td>
+      <td>The number of bytes this task reads from a remote source per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInLocal</td>
+      <td>The total number of network buffers this task has read from a local source.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInLocalPerSecond</td>
+      <td>The number of network buffers this task reads from a local source per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInRemote</td>
+      <td>The total number of network buffers this task has read from a remote source.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInRemotePerSecond</td>
+      <td>The number of network buffers this task reads from a remote source per second.</td>
+      <td>Meter</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="cluster">Cluster</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 26%">Metrics</th>
+      <th class="text-left" style="width: 48%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4"><strong>JobManager</strong></th>
+      <td>numRegisteredTaskManagers</td>
+      <td>The number of registered taskmanagers.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numRunningJobs</td>
+      <td>The number of running jobs.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>taskSlotsAvailable</td>
+      <td>The number of available task slots.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>taskSlotsTotal</td>
+      <td>The total number of task slots.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="availability">Availability</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 26%">Metrics</th>
+      <th class="text-left" style="width: 48%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5"><strong>Job (only available on JobManager)</strong></th>
+      <td>restartingTime</td>
+      <td>The time it took to restart the job, or how long the current restart has been in progress (in milliseconds).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>uptime</td>
+      <td>
+        The time that the job has been running without interruption.
+        <p>Returns -1 for completed jobs (in milliseconds).</p>
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>downtime</td>
+      <td>
+        For jobs currently in a failing/recovering situation, the time elapsed during this outage.
+        <p>Returns 0 for running jobs and -1 for completed jobs (in milliseconds).</p>
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>fullRestarts</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <b>numRestarts</b>.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numRestarts</td>
+      <td>The total number of restarts since this job was submitted, including full restarts and fine-grained restarts.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="checkpointing">Checkpointing</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 26%">Metrics</th>
+      <th class="text-left" style="width: 48%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="9"><strong>Job (only available on JobManager)</strong></th>
+      <td>lastCheckpointDuration</td>
+      <td>The time it took to complete the last checkpoint (in milliseconds).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>lastCheckpointSize</td>
+      <td>The total size of the last checkpoint (in bytes).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>lastCheckpointExternalPath</td>
+      <td>The path where the last external checkpoint was stored.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>lastCheckpointRestoreTimestamp</td>
+      <td>Timestamp when the last checkpoint was restored at the coordinator (in milliseconds).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numberOfInProgressCheckpoints</td>
+      <td>The number of in progress checkpoints.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numberOfCompletedCheckpoints</td>
+      <td>The number of successfully completed checkpoints.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numberOfFailedCheckpoints</td>
+      <td>The number of failed checkpoints.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>totalNumberOfCheckpoints</td>
+      <td>The number of total checkpoints (in progress, completed, failed).</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="2">Task</th>
+      <td>checkpointAlignmentTime</td>
+      <td>The time in nanoseconds that the last barrier alignment took to complete, or how long the current alignment has taken so far (in nanoseconds). This is the time between receiving first and the last checkpoint barrier. You can find more information in the [Monitoring State and Checkpoints section](//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html#monitoring-state-and-checkpoints)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>checkpointStartDelayNanos</td>
+      <td>The time in nanoseconds that elapsed between the creation of the last checkpoint and the time when the checkpointing process has started by this Task. This delay shows how long it takes for the first checkpoint barrier to reach the task. A high value indicates back-pressure. If only a specific task has a long start delay, the most likely reason is data skew.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="rocksdb">RocksDB</h3>
+<p>Certain RocksDB native metrics are available but disabled by default, you can find full documentation <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#rocksdb-native-metrics">here</a></p>
+
+<h3 id="io">IO</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 18%">Scope</th>
+      <th class="text-left" style="width: 26%">Metrics</th>
+      <th class="text-left" style="width: 48%">Description</th>
+      <th class="text-left" style="width: 8%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="1"><strong>Job (only available on TaskManager)</strong></th>
+      <td>[&lt;source_id&gt;.[&lt;source_subtask_index&gt;.]]&lt;operator_id&gt;.&lt;operator_subtask_index&gt;.latency</td>
+      <td>The latency distributions from a given source (subtask) to an operator subtask (in milliseconds), depending on the <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#metrics-latency-granularity">latency granularity</a>.</td>
+      <td>Histogram</td>
+    </tr>
+    <tr>
+      <th rowspan="13"><strong>Task</strong></th>
+      <td>numBytesInLocal</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBytesInLocalPerSecond</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBytesInRemote</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBytesInRemotePerSecond</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInLocal</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInLocalPerSecond</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInRemote</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBuffersInRemotePerSecond</td>
+      <td><span class="label label-danger">Attention:</span> deprecated, use <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html#default-shuffle-service">Default shuffle service metrics</a>.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBytesOut</td>
+      <td>The total number of bytes this task has emitted.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBytesOutPerSecond</td>
+      <td>The number of bytes this task emits per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numBuffersOut</td>
+      <td>The total number of network buffers this task has emitted.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numBuffersOutPerSecond</td>
+      <td>The number of network buffers this task emits per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>isBackPressured</td>
+      <td>Whether the task is back-pressured.</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>idleTimeMsPerSecond</td>
+      <td>The time (in milliseconds) this task is idle (either has no data to process or it is back pressured) per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <th rowspan="6"><strong>Task/Operator</strong></th>
+      <td>numRecordsIn</td>
+      <td>The total number of records this operator/task has received.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numRecordsInPerSecond</td>
+      <td>The number of records this operator/task receives per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numRecordsOut</td>
+      <td>The total number of records this operator/task has emitted.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>numRecordsOutPerSecond</td>
+      <td>The number of records this operator/task sends per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>numLateRecordsDropped</td>
+      <td>The number of records this operator/task has dropped due to arriving late.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+      <td>currentInputWatermark</td>
+      <td>
+        The last watermark this operator/tasks has received (in milliseconds).
+        <p><strong>Note:</strong> For operators/tasks with 2 inputs this is the minimum of the last received watermarks.</p>
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="3"><strong>Operator</strong></th>
+      <td>currentInput<strong>N</strong>Watermark</td>
+      <td>
+        The last watermark this operator has received in its <strong>N'th</strong> input (in milliseconds), with index <strong>N</strong> starting from 1. For example currentInput<strong>1</strong>Watermark, currentInput<strong>2</strong>Watermark, ...
+        <p><strong>Note:</strong> Only for operators with 2 or more inputs.</p>
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>currentOutputWatermark</td>
+      <td>
+        The last watermark this operator has emitted (in milliseconds).
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>numSplitsProcessed</td>
+      <td>The total number of InputSplits this data source has processed (if the operator is a data source).</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="connectors">Connectors</h3>
+
+<h4 id="kafka-connectors">Kafka Connectors</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 15%">Scope</th>
+      <th class="text-left" style="width: 18%">Metrics</th>
+      <th class="text-left" style="width: 18%">User Variables</th>
+      <th class="text-left" style="width: 39%">Description</th>
+      <th class="text-left" style="width: 10%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>commitsSucceeded</td>
+      <td>n/a</td>
+      <td>The total number of successful offset commits to Kafka, if offset committing is turned on and checkpointing is enabled.</td>
+      <td>Counter</td>
+    </tr>
+    <tr>
+       <th rowspan="1">Operator</th>
+       <td>commitsFailed</td>
+       <td>n/a</td>
+       <td>The total number of offset commit failures to Kafka, if offset committing is
+       turned on and checkpointing is enabled. Note that committing offsets back to Kafka
+       is only a means to expose consumer progress, so a commit failure does not affect
+       the integrity of Flink's checkpointed partition offsets.</td>
+       <td>Counter</td>
+    </tr>
+    <tr>
+       <th rowspan="1">Operator</th>
+       <td>committedOffsets</td>
+       <td>topic, partition</td>
+       <td>The last successfully committed offsets to Kafka, for each partition.
+       A particular partition's metric can be specified by topic name and partition id.</td>
+       <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>currentOffsets</td>
+      <td>topic, partition</td>
+      <td>The consumer's current read offset, for each partition. A particular
+      partition's metric can be specified by topic name and partition id.</td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="kinesis-connectors">Kinesis Connectors</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 15%">Scope</th>
+      <th class="text-left" style="width: 18%">Metrics</th>
+      <th class="text-left" style="width: 18%">User Variables</th>
+      <th class="text-left" style="width: 39%">Description</th>
+      <th class="text-left" style="width: 10%">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>millisBehindLatest</td>
+      <td>stream, shardId</td>
+      <td>The number of milliseconds the consumer is behind the head of the stream,
+      indicating how far behind current time the consumer is, for each Kinesis shard.
+      A particular shard's metric can be specified by stream name and shard id.
+      A value of 0 indicates record processing is caught up, and there are no new records
+      to process at this moment. A value of -1 indicates that there is no reported value for the metric, yet.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>sleepTimeMillis</td>
+      <td>stream, shardId</td>
+      <td>The number of milliseconds the consumer spends sleeping before fetching records from Kinesis.
+      A particular shard's metric can be specified by stream name and shard id.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>maxNumberOfRecordsPerFetch</td>
+      <td>stream, shardId</td>
+      <td>The maximum number of records requested by the consumer in a single getRecords call to Kinesis. If ConsumerConfigConstants.SHARD_USE_ADAPTIVE_READS
+      is set to true, this value is adaptively calculated to maximize the 2 Mbps read limits from Kinesis.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>numberOfAggregatedRecordsPerFetch</td>
+      <td>stream, shardId</td>
+      <td>The number of aggregated Kinesis records fetched by the consumer in a single getRecords call to Kinesis.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>numberOfDeggregatedRecordsPerFetch</td>
+      <td>stream, shardId</td>
+      <td>The number of deaggregated Kinesis records fetched by the consumer in a single getRecords call to Kinesis.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>averageRecordSizeBytes</td>
+      <td>stream, shardId</td>
+      <td>The average size of a Kinesis record in bytes, fetched by the consumer in a single getRecords call.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>runLoopTimeNanos</td>
+      <td>stream, shardId</td>
+      <td>The actual time taken, in nanoseconds, by the consumer in the run loop.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>loopFrequencyHz</td>
+      <td>stream, shardId</td>
+      <td>The number of calls to getRecords in one second.
+      </td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <th rowspan="1">Operator</th>
+      <td>bytesRequestedPerFetch</td>
+      <td>stream, shardId</td>
+      <td>The bytes requested (2 Mbps / loopFrequencyHz) in a single call to getRecords.
+      </td>
+      <td>Gauge</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="system-resources">System resources</h3>
+
+<p>System resources reporting is disabled by default. When <code class="highlighter-rouge">metrics.system-resource</code>
+is enabled additional metrics listed below will be available on Job- and TaskManager.
+System resources metrics are updated periodically and they present average values for a
+configured interval (<code class="highlighter-rouge">metrics.system-resource-probing-interval</code>).</p>
+
+<p>System resources reporting requires an optional dependency to be present on the
+classpath (for example placed in Flink’s <code class="highlighter-rouge">lib</code> directory):</p>
+
+<ul>
+  <li><code class="highlighter-rouge">com.github.oshi:oshi-core:3.4.0</code> (licensed under EPL 1.0 license)</li>
+</ul>
+
+<p>Including it’s transitive dependencies:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">net.java.dev.jna:jna-platform:jar:4.2.2</code></li>
+  <li><code class="highlighter-rouge">net.java.dev.jna:jna:jar:4.2.2</code></li>
+</ul>
+
+<p>Failures in this regard will be reported as warning messages like <code class="highlighter-rouge">NoClassDefFoundError</code>
+logged by <code class="highlighter-rouge">SystemResourcesMetricsInitializer</code> during the startup.</p>
+
+<h4 id="system-cpu">System CPU</h4>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Scope</th>
+      <th class="text-left" style="width: 25%">Infix</th>
+      <th class="text-left" style="width: 23%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="12"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="12">System.CPU</td>
+      <td>Usage</td>
+      <td>Overall % of CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>Idle</td>
+      <td>% of CPU Idle usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>Sys</td>
+      <td>% of System CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>User</td>
+      <td>% of User CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>IOWait</td>
+      <td>% of IOWait CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>Irq</td>
+      <td>% of Irq CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>SoftIrq</td>
+      <td>% of SoftIrq CPU usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>Nice</td>
+      <td>% of Nice Idle usage on the machine.</td>
+    </tr>
+    <tr>
+      <td>Load1min</td>
+      <td>Average CPU load over 1 minute</td>
+    </tr>
+    <tr>
+      <td>Load5min</td>
+      <td>Average CPU load over 5 minute</td>
+    </tr>
+    <tr>
+      <td>Load15min</td>
+      <td>Average CPU load over 15 minute</td>
+    </tr>
+    <tr>
+      <td>UsageCPU*</td>
+      <td>% of CPU usage per each processor</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="system-memory">System memory</h4>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Scope</th>
+      <th class="text-left" style="width: 25%">Infix</th>
+      <th class="text-left" style="width: 23%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="2">System.Memory</td>
+      <td>Available</td>
+      <td>Available memory in bytes</td>
+    </tr>
+    <tr>
+      <td>Total</td>
+      <td>Total memory in bytes</td>
+    </tr>
+    <tr>
+      <td rowspan="2">System.Swap</td>
+      <td>Used</td>
+      <td>Used swap bytes</td>
+    </tr>
+    <tr>
+      <td>Total</td>
+      <td>Total swap in bytes</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="system-network">System network</h4>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">Scope</th>
+      <th class="text-left" style="width: 25%">Infix</th>
+      <th class="text-left" style="width: 23%">Metrics</th>
+      <th class="text-left" style="width: 32%">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2"><strong>Job-/TaskManager</strong></th>
+      <td rowspan="2">System.Network.INTERFACE_NAME</td>
+      <td>ReceiveRate</td>
+      <td>Average receive rate in bytes per second</td>
+    </tr>
+    <tr>
+      <td>SendRate</td>
+      <td>Average send rate in bytes per second</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="latency-tracking">Latency tracking</h2>
+
+<p>Flink allows to track the latency of records travelling through the system. This feature is disabled by default.
+To enable the latency tracking you must set the <code class="highlighter-rouge">latencyTrackingInterval</code> to a positive number in either the
+<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#metrics-latency-interval">Flink configuration</a> or <code class="highlighter-rouge">ExecutionConfig</code>.</p>
+
+<p>At the <code class="highlighter-rouge">latencyTrackingInterval</code>, the sources will periodically emit a special record, called a <code class="highlighter-rouge">LatencyMarker</code>.
+The marker contains a timestamp from the time when the record has been emitted at the sources.
+Latency markers can not overtake regular user records, thus if records are queuing up in front of an operator,
+it will add to the latency tracked by the marker.</p>
+
+<p>Note that the latency markers are not accounting for the time user records spend in operators as they are
+bypassing them. In particular the markers are not accounting for the time records spend for example in window buffers.
+Only if operators are not able to accept new records, thus they are queuing up, the latency measured using
+the markers will reflect that.</p>
+
+<p>The <code class="highlighter-rouge">LatencyMarker</code>s are used to derive a distribution of the latency between the sources of the topology and each
+downstream operator. These distributions are reported as histogram metrics. The granularity of these distributions can
+be controlled in the <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#metrics-latency-interval">Flink configuration</a>. For the highest
+granularity <code class="highlighter-rouge">subtask</code> Flink will derive the latency distribution between every source subtask and every downstream 
+subtask, which results in quadratic (in the terms of the parallelism) number of histograms.</p>
+
+<p>Currently, Flink assumes that the clocks of all machines in the cluster are in sync. We recommend setting
+up an automated clock synchronisation service (like NTP) to avoid false latency results.</p>
+
+<p><span class="label label-danger">Warning</span> Enabling latency metrics can significantly impact the performance
+of the cluster (in particular for <code class="highlighter-rouge">subtask</code> granularity). It is highly recommended to only use them for debugging 
+purposes.</p>
+
+<h2 id="rest-api-integration">REST API integration</h2>
+
+<p>Metrics can be queried through the <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">Monitoring REST API</a>.</p>
+
+<p>Below is a list of available endpoints, with a sample JSON response. All endpoints are of the sample form <code class="highlighter-rouge">http://hostname:8081/jobmanager/metrics</code>, below we list only the <em>path</em> part of the URLs.</p>
+
+<p>Values in angle brackets are variables, for example <code class="highlighter-rouge">http://hostname:8081/jobs/&lt;jobid&gt;/metrics</code> will have to be requested for example as <code class="highlighter-rouge">http://hostname:8081/jobs/7684be6004e4e955c2a558a9bc463f65/metrics</code>.</p>
+
+<p>Request metrics for a specific entity:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">/jobmanager/metrics</code></li>
+  <li><code class="highlighter-rouge">/taskmanagers/&lt;taskmanagerid&gt;/metrics</code></li>
+  <li><code class="highlighter-rouge">/jobs/&lt;jobid&gt;/metrics</code></li>
+  <li><code class="highlighter-rouge">/jobs/&lt;jobid&gt;/vertices/&lt;vertexid&gt;/subtasks/&lt;subtaskindex&gt;</code></li>
+</ul>
+
+<p>Request metrics aggregated across all entities of the respective type:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">/taskmanagers/metrics</code></li>
+  <li><code class="highlighter-rouge">/jobs/metrics</code></li>
+  <li><code class="highlighter-rouge">/jobs/&lt;jobid&gt;/vertices/&lt;vertexid&gt;/subtasks/metrics</code></li>
+</ul>
+
+<p>Request metrics aggregated over a subset of all entities of the respective type:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">/taskmanagers/metrics?taskmanagers=A,B,C</code></li>
+  <li><code class="highlighter-rouge">/jobs/metrics?jobs=D,E,F</code></li>
+  <li><code class="highlighter-rouge">/jobs/&lt;jobid&gt;/vertices/&lt;vertexid&gt;/subtasks/metrics?subtask=1,2,3</code></li>
+</ul>
+
+<p>Request a list of available metrics:</p>
+
+<p><code class="highlighter-rouge">GET /jobmanager/metrics</code></p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric1"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric2"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p>Request the values for specific (unaggregated) metrics:</p>
+
+<p><code class="highlighter-rouge">GET taskmanagers/ABCDE/metrics?get=metric1,metric2</code></p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"34"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p>Request aggregated values for specific metrics:</p>
+
+<p><code class="highlighter-rouge">GET /taskmanagers/metrics?get=metric1,metric2</code></p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"avg"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sum"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"avg"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sum"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p>Request specific aggregated values for specific metrics:</p>
+
+<p><code class="highlighter-rouge">GET /taskmanagers/metrics?get=metric1,metric2&amp;agg=min,max</code></p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max"</span><span class="p">:</span><span class="w"> </span><span class="mi">34</span><span class="p">,</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metric2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"max"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<h2 id="dashboard-integration">Dashboard integration</h2>
+
+<p>Metrics that were gathered for each task or operator can also be visualized in the Dashboard. On the main page for a
+job, select the <code class="highlighter-rouge">Metrics</code> tab. After selecting one of the tasks in the top graph you can select metrics to display using
+the <code class="highlighter-rouge">Add Metric</code> drop-down menu.</p>
+
+<ul>
+  <li>Task metrics are listed as <code class="highlighter-rouge">&lt;subtask_index&gt;.&lt;metric_name&gt;</code>.</li>
+  <li>Operator metrics are listed as <code class="highlighter-rouge">&lt;subtask_index&gt;.&lt;operator_name&gt;.&lt;metric_name&gt;</code>.</li>
+</ul>
+
+<p>Each metric will be visualized as a separate graph, with the x-axis representing time and the y-axis the measured value.
+All graphs are automatically updated every 10 seconds, and continue to do so when navigating to another page.</p>
+
+<p>There is no limit as to the number of visualized metrics; however only numeric metrics can be visualized.</p>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

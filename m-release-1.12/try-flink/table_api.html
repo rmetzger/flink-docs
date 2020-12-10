@@ -1,0 +1,732 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: Real Time Reporting with the Table API</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/try-flink/table_api.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"class="active"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink</a><div class="collapse in" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/local_installation.html">Local Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/datastream_api.html">Fraud Detection with the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/table_api.html" class="active">Real Time Reporting with the Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/flink-operations-playground.html">Flink Operations Playground</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> Learn Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/datastream_api.html">Intro to the DataStream API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/etl.html">Data Pipelines & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/streaming_analytics.html">Streaming Analytics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/event_driven.html">Event-driven Applications</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/learn-flink/fault_tolerance.html">Fault Tolerance</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/index.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/stateful-stream-processing.html">Stateful Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/timely-stream-processing.html">Timely Stream Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/flink-architecture.html">Flink Architecture</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/concepts/glossary.html">Glossary</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> Application Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_api.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">Event Time<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_time.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamps_watermarks.html">Generating Watermarks</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/event_timestamp_extractors.html">Builtin Watermark Generators</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/broadcast_state.html">The Broadcast State Pattern</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/schema_evolution.html">State Schema Evolution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/state/custom_serialization.html">Custom State Serialization</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/user_defined_functions.html">User-Defined Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">Operators<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/windows.html">Windows</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/asyncio.html">Async I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/side_output.html">Side Outputs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/testing.html">Testing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/experimental.html">Experimental Features</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/java_lambdas.html">Java Lambda Expressions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/iterations.html">Iterations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/hadoop_compatibility.html">Hadoop Compatibility</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/local_execution.html">Local Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/cluster_execution.html">Cluster Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/examples.html">Batch Examples</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/common.html">Concepts & Common API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">Streaming Concepts<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/dynamic_tables.html">Dynamic Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/time_attributes.html">Time Attributes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/joins.html">Joins in Continuous Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/temporal_tables.html">Temporal Tables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/match_recognize.html">Detecting Patterns</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/queries.html">Queries</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/create.html">CREATE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/drop.html">DROP Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/alter.html">ALTER Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/insert.html">INSERT Statement</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/describe.html">DESCRIBE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/explain.html">EXPLAIN Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/use.html">USE Statements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/show.html">SHOW Statements</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html">System (Built-in) Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/modules.html">Modules</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sqlClient.html">SQL Client</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/config.html">Configuration</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tuning/streaming_aggregation_optimization.html">Streaming Aggregation</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/installation.html">Installation</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table_api_tutorial.html">Table API Tutorial</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream_tutorial.html">DataStream API Tutorial</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/intro_to_table_api.html">Intro to the Python Table API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/built_in_functions.html">System (Built-in) Functions</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">User Defined Functions<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/python_udfs.html">General User-defined Functions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">Vectorized User-defined Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/conversion_of_pandas.html">Conversions between PyFlink Table and Pandas DataFrame</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/dependency_management.html">Dependency Management</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/table-api-users-guide/python_table_api_connectors.html">Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API User's Guide<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/data_types.html">Data Types</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/operators.html">Operators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/datastream-api-users-guide/dependency_management.html">Dependency Management</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/python_config.html">Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/environment_variables.html">Environment Variables</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/python/faq.html">FAQ</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">Data Types & Serialization<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/types_serialization.html">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/custom_serializers.html">Custom Serializers</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">Managing Execution<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_configuration.html">Execution Configuration</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/packaging.html">Program Packaging</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/parallel.html">Parallel Execution</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/execution_plans.html">Execution Plans</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/task_failure_recovery.html">Task Failure Recovery</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/migration.html">API Migration Guides</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/cep.html">Event Processing (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">Graphs: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/guarantees.html">Fault Tolerance Guarantees</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/">Overview</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_dialect.html">Hive Dialect</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/hive/hive_functions.html">Hive Functions</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/connectors/downloads.html">Download</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/">Overview</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/local.html">Local Cluster</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/config.html">Configuration</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">Memory Configuration<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup.html">Set up Flink's Process Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_tm.html">Set up TaskManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_setup_jobmanager.html">Set up JobManager Memory</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_tuning.html">Memory tuning guide</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_trouble.html">Troubleshooting</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/memory/mem_migration.html">Migration Guide</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">File Systems<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/common.html">Common Configurations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/oss.html">Aliyun OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/azure.html">Azure Blob Storage</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/">Overview</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-ssl.html">SSL Setup</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/external_resources.html">External Resources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/deployment/advanced/logging.html">Logging</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">State & Fault Tolerance<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/state/large_state_tuning.html">Tuning Checkpoints and Large State</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/metrics.html">Metrics</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_event_time.html">Debugging Windows & Event Time</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/debugging_classloading.html">Debugging Classloading</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/debugging/application_profiling.html">Application Profiling & Debugging</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/checkpoint_monitoring.html">Monitoring Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/monitoring/back_pressure.html">Monitoring Back Pressure</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/upgrading.html">Upgrading Applications and Flink Versions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/ops/production_ready.html">Production Readiness Checklist</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink Development<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/ide_setup.html">Importing Flink into an IDE</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/flinkDev/building.html">Building Flink from Source</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> Internals<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/job_scheduling.html">Jobs and Scheduling</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/task_lifecycle.html">Task Lifecycle</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/internals/filesystems.html">File Systems</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Pick Docs Version<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><!-- link to the Chinese home page when current is blog page -->
+    <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">
+      <button type="submit" class="btn btn-default">中文版</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink</li>
+  
+    <li class="active">Real Time Reporting with the Table API</li>
+</ol>
+
+<h1>Real Time Reporting with the Table API</h1>
+
+
+
+
+<p>Apache Flink offers a Table API as a unified, relational API for batch and stream processing, i.e., queries are executed with the same semantics on unbounded, real-time streams or bounded, batch data sets and produce the same results.
+The Table API in Flink is commonly used to ease the definition of data analytics, data pipelining, and ETL applications.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#what-will-you-be-building" id="markdown-toc-what-will-you-be-building">What Will You Be Building?</a></li>
+  <li><a href="#prerequisites" id="markdown-toc-prerequisites">Prerequisites</a></li>
+  <li><a href="#help-im-stuck" id="markdown-toc-help-im-stuck">Help, I’m Stuck!</a></li>
+  <li><a href="#how-to-follow-along" id="markdown-toc-how-to-follow-along">How To Follow Along</a></li>
+  <li><a href="#breaking-down-the-code" id="markdown-toc-breaking-down-the-code">Breaking Down The Code</a></li>
+  <li><a href="#testing" id="markdown-toc-testing">Testing</a></li>
+  <li><a href="#attempt-one" id="markdown-toc-attempt-one">Attempt One</a></li>
+  <li><a href="#user-defined-functions" id="markdown-toc-user-defined-functions">User Defined Functions</a></li>
+  <li><a href="#adding-windows" id="markdown-toc-adding-windows">Adding Windows</a></li>
+  <li><a href="#once-more-with-streaming" id="markdown-toc-once-more-with-streaming">Once More, With Streaming!</a></li>
+</ul>
+
+<h2 id="what-will-you-be-building">What Will You Be Building?</h2>
+
+<p>In this tutorial, you will learn how to build a real-time dashboard to track financial transactions by account.
+The pipeline will read data from Kafka and write the results to MySQL visualized via Grafana.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>This walkthrough assumes that you have some familiarity with Java or Scala, but you should be able to follow along even if you come from a different programming language.
+It also assumes that you are familiar with basic relational concepts such as <code class="highlighter-rouge">SELECT</code> and <code class="highlighter-rouge">GROUP BY</code> clauses.</p>
+
+<h2 id="help-im-stuck">Help, I’m Stuck!</h2>
+
+<p>If you get stuck, check out the <a href="https://flink.apache.org/community.html">community support resources</a>.
+In particular, Apache Flink’s <a href="https://flink.apache.org/community.html#mailing-lists">user mailing list</a> consistently ranks as one of the most active of any Apache project and a great way to get help quickly.</p>
+
+<div class="alert alert-info">
+If running docker on windows and your data generator container is failing to start, then please ensure that you're using the right shell.
+For example <b>docker-entrypoint.sh</b> for <b>table-walkthrough_data-generator_1</b> container requires bash.
+If unavailable, it will throw an error <b>standard_init_linux.go:211: exec user process caused "no such file or directory"</b>.
+A workaround is to switch the shell to <b>sh</b> on the first line of <b>docker-entrypoint.sh</b>.
+</div>
+
+<h2 id="how-to-follow-along">How To Follow Along</h2>
+
+<p>If you want to follow along, you will require a computer with:</p>
+
+<ul>
+  <li>Java 8 or 11</li>
+  <li>Maven</li>
+  <li>Docker</li>
+</ul>
+
+<p>The required configuration files are available in the <a href="https://github.com/apache/flink-playgrounds">flink-playgrounds</a> repository.
+Once downloaded, open the project <code class="highlighter-rouge">flink-playground/table-walkthrough</code> in your IDE and navigate to the file <code class="highlighter-rouge">SpendReport</code>.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">EnvironmentSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="nc">EnvironmentSettings</span><span class="o">.</span><span class="na">newInstance</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+<span class="nc">TableEnvironment</span> <span class="n">tEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">settings</span><span class="o">);</span>
+
+<span class="n">tEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE transactions (\n"</span> <span class="o">+</span>
+    <span class="s">"    account_id  BIGINT,\n"</span> <span class="o">+</span>
+    <span class="s">"    amount      BIGINT,\n"</span> <span class="o">+</span>
+    <span class="s">"    transaction_time TIMESTAMP(3),\n"</span> <span class="o">+</span>
+    <span class="s">"    WATERMARK FOR transaction_time AS transaction_time - INTERVAL '5' SECOND\n"</span> <span class="o">+</span>
+    <span class="s">") WITH (\n"</span> <span class="o">+</span>
+    <span class="s">"    'connector' = 'kafka',\n"</span> <span class="o">+</span>
+    <span class="s">"    'topic'     = 'transactions',\n"</span> <span class="o">+</span>
+    <span class="s">"    'properties.bootstrap.servers' = 'kafka:9092',\n"</span> <span class="o">+</span>
+    <span class="s">"    'format'    = 'csv'\n"</span> <span class="o">+</span>
+    <span class="s">")"</span><span class="o">);</span>
+
+<span class="n">tEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE spend_report (\n"</span> <span class="o">+</span>
+    <span class="s">"    account_id BIGINT,\n"</span> <span class="o">+</span>
+    <span class="s">"    log_ts     TIMESTAMP(3),\n"</span> <span class="o">+</span>
+    <span class="s">"    amount     BIGINT\n,"</span> <span class="o">+</span>
+    <span class="s">"    PRIMARY KEY (account_id, log_ts) NOT ENFORCED"</span> <span class="o">+</span>
+    <span class="s">") WITH (\n"</span> <span class="o">+</span>
+    <span class="s">"   'connector'  = 'jdbc',\n"</span> <span class="o">+</span>
+    <span class="s">"   'url'        = 'jdbc:mysql://mysql:3306/sql-demo',\n"</span> <span class="o">+</span>
+    <span class="s">"   'table-name' = 'spend_report',\n"</span> <span class="o">+</span>
+    <span class="s">"   'driver'     = 'com.mysql.jdbc.Driver',\n"</span> <span class="o">+</span>
+    <span class="s">"   'username'   = 'sql-demo',\n"</span> <span class="o">+</span>
+    <span class="s">"   'password'   = 'demo-sql'\n"</span> <span class="o">+</span>
+    <span class="s">")"</span><span class="o">);</span>
+
+<span class="nc">Table</span> <span class="n">transactions</span> <span class="o">=</span> <span class="n">tEnv</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">);</span>
+<span class="n">report</span><span class="o">(</span><span class="n">transactions</span><span class="o">).</span><span class="na">executeInsert</span><span class="o">(</span><span class="s">"spend_report"</span><span class="o">);</span></code></pre></figure>
+
+<h2 id="breaking-down-the-code">Breaking Down The Code</h2>
+
+<h4 id="the-execution-environment">The Execution Environment</h4>
+
+<p>The first two lines set up your <code class="highlighter-rouge">TableEnvironment</code>.
+The table environment is how you can set properties for your Job, specify whether you are writing a batch or a streaming application, and create your sources.
+This walkthrough creates a standard table environment that uses the streaming execution.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">EnvironmentSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="nc">EnvironmentSettings</span><span class="o">.</span><span class="na">newInstance</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+<span class="nc">TableEnvironment</span> <span class="n">tEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">settings</span><span class="o">);</span></code></pre></figure>
+
+<h4 id="registering-tables">Registering Tables</h4>
+
+<p>Next, tables are registered in the current <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/catalogs.html">catalog</a> that you can use to connect to external systems for reading and writing both batch and streaming data.
+A table source provides access to data stored in external systems, such as a database, a key-value store, a message queue, or a file system.
+A table sink emits a table to an external storage system.
+Depending on the type of source and sink, they support different formats such as CSV, JSON, Avro, or Parquet.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">tEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE transactions (\n"</span> <span class="o">+</span>
+     <span class="s">"    account_id  BIGINT,\n"</span> <span class="o">+</span>
+     <span class="s">"    amount      BIGINT,\n"</span> <span class="o">+</span>
+     <span class="s">"    transaction_time TIMESTAMP(3),\n"</span> <span class="o">+</span>
+     <span class="s">"    WATERMARK FOR transaction_time AS transaction_time - INTERVAL '5' SECOND\n"</span> <span class="o">+</span>
+     <span class="s">") WITH (\n"</span> <span class="o">+</span>
+     <span class="s">"    'connector' = 'kafka',\n"</span> <span class="o">+</span>
+     <span class="s">"    'topic'     = 'transactions',\n"</span> <span class="o">+</span>
+     <span class="s">"    'properties.bootstrap.servers' = 'kafka:9092',\n"</span> <span class="o">+</span>
+     <span class="s">"    'format'    = 'csv'\n"</span> <span class="o">+</span>
+     <span class="s">")"</span><span class="o">);</span></code></pre></figure>
+
+<p>Two tables are registered; a transaction input table, and a spend report output table.
+The transactions (<code class="highlighter-rouge">transactions</code>) table lets us read credit card transactions, which contain account ID’s (<code class="highlighter-rouge">account_id</code>), timestamps (<code class="highlighter-rouge">transaction_time</code>), and US$ amounts (<code class="highlighter-rouge">amount</code>).
+The table is a logical view over a Kafka topic called <code class="highlighter-rouge">transactions</code> containing CSV data.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">tEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE spend_report (\n"</span> <span class="o">+</span>
+    <span class="s">"    account_id BIGINT,\n"</span> <span class="o">+</span>
+    <span class="s">"    log_ts     TIMESTAMP(3),\n"</span> <span class="o">+</span>
+    <span class="s">"    amount     BIGINT\n,"</span> <span class="o">+</span>
+    <span class="s">"    PRIMARY KEY (account_id, log_ts) NOT ENFORCED"</span> <span class="o">+</span>
+    <span class="s">") WITH (\n"</span> <span class="o">+</span>
+    <span class="s">"    'connector'  = 'jdbc',\n"</span> <span class="o">+</span>
+    <span class="s">"    'url'        = 'jdbc:mysql://mysql:3306/sql-demo',\n"</span> <span class="o">+</span>
+    <span class="s">"    'table-name' = 'spend_report',\n"</span> <span class="o">+</span>
+    <span class="s">"    'driver'     = 'com.mysql.jdbc.Driver',\n"</span> <span class="o">+</span>
+    <span class="s">"    'username'   = 'sql-demo',\n"</span> <span class="o">+</span>
+    <span class="s">"    'password'   = 'demo-sql'\n"</span> <span class="o">+</span>
+    <span class="s">")"</span><span class="o">);</span></code></pre></figure>
+
+<p>The second table, <code class="highlighter-rouge">spend_report</code>, stores the final results of the aggregation.
+Its underlying storage is a table in a MySql database.</p>
+
+<h4 id="the-query">The Query</h4>
+
+<p>With the environment configured and tables registered, you are ready to build your first application.
+From the <code class="highlighter-rouge">TableEnvironment</code> you can read <code class="highlighter-rouge">from</code> an input table to read its rows and then write those results into an output table using <code class="highlighter-rouge">executeInsert</code>.
+The <code class="highlighter-rouge">report</code> function is where you will implement your business logic.
+It is currently unimplemented.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Table</span> <span class="n">transactions</span> <span class="o">=</span> <span class="n">tEnv</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">);</span>
+<span class="n">report</span><span class="o">(</span><span class="n">transactions</span><span class="o">).</span><span class="na">executeInsert</span><span class="o">(</span><span class="s">"spend_report"</span><span class="o">);</span></code></pre></figure>
+
+<h2 id="testing">Testing</h2>
+
+<p>The project contains a secondary testing class <code class="highlighter-rouge">SpendReportTest</code> that validates the logic of the report.
+It creates a table environment in batch mode.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">EnvironmentSettings</span> <span class="n">settings</span> <span class="o">=</span> <span class="nc">EnvironmentSettings</span><span class="o">.</span><span class="na">newInstance</span><span class="o">().</span><span class="na">inBatchMode</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
+<span class="nc">TableEnvironment</span> <span class="n">tEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">settings</span><span class="o">);</span> </code></pre></figure>
+
+<p>One of Flink’s unique properties is that it provides consistent semantics across batch and streaming.
+This means you can develop and test applications in batch mode on static datasets, and deploy to production as streaming applications.</p>
+
+<h2 id="attempt-one">Attempt One</h2>
+
+<p>Now with the skeleton of a Job set-up, you are ready to add some business logic.
+The goal is to build a report that shows the total spend for each account across each hour of the day.
+This means the timestamp column needs be be rounded down from millisecond to hour granularity.</p>
+
+<p>Flink supports developing relational applications in pure <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/">SQL</a> or using the <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/tableApi.html">Table API</a>.
+The Table API is a fluent DSL inspired by SQL, that can be written in Python, Java, or Scala and supports strong IDE integration.
+Just like a SQL query, Table programs can select the required fields and group by your keys.
+These features, allong with <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/systemFunctions.html">built-in functions</a> like <code class="highlighter-rouge">floor</code> and <code class="highlighter-rouge">sum</code>, you can write this report.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">Table</span> <span class="nf">report</span><span class="o">(</span><span class="nc">Table</span> <span class="n">transactions</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">transactions</span><span class="o">.</span><span class="na">select</span><span class="o">(</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"transaction_time"</span><span class="o">).</span><span class="na">floor</span><span class="o">(</span><span class="nc">TimeIntervalUnit</span><span class="o">.</span><span class="na">HOUR</span><span class="o">).</span><span class="na">as</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">groupBy</span><span class="o">(</span><span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">).</span><span class="na">sum</span><span class="o">().</span><span class="na">as</span><span class="o">(</span><span class="s">"amount"</span><span class="o">));</span>
+<span class="o">}</span></code></pre></figure>
+
+<h2 id="user-defined-functions">User Defined Functions</h2>
+
+<p>Flink contains a limited number of built-in functions, and sometimes you need to extend it with a <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/functions/udfs.html">user-defined function</a>.
+If <code class="highlighter-rouge">floor</code> wasn’t predefined, you could implement it yourself.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.time.LocalDateTime</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.time.temporal.ChronoUnit</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.flink.table.annotation.DataTypeHint</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.table.functions.ScalarFunction</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFloor</span> <span class="kd">extends</span> <span class="nc">ScalarFunction</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nd">@DataTypeHint</span><span class="o">(</span><span class="s">"TIMESTAMP(3)"</span><span class="o">)</span> <span class="nc">LocalDateTime</span> <span class="nf">eval</span><span class="o">(</span>
+        <span class="nd">@DataTypeHint</span><span class="o">(</span><span class="s">"TIMESTAMP(3)"</span><span class="o">)</span> <span class="nc">LocalDateTime</span> <span class="n">timestamp</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">return</span> <span class="n">timestamp</span><span class="o">.</span><span class="na">truncatedTo</span><span class="o">(</span><span class="nc">ChronoUnit</span><span class="o">.</span><span class="na">HOURS</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>And then quickly integrate it in your application.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">Table</span> <span class="nf">report</span><span class="o">(</span><span class="nc">Table</span> <span class="n">transactions</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">transactions</span><span class="o">.</span><span class="na">select</span><span class="o">(</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span>
+            <span class="n">call</span><span class="o">(</span><span class="nc">MyFloor</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"transaction_time"</span><span class="o">)).</span><span class="na">as</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">groupBy</span><span class="o">(</span><span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">).</span><span class="na">sum</span><span class="o">().</span><span class="na">as</span><span class="o">(</span><span class="s">"amount"</span><span class="o">));</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>This query consumes all records from the <code class="highlighter-rouge">transactions</code> table, calculates the report, and outputs the results in an efficient, scalable manner.
+Running the test with this implementation will pass.</p>
+
+<h2 id="adding-windows">Adding Windows</h2>
+
+<p>Grouping data based on time is a typical operation in data processing, especially when working with infinite streams.
+A grouping based on time is called a <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/stream/operators/windows.html">window</a> and Flink offers flexible windowing semantics.
+The most basic type of window is called a <code class="highlighter-rouge">Tumble</code> window, which has a fixed size and whose buckets do not overlap.</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="nc">Table</span> <span class="nf">report</span><span class="o">(</span><span class="nc">Table</span> <span class="n">transactions</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">transactions</span>
+        <span class="o">.</span><span class="na">window</span><span class="o">(</span><span class="nc">Tumble</span><span class="o">.</span><span class="na">over</span><span class="o">(</span><span class="n">lit</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">hour</span><span class="o">()).</span><span class="na">on</span><span class="o">(</span><span class="err">$</span><span class="o">(</span><span class="s">"transaction_time"</span><span class="o">)).</span><span class="na">as</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">groupBy</span><span class="o">(</span><span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"account_id"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">).</span><span class="na">start</span><span class="o">().</span><span class="na">as</span><span class="o">(</span><span class="s">"log_ts"</span><span class="o">),</span>
+            <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">).</span><span class="na">sum</span><span class="o">().</span><span class="na">as</span><span class="o">(</span><span class="s">"amount"</span><span class="o">));</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>This defines your application as using one hour tumbling windows based on the timestamp column.
+So a row with timestamp <code class="highlighter-rouge">2019-06-01 01:23:47</code> is put in the <code class="highlighter-rouge">2019-06-01 01:00:00</code> window.</p>
+
+<p>Aggregations based on time are unique because time, as opposed to other attributes, generally moves forward in a continuous streaming application.
+Unlike <code class="highlighter-rouge">floor</code> and your UDF, window functions are <a href="https://en.wikipedia.org/wiki/Intrinsic_function">intrinsics</a>, which allows the runtime to apply additional optimizations.
+In a batch context, windows offer a convenient API for grouping records by a timestamp attribute.</p>
+
+<p>Running the test with this implementation will also pass.</p>
+
+<h2 id="once-more-with-streaming">Once More, With Streaming!</h2>
+
+<p>And that’s it, a fully functional, stateful, distributed streaming application!
+The query continuously consumes the stream of transactions from Kafka, computes the hourly spendings, and emits results as soon as they are ready.
+Since the input is unbounded, the query keeps running until it is manually stopped.
+And because the Job uses time window-based aggregations, Flink can perform specific optimizations such as state clean up when the framework knows that no more records will arrive for a particular window.</p>
+
+<p>The table playground is fully dockerized and runnable locally as streaming application.
+The environment contains a Kafka topic, a continuous data generator, MySql, and Grafana.</p>
+
+<p>From within the <code class="highlighter-rouge">table-walkthrough</code> folder start the docker-compose script.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>docker-compose build
+<span class="nv">$ </span>docker-compose up <span class="nt">-d</span></code></pre></figure>
+
+<p>You can see information on the running job via the <a href="http://localhost:8082/">Flink console</a>.</p>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/spend-report-console.png" alt="Flink Console" height="400px" width="800px" /></p>
+
+<p>Explore the results from inside MySQL.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>docker-compose <span class="nb">exec </span>mysql mysql <span class="nt">-Dsql-demo</span> <span class="nt">-usql-demo</span> <span class="nt">-pdemo-sql</span>
+
+mysql&gt; use sql-demo<span class="p">;</span>
+Database changed
+
+mysql&gt; <span class="k">select </span>count<span class="o">(</span><span class="k">*</span><span class="o">)</span> from spend_report<span class="p">;</span>
++----------+
+| count<span class="o">(</span><span class="k">*</span><span class="o">)</span> |
++----------+
+|      110 |
++----------+</code></pre></figure>
+
+<p>Finally, go to <a href="http://localhost:3000/d/FOe0PbmGk/walkthrough?viewPanel=2&amp;orgId=1&amp;refresh=5s">Grafana</a> to see the fully visualized result!</p>
+
+<p><img src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/spend-report-grafana.png" alt="Grafana" height="400px" width="800px" /></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      Want to contribute translation?
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

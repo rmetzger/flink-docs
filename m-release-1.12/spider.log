@@ -1,0 +1,730 @@
+2020-12-09 10:48:26 URL:http://localhost:4000/ [35877/35877] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:48:26 URL: http://localhost:4000/page/favicon.ico 200 OK
+unlink: No such file or directory
+2020-12-09 10:48:27 URL:http://localhost:4000/page/css/flink.css [5616/5616] -> "flink.css.tmp.tmp" [1]
+2020-12-09 10:48:27 URL:http://localhost:4000/page/css/syntax.css [4548/4548] -> "syntax.css.tmp.tmp" [1]
+2020-12-09 10:48:28 URL:http://localhost:4000/page/css/codetabs.css [2136/2136] -> "codetabs.css.tmp.tmp" [1]
+2020-12-09 10:48:28 URL:http://localhost:4000/page/font-awesome/css/font-awesome.min.css [29062/29062] -> "font-awesome.min.css.tmp.tmp" [1]
+2020-12-09 10:48:28 URL: http://localhost:4000/page/img/navbar-brand-logo.jpg 200 OK
+unlink: No such file or directory
+2020-12-09 10:48:30 URL:http://localhost:4000/try-flink/local_installation.html [32748/32748] -> "local_installation.html.tmp.tmp" [1]
+2020-12-09 10:48:30 URL:http://localhost:4000/try-flink/datastream_api.html [125216/125216] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:48:31 URL:http://localhost:4000/try-flink/table_api.html [60007/60007] -> "table_api.html.tmp.tmp" [1]
+2020-12-09 10:48:32 URL:http://localhost:4000/try-flink/flink-operations-playground.html [97216/97216] -> "flink-operations-playground.html.tmp.tmp" [1]
+2020-12-09 10:48:33 URL:http://localhost:4000/learn-flink/ [42830/42830] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:48:34 URL:http://localhost:4000/learn-flink/datastream_api.html [50551/50551] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:48:34 URL:http://localhost:4000/learn-flink/etl.html [78719/78719] -> "etl.html.tmp.tmp" [1]
+2020-12-09 10:48:35 URL:http://localhost:4000/learn-flink/streaming_analytics.html [67718/67718] -> "streaming_analytics.html.tmp.tmp" [1]
+2020-12-09 10:48:36 URL:http://localhost:4000/learn-flink/event_driven.html [60153/60153] -> "event_driven.html.tmp.tmp" [1]
+2020-12-09 10:48:37 URL:http://localhost:4000/learn-flink/fault_tolerance.html [42813/42813] -> "fault_tolerance.html.tmp.tmp" [1]
+2020-12-09 10:48:38 URL:http://localhost:4000/concepts/index.html [36132/36132] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:48:39 URL:http://localhost:4000/concepts/stateful-stream-processing.html [52400/52400] -> "stateful-stream-processing.html.tmp.tmp" [1]
+2020-12-09 10:48:40 URL:http://localhost:4000/concepts/timely-stream-processing.html [43750/43750] -> "timely-stream-processing.html.tmp.tmp" [1]
+2020-12-09 10:48:41 URL:http://localhost:4000/concepts/flink-architecture.html [46958/46958] -> "flink-architecture.html.tmp.tmp" [1]
+2020-12-09 10:48:43 URL:http://localhost:4000/concepts/glossary.html [41004/41004] -> "glossary.html.tmp.tmp" [1]
+2020-12-09 10:48:43 URL:http://localhost:4000/dev/datastream_api.html [102954/102954] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:48:45 URL:http://localhost:4000/dev/datastream_execution_mode.html [58509/58509] -> "datastream_execution_mode.html.tmp.tmp" [1]
+2020-12-09 10:48:45 URL:http://localhost:4000/dev/event_time.html [33757/33757] -> "event_time.html.tmp.tmp" [1]
+2020-12-09 10:48:46 URL:http://localhost:4000/dev/event_timestamps_watermarks.html [75251/75251] -> "event_timestamps_watermarks.html.tmp.tmp" [1]
+2020-12-09 10:48:47 URL:http://localhost:4000/dev/event_timestamp_extractors.html [37078/37078] -> "event_timestamp_extractors.html.tmp.tmp" [1]
+2020-12-09 10:48:48 URL:http://localhost:4000/dev/stream/state/ [33772/33772] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:48:49 URL:http://localhost:4000/dev/stream/state/state.html [116537/116537] -> "state.html.tmp.tmp" [1]
+2020-12-09 10:48:50 URL:http://localhost:4000/dev/stream/state/broadcast_state.html [61041/61041] -> "broadcast_state.html.tmp.tmp" [1]
+2020-12-09 10:48:51 URL:http://localhost:4000/dev/stream/state/checkpointing.html [54014/54014] -> "checkpointing.html.tmp.tmp" [1]
+2020-12-09 10:48:52 URL:http://localhost:4000/dev/stream/state/queryable_state.html [61874/61874] -> "queryable_state.html.tmp.tmp" [1]
+2020-12-09 10:48:53 URL:http://localhost:4000/dev/stream/state/state_backends.html [34703/34703] -> "state_backends.html.tmp.tmp" [1]
+2020-12-09 10:48:54 URL:http://localhost:4000/dev/stream/state/schema_evolution.html [39406/39406] -> "schema_evolution.html.tmp.tmp" [1]
+2020-12-09 10:48:55 URL:http://localhost:4000/dev/stream/state/custom_serialization.html [78431/78431] -> "custom_serialization.html.tmp.tmp" [1]
+2020-12-09 10:48:56 URL:http://localhost:4000/dev/user_defined_functions.html [50714/50714] -> "user_defined_functions.html.tmp.tmp" [1]
+2020-12-09 10:48:57 URL:http://localhost:4000/dev/stream/operators/ [132046/132046] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:48:58 URL:http://localhost:4000/dev/stream/operators/windows.html [167235/167235] -> "windows.html.tmp.tmp" [1]
+2020-12-09 10:48:59 URL:http://localhost:4000/dev/stream/operators/joining.html [63111/63111] -> "joining.html.tmp.tmp" [1]
+2020-12-09 10:49:00 URL:http://localhost:4000/dev/stream/operators/process_function.html [68149/68149] -> "process_function.html.tmp.tmp" [1]
+2020-12-09 10:49:01 URL:http://localhost:4000/dev/stream/operators/asyncio.html [55895/55895] -> "asyncio.html.tmp.tmp" [1]
+2020-12-09 10:49:01 URL:http://localhost:4000/dev/stream/sources.html [75631/75631] -> "sources.html.tmp.tmp" [1]
+2020-12-09 10:49:01 URL:http://localhost:4000/dev/stream/side_output.html [42868/42868] -> "side_output.html.tmp.tmp" [1]
+2020-12-09 10:49:01 URL:http://localhost:4000/dev/application_parameters.html [45099/45099] -> "application_parameters.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/stream/testing.html [84275/84275] -> "testing.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/stream/experimental.html [39044/39044] -> "experimental.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/scala_api_extensions.html [58859/58859] -> "scala_api_extensions.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/java_lambdas.html [46746/46746] -> "java_lambdas.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/project-configuration.html [71410/71410] -> "project-configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/ [274159/274159] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/dataset_transformations.html [229961/229961] -> "dataset_transformations.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/iterations.html [48102/48102] -> "iterations.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/zip_elements_guide.html [42725/42725] -> "zip_elements_guide.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/hadoop_compatibility.html [56462/56462] -> "hadoop_compatibility.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/local_execution.html [43684/43684] -> "local_execution.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/cluster_execution.html [36862/36862] -> "cluster_execution.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/batch/examples.html [90254/90254] -> "examples.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/ [40205/40205] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/common.html [211080/211080] -> "common.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/ [33747/33747] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/dynamic_tables.html [50815/50815] -> "dynamic_tables.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/time_attributes.html [76943/76943] -> "time_attributes.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/joins.html [78372/78372] -> "joins.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/temporal_tables.html [76610/76610] -> "temporal_tables.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/match_recognize.html [103939/103939] -> "match_recognize.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/streaming/query_configuration.html [48545/48545] -> "query_configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/types.html [175313/175313] -> "types.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/tableApi.html [409760/409760] -> "tableApi.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/ [66209/66209] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/gettingStarted.html [43900/43900] -> "gettingStarted.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/queries.html [161413/161413] -> "queries.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/create.html [80217/80217] -> "create.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/drop.html [45291/45291] -> "drop.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/alter.html [45679/45679] -> "alter.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/insert.html [58412/58412] -> "insert.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/hints.html [37522/37522] -> "hints.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/describe.html [45905/45905] -> "describe.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/explain.html [45597/45597] -> "explain.html.tmp.tmp" [1]
+2020-12-09 10:49:02 URL:http://localhost:4000/dev/table/sql/use.html [45659/45659] -> "use.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/sql/show.html [50669/50669] -> "show.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/functions/ [36264/36264] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/functions/systemFunctions.html [267575/267575] -> "systemFunctions.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/functions/udfs.html [223379/223379] -> "udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/modules.html [37918/37918] -> "modules.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/catalogs.html [98350/98350] -> "catalogs.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/sqlClient.html [94714/94714] -> "sqlClient.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/config.html [57526/57526] -> "config.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/tuning/streaming_aggregation_optimization.html [60157/60157] -> "streaming_aggregation_optimization.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/table/sourceSinks.html [110230/110230] -> "sourceSinks.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/ [34377/34377] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/installation.html [35703/35703] -> "installation.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table_api_tutorial.html [50997/50997] -> "table_api_tutorial.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/datastream_tutorial.html [43397/43397] -> "datastream_tutorial.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/intro_to_table_api.html [86842/86842] -> "intro_to_table_api.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/table_environment.html [75155/75155] -> "table_environment.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/operations.html [409785/409785] -> "operations.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/python_types.html [39587/39587] -> "python_types.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/built_in_functions.html [267587/267587] -> "built_in_functions.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/udfs/python_udfs.html [75886/75886] -> "python_udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html [50641/50641] -> "vectorized_python_udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/conversion_of_pandas.html [39244/39244] -> "conversion_of_pandas.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/dependency_management.html [44111/44111] -> "dependency_management.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/sql.html [66305/66305] -> "sql.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/catalogs.html [98368/98368] -> "catalogs.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/metrics.html [47113/47113] -> "metrics.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/table-api-users-guide/python_table_api_connectors.html [45633/45633] -> "python_table_api_connectors.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/datastream-api-users-guide/data_types.html [44203/44203] -> "data_types.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/datastream-api-users-guide/operators.html [39523/39523] -> "operators.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/datastream-api-users-guide/dependency_management.html [39923/39923] -> "dependency_management.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/python_config.html [40490/40490] -> "python_config.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/environment_variables.html [33765/33765] -> "environment_variables.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/python/faq.html [40176/40176] -> "faq.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/types_serialization.html [78855/78855] -> "types_serialization.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/custom_serializers.html [40755/40755] -> "custom_serializers.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/execution_configuration.html [41755/41755] -> "execution_configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/packaging.html [34657/34657] -> "packaging.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/parallel.html [49465/49465] -> "parallel.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/execution_plans.html [35155/35155] -> "execution_plans.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/task_failure_recovery.html [54568/54568] -> "task_failure_recovery.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/migration.html [33752/33752] -> "migration.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/libs/cep.html [194546/194546] -> "cep.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/libs/state_processor_api.html [122582/122582] -> "state_processor_api.html.tmp.tmp" [1]
+2020-12-09 10:49:03 URL:http://localhost:4000/dev/libs/gelly/ [40605/40605] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/graph_api.html [133461/133461] -> "graph_api.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/iterative_graph_processing.html [129904/129904] -> "iterative_graph_processing.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/library_methods.html [66572/66572] -> "library_methods.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/graph_algorithms.html [53216/53216] -> "graph_algorithms.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/graph_generators.html [79619/79619] -> "graph_generators.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/libs/gelly/bipartite_graph.html [48456/48456] -> "bipartite_graph.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/ [36810/36810] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/guarantees.html [35818/35818] -> "guarantees.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/kafka.html [86778/86778] -> "kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/cassandra.html [62111/62111] -> "cassandra.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/kinesis.html [108108/108108] -> "kinesis.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/elasticsearch.html [78407/78407] -> "elasticsearch.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/file_sink.html [108454/108454] -> "file_sink.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/streamfile_sink.html [106085/106085] -> "streamfile_sink.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/rabbitmq.html [47917/47917] -> "rabbitmq.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/nifi.html [42515/42515] -> "nifi.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/pubsub.html [45587/45587] -> "pubsub.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/twitter.html [39433/39433] -> "twitter.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/connectors/jdbc.html [36753/36753] -> "jdbc.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/ [54826/54826] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/ [35861/35861] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/csv.html [40944/40944] -> "csv.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/json.html [41315/41315] -> "json.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/avro-confluent.html [38859/38859] -> "avro-confluent.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/avro.html [39287/39287] -> "avro.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/debezium.html [59164/59164] -> "debezium.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/canal.html [48616/48616] -> "canal.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/maxwell.html [46067/46067] -> "maxwell.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/parquet.html [38515/38515] -> "parquet.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/orc.html [37865/37865] -> "orc.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/formats/raw.html [40610/40610] -> "raw.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/kafka.html [69102/69102] -> "kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/upsert-kafka.html [48984/48984] -> "upsert-kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/kinesis.html [74009/74009] -> "kinesis.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/jdbc.html [69439/69439] -> "jdbc.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/elasticsearch.html [46924/46924] -> "elasticsearch.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/filesystem.html [61805/61805] -> "filesystem.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hbase.html [49563/49563] -> "hbase.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/datagen.html [42405/42405] -> "datagen.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/print.html [36943/36943] -> "print.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/blackhole.html [35289/35289] -> "blackhole.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hive/ [55446/55446] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hive/hive_catalog.html [50127/50127] -> "hive_catalog.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hive/hive_dialect.html [61604/61604] -> "hive_dialect.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hive/hive_read_write.html [66054/66054] -> "hive_read_write.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/hive/hive_functions.html [47332/47332] -> "hive_functions.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/table/connectors/downloads.html [32559/32559] -> "downloads.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/dev/batch/connectors.html [50302/50302] -> "connectors.html.tmp.tmp" [1]
+2020-12-09 10:49:04 URL:http://localhost:4000/deployment/ [47972/47972] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/standalone/ [47876/47876] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/standalone/docker.html [75766/75766] -> "docker.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/standalone/kubernetes.html [76894/76894] -> "kubernetes.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/native_kubernetes.html [56851/56851] -> "native_kubernetes.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/yarn.html [52406/52406] -> "yarn.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/resource-providers/mesos.html [48510/48510] -> "mesos.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/config.html [249797/249797] -> "config.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_setup.html [45111/45111] -> "mem_setup.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_setup_tm.html [51090/51090] -> "mem_setup_tm.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_setup_jobmanager.html [40709/40709] -> "mem_setup_jobmanager.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_tuning.html [40661/40661] -> "mem_tuning.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_trouble.html [38080/38080] -> "mem_trouble.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/memory/mem_migration.html [56936/56936] -> "mem_migration.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/cli.html [83739/83739] -> "cli.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/ [41887/41887] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/common.html [36169/36169] -> "common.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/s3.html [44353/44353] -> "s3.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/oss.html [37291/37291] -> "oss.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/azure.html [37125/37125] -> "azure.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/filesystems/plugins.html [38049/38049] -> "plugins.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/ha/ [36183/36183] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/ha/zookeeper_ha.html [40085/40085] -> "zookeeper_ha.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/ha/kubernetes_ha.html [35797/35797] -> "kubernetes_ha.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/metric_reporters.html [57734/57734] -> "metric_reporters.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/security/security-ssl.html [69489/69489] -> "security-ssl.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/security/security-kerberos.html [40177/40177] -> "security-kerberos.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/repls/python_shell.html [50693/50693] -> "python_shell.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/repls/scala_shell.html [59231/59231] -> "scala_shell.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/advanced/external_resources.html [64414/64414] -> "external_resources.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/advanced/historyserver.html [38033/38033] -> "historyserver.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/deployment/advanced/logging.html [42359/42359] -> "logging.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/state/checkpoints.html [41438/41438] -> "checkpoints.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/state/savepoints.html [52420/52420] -> "savepoints.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/state/state_backends.html [65721/65721] -> "state_backends.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/state/large_state_tuning.html [59786/59786] -> "large_state_tuning.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/metrics.html [128050/128050] -> "metrics.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/rest_api.html [168450/168450] -> "rest_api.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/debugging/debugging_event_time.html [34497/34497] -> "debugging_event_time.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/debugging/debugging_classloading.html [47752/47752] -> "debugging_classloading.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/debugging/application_profiling.html [38946/38946] -> "application_profiling.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/monitoring/checkpoint_monitoring.html [41727/41727] -> "checkpoint_monitoring.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/monitoring/back_pressure.html [36848/36848] -> "back_pressure.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/upgrading.html [60863/60863] -> "upgrading.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/ops/production_ready.html [36601/36601] -> "production_ready.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/flinkDev/ide_setup.html [44706/44706] -> "ide_setup.html.tmp.tmp" [1]
+2020-12-09 10:49:05 URL:http://localhost:4000/flinkDev/building.html [40864/40864] -> "building.html.tmp.tmp" [1]
+2020-12-09 10:49:06 URL:http://localhost:4000/internals/job_scheduling.html [39480/39480] -> "job_scheduling.html.tmp.tmp" [1]
+2020-12-09 10:49:06 URL:http://localhost:4000/internals/task_lifecycle.html [47153/47153] -> "task_lifecycle.html.tmp.tmp" [1]
+2020-12-09 10:49:06 URL:http://localhost:4000/internals/filesystems.html [40790/40790] -> "filesystems.html.tmp.tmp" [1]
+2020-12-09 10:49:06 URL:http://localhost:4000/zh/ [35717/35717] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:06 URL:http://localhost:4000/deployment/resource-providers/ [32218/32218] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.12.html [48850/48850] -> "flink-1.12.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.11.html [69723/69723] -> "flink-1.11.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.10.html [67677/67677] -> "flink-1.10.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.9.html [51708/51708] -> "flink-1.9.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.8.html [46484/46484] -> "flink-1.8.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/release-notes/flink-1.7.html [42364/42364] -> "flink-1.7.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/page/js/jquery.min.js 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/js/flink.js 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.eot?v=4.6.3 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.eot? 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.3 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.ttf?v=4.6.3 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/page/font-awesome/fonts/fontawesome-webfont.svg?v=4.6.3 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/try-flink/local_installation.html [32746/32746] -> "local_installation.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/try-flink/datastream_api.html [126255/126255] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/fraud-transactions.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/try-flink/table_api.html [60750/60750] -> "table_api.html.tmp.tmp" [1]
+failed: Connection refused.
+failed: Connection refused.
+failed: Connection refused.
+failed: Connection refused.
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/spend-report-console.png 200 OK
+unlink: No such file or directory
+failed: Connection refused.
+failed: Connection refused.
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/spend-report-grafana.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/try-flink/flink-operations-playground.html [98439/98439] -> "flink-operations-playground.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/flink-docker-playground.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/click-event-count-example.svg 200 OK
+unlink: No such file or directory
+failed: Connection refused.
+failed: Connection refused.
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/playground-webui.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/playground-webui-failure.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/ [42746/42746] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/bounded-unbounded.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/program_dataflow.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/flink-application-sources-sinks.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/parallel_dataflow.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/parallel-job.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/local-state.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/datastream_api.html [50274/50274] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/distributed-runtime.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/etl.html [77185/77185] -> "etl.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/keyBy.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/transformation.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/connected-streams.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/streaming_analytics.html [68156/68156] -> "streaming_analytics.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/window-assigners.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/event_driven.html [61100/61100] -> "event_driven.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/learn-flink/fault_tolerance.html [42466/42466] -> "fault_tolerance.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/stream_barriers.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/stream_aligning.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/concepts/index.html [36493/36493] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/levels_of_abstraction.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/concepts/stateful-stream-processing.html [50022/50022] -> "stateful-stream-processing.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/state_partitioning.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/checkpointing.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/stream_unaligning.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/checkpoints.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/dev/batch/fault_tolerance.html [32230/32230] -> "fault_tolerance.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/concepts/timely-stream-processing.html [43849/43849] -> "timely-stream-processing.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/event_processing_time.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/stream_watermark_in_order.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/stream_watermark_out_of_order.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/parallel_streams_watermarks.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/windows.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL:http://localhost:4000/zh/concepts/flink-architecture.html [45868/45868] -> "flink-architecture.html.tmp.tmp" [1]
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/processes.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/tasks_chains.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/tasks_slots.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:07 URL: http://localhost:4000/fig/slot_sharing.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/concepts/glossary.html [40620/40620] -> "glossary.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/datastream_api.html [103086/103086] -> "datastream_api.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/datastream_execution_mode.html [58654/58654] -> "datastream_execution_mode.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/datastream-example-job-graph.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/event_time.html [39919/39919] -> "event_time.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/event_timestamps_watermarks.html [74783/74783] -> "event_timestamps_watermarks.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/parallel_kafka_watermarks.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/event_timestamp_extractors.html [37330/37330] -> "event_timestamp_extractors.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/ [33766/33766] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/state.html [113619/113619] -> "state.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/broadcast_state.html [60198/60198] -> "broadcast_state.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/checkpointing.html [52344/52344] -> "checkpointing.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/queryable_state.html [60934/60934] -> "queryable_state.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/state_backends.html [34788/34788] -> "state_backends.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/schema_evolution.html [39004/39004] -> "schema_evolution.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/state/custom_serialization.html [78527/78527] -> "custom_serialization.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/user_defined_functions.html [50747/50747] -> "user_defined_functions.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/operators/ [131617/131617] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/rescale.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/operators/windows.html [167353/167353] -> "windows.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/tumbling-windows.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/sliding-windows.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/session-windows.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/non-windowed.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/operators/joining.html [63217/63217] -> "joining.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/tumbling-window-join.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/sliding-window-join.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/session-window-join.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/interval-join.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/operators/process_function.html [68249/68249] -> "process_function.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/operators/asyncio.html [54160/54160] -> "asyncio.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/async_io.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/sources.html [75740/75740] -> "sources.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/source_components.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/source_reader.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/per_split_watermarks.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/side_output.html [42749/42749] -> "side_output.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/application_parameters.html [45202/45202] -> "application_parameters.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/testing.html [84109/84109] -> "testing.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/stream/experimental.html [39120/39120] -> "experimental.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/scala_api_extensions.html [58968/58968] -> "scala_api_extensions.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/java_lambdas.html [46541/46541] -> "java_lambdas.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/project-configuration.html [71522/71522] -> "project-configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/ [273661/273661] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/dataset_transformations.html [230064/230064] -> "dataset_transformations.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/dev/batch/index.html [274159/274159] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/iterations.html [48196/48196] -> "iterations.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/iterations_iterate_operator.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/iterations_iterate_operator_example.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/iterations_delta_iterate_operator.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/iterations_delta_iterate_operator_example.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL: http://localhost:4000/fig/iterations_supersteps.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/zip_elements_guide.html [42828/42828] -> "zip_elements_guide.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/hadoop_compatibility.html [56550/56550] -> "hadoop_compatibility.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/local_execution.html [43784/43784] -> "local_execution.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/cluster_execution.html [37045/37045] -> "cluster_execution.html.tmp.tmp" [1]
+2020-12-09 10:49:08 URL:http://localhost:4000/zh/dev/batch/examples.html [89978/89978] -> "examples.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/ [42513/42513] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/dev/table/connect.html [237437/237437] -> "connect.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/common.html [211443/211443] -> "common.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/ [33604/33604] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/dynamic_tables.html [48914/48914] -> "dynamic_tables.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/stream-query-stream.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/append-mode.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/query-groupBy-cnt.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/query-groupBy-window-cnt.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/undo-redo-mode.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/redo-mode.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/time_attributes.html [75830/75830] -> "time_attributes.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/joins.html [75527/75527] -> "joins.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/temporal_tables.html [75237/75237] -> "temporal_tables.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/match_recognize.html [100838/100838] -> "match_recognize.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/streaming/query_configuration.html [48645/48645] -> "query_configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/types.html [171849/171849] -> "types.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/tableApi.html [409878/409878] -> "tableApi.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/ [66363/66363] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/gettingStarted.html [44030/44030] -> "gettingStarted.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/dev/table/sql/ [66209/66209] -> "sql.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/dev/table/sql/index.html [66209/66209] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/dev/table/streaming/ [33747/33747] -> "streaming.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/queries.html [159047/159047] -> "queries.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/create.html [79207/79207] -> "create.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/drop.html [45310/45310] -> "drop.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/alter.html [45704/45704] -> "alter.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/insert.html [58187/58187] -> "insert.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/hints.html [37631/37631] -> "hints.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/describe.html [45900/45900] -> "describe.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/explain.html [45792/45792] -> "explain.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/use.html [45647/45647] -> "use.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sql/show.html [50762/50762] -> "show.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/functions/ [35936/35936] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/functions/systemFunctions.html [274785/274785] -> "systemFunctions.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/functions/udfs.html [228344/228344] -> "udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/udagg-mechanism.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/udtagg-mechanism.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/modules.html [38021/38021] -> "modules.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/catalogs.html [97713/97713] -> "catalogs.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sqlClient.html [92559/92559] -> "sqlClient.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/sql_client_demo.gif 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/config.html [57357/57357] -> "config.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/tuning/streaming_aggregation_optimization.html [59179/59179] -> "streaming_aggregation_optimization.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/minibatch_agg.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/local_agg.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table-streaming/distinct_split.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:09 URL:http://localhost:4000/zh/dev/table/sourceSinks.html [110339/110339] -> "sourceSinks.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL:http://localhost:4000/dev/table/legacySourceSinks.html [114031/114031] -> "legacySourceSinks.html.tmp.tmp" [1]
+2020-12-09 10:49:09 URL: http://localhost:4000/fig/table_connectors.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/ [34495/34495] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/pyflink.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/dev/python/table-api-users-guide/ [33510/33510] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/dev/python/datastream-api-users-guide/ [32228/32228] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/installation.html [35409/35409] -> "installation.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table_api_tutorial.html [51212/51212] -> "table_api_tutorial.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/datastream_tutorial.html [43183/43183] -> "datastream_tutorial.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/intro_to_table_api.html [86445/86445] -> "intro_to_table_api.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/dev/table/tableApi.html?code_tab=python [409760/409760] -> "tableApi.html?code_tab=python.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/table_environment.html [74607/74607] -> "table_environment.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/operations.html [409902/409902] -> "operations.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/python_types.html [39720/39720] -> "python_types.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/built_in_functions.html [274796/274796] -> "built_in_functions.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/udfs/python_udfs.html [76011/76011] -> "python_udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/udagg-mechanism-python.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html [50442/50442] -> "vectorized_python_udfs.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/conversion_of_pandas.html [39149/39149] -> "conversion_of_pandas.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/dependency_management.html [43987/43987] -> "dependency_management.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/sql.html [66458/66458] -> "sql.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/catalogs.html [97730/97730] -> "catalogs.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/metrics.html [47600/47600] -> "metrics.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/python_table_api_connectors.html [45865/45865] -> "python_table_api_connectors.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/datastream-api-users-guide/data_types.html [44108/44108] -> "data_types.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/datastream-api-users-guide/operators.html [38929/38929] -> "operators.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/dev/stream/operators/?code_tab=python [132046/132046] -> "index.html?code_tab=python.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/datastream-api-users-guide/dependency_management.html [39836/39836] -> "dependency_management.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/python_config.html [40575/40575] -> "python_config.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/environment_variables.html [33841/33841] -> "environment_variables.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/python/faq.html [40148/40148] -> "faq.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/downloads/setup-pyflink-virtual-env.sh 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/types_serialization.html [77863/77863] -> "types_serialization.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/custom_serializers.html [40650/40650] -> "custom_serializers.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/execution_configuration.html [41825/41825] -> "execution_configuration.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/packaging.html [34487/34487] -> "packaging.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/parallel.html [49194/49194] -> "parallel.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/execution_plans.html [35162/35162] -> "execution_plans.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/plan_visualizer.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/task_failure_recovery.html [54196/54196] -> "task_failure_recovery.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/migration.html [33874/33874] -> "migration.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/libs/cep.html [189697/189697] -> "cep.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/libs/state_processor_api.html [122717/122717] -> "state_processor_api.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/application-my-app-state-processor-api.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/database-my-app-state-processor-api.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/libs/gelly/ [40722/40722] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL:http://localhost:4000/zh/dev/libs/gelly/graph_api.html [133578/133578] -> "graph_api.html.tmp.tmp" [1]
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/gelly-filter.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/gelly-union.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/gelly-example-graph.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:10 URL: http://localhost:4000/fig/gelly-reduceOnEdges.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/gelly-reduceOnNeighbors.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/libs/gelly/iterative_graph_processing.html [130030/130030] -> "iterative_graph_processing.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/vertex-centric%20supersteps.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/gelly-vc-sssp1.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/gelly-gsa-sssp1.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL:http://localhost:4000/dev/ [32194/32194] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/libs/gelly/library_methods.html [66689/66689] -> "library_methods.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/libs/gelly/graph_algorithms.html [53333/53333] -> "graph_algorithms.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/libs/gelly/graph_generators.html [79736/79736] -> "graph_generators.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/libs/gelly/bipartite_graph.html [48573/48573] -> "bipartite_graph.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/bipartite_graph_projections.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/ [36668/36668] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/guarantees.html [35695/35695] -> "guarantees.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/kafka.html [85580/85580] -> "kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/cassandra.html [62237/62237] -> "cassandra.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/kinesis.html [80073/80073] -> "kinesis.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/elasticsearch.html [78501/78501] -> "elasticsearch.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/file_sink.html [106683/106683] -> "file_sink.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL: http://localhost:4000/fig/streamfilesink_bucketing.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/streamfile_sink.html [104939/104939] -> "streamfile_sink.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/rabbitmq.html [47774/47774] -> "rabbitmq.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/nifi.html [42536/42536] -> "nifi.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/pubsub.html [45060/45060] -> "pubsub.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/twitter.html [39001/39001] -> "twitter.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/connectors/jdbc.html [36808/36808] -> "jdbc.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/ [54984/54984] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/ [36102/36102] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/csv.html [41045/41045] -> "csv.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/json.html [41632/41632] -> "json.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/avro-confluent.html [38848/38848] -> "avro-confluent.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/avro.html [39307/39307] -> "avro.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/debezium.html [58912/58912] -> "debezium.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/canal.html [48763/48763] -> "canal.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/maxwell.html [46190/46190] -> "maxwell.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/parquet.html [38526/38526] -> "parquet.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/orc.html [37958/37958] -> "orc.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/formats/raw.html [40586/40586] -> "raw.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/kafka.html [69323/69323] -> "kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/upsert-kafka.html [48779/48779] -> "upsert-kafka.html.tmp.tmp" [1]
+2020-12-09 10:49:11 URL:http://localhost:4000/zh/dev/table/connectors/kinesis.html [74126/74126] -> "kinesis.html.tmp.tmp" [1]
+2020-12-09 10:49:12 URL:http://localhost:4000/zh/dev/table/connectors/jdbc.html [69562/69562] -> "jdbc.html.tmp.tmp" [1]
+2020-12-09 10:49:13 URL:http://localhost:4000/zh/dev/table/connectors/elasticsearch.html [47050/47050] -> "elasticsearch.html.tmp.tmp" [1]
+2020-12-09 10:49:14 URL:http://localhost:4000/zh/dev/table/connectors/filesystem.html [61940/61940] -> "filesystem.html.tmp.tmp" [1]
+2020-12-09 10:49:15 URL:http://localhost:4000/zh/dev/table/connectors/hbase.html [49128/49128] -> "hbase.html.tmp.tmp" [1]
+2020-12-09 10:49:16 URL:http://localhost:4000/zh/dev/table/connectors/datagen.html [38132/38132] -> "datagen.html.tmp.tmp" [1]
+2020-12-09 10:49:17 URL:http://localhost:4000/zh/dev/table/connectors/print.html [37124/37124] -> "print.html.tmp.tmp" [1]
+2020-12-09 10:49:17 URL:http://localhost:4000/zh/dev/table/connectors/blackhole.html [35354/35354] -> "blackhole.html.tmp.tmp" [1]
+2020-12-09 10:49:19 URL:http://localhost:4000/zh/dev/table/connectors/hive/ [55172/55172] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:20 URL:http://localhost:4000/zh/dev/table/connectors/hive/hive_catalog.html [50244/50244] -> "hive_catalog.html.tmp.tmp" [1]
+2020-12-09 10:49:21 URL:http://localhost:4000/zh/dev/table/connectors/hive/hive_dialect.html [61225/61225] -> "hive_dialect.html.tmp.tmp" [1]
+2020-12-09 10:49:22 URL:http://localhost:4000/zh/dev/table/connectors/hive/hive_read_write.html [66183/66183] -> "hive_read_write.html.tmp.tmp" [1]
+2020-12-09 10:49:23 URL:http://localhost:4000/zh/dev/table/connectors/hive/hive_functions.html [47457/47457] -> "hive_functions.html.tmp.tmp" [1]
+2020-12-09 10:49:24 URL:http://localhost:4000/zh/dev/table/connectors/downloads.html [32676/32676] -> "downloads.html.tmp.tmp" [1]
+2020-12-09 10:49:25 URL:http://localhost:4000/zh/dev/batch/connectors.html [50419/50419] -> "connectors.html.tmp.tmp" [1]
+2020-12-09 10:49:26 URL:http://localhost:4000/zh/deployment/ [48134/48134] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:26 URL: http://localhost:4000/fig/deployment_overview.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:27 URL: http://localhost:4000/fig/deployment_modes.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:28 URL:http://localhost:4000/zh/deployment/resource-providers/standalone/ [44135/44135] -> "index.html.tmp.tmp" [1]
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/index.md%20%25%7D:
+Remote file does not exist -- broken link!!!
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/resource-providers/standalone/docker.md%20%25%7D:
+Remote file does not exist -- broken link!!!
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/resource-providers/standalone/kubernetes.md%20%25%7D:
+Remote file does not exist -- broken link!!!
+2020-12-09 10:49:30 URL:http://localhost:4000/zh/deployment/resource-providers/standalone/docker.html [75130/75130] -> "docker.html.tmp.tmp" [1]
+2020-12-09 10:49:30 URL:http://localhost:4000/zh/deployment/resource-providers/standalone/kubernetes.html [76947/76947] -> "kubernetes.html.tmp.tmp" [1]
+failed: Connection refused.
+failed: Connection refused.
+failed: Connection refused.
+failed: Connection refused.
+2020-12-09 10:49:30 URL:http://localhost:4000/zh/deployment/resource-providers/native_kubernetes.html [57006/57006] -> "native_kubernetes.html.tmp.tmp" [1]
+2020-12-09 10:49:30 URL:http://localhost:4000/zh/deployment/resource-providers/yarn.html [52553/52553] -> "yarn.html.tmp.tmp" [1]
+2020-12-09 10:49:30 URL:http://localhost:4000/zh/deployment/resource-providers/mesos.html [48632/48632] -> "mesos.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/config.html [249959/249959] -> "config.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/memory/mem_setup.html [45263/45263] -> "mem_setup.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL: http://localhost:4000/fig/process_mem_model.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/memory/mem_setup_tm.html [51416/51416] -> "mem_setup_tm.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL: http://localhost:4000/fig/simple_mem_model.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:31 URL: http://localhost:4000/fig/detailed-mem-model.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/memory/mem_setup_jobmanager.html [40476/40476] -> "mem_setup_jobmanager.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/memory/mem_tuning.html [40915/40915] -> "mem_tuning.html.tmp.tmp" [1]
+2020-12-09 10:49:31 URL:http://localhost:4000/zh/deployment/memory/mem_trouble.html [37909/37909] -> "mem_trouble.html.tmp.tmp" [1]
+2020-12-09 10:49:32 URL:http://localhost:4000/zh/deployment/memory/mem_migration.html [57065/57065] -> "mem_migration.html.tmp.tmp" [1]
+2020-12-09 10:49:33 URL:http://localhost:4000/zh/deployment/cli.html [79893/79893] -> "cli.html.tmp.tmp" [1]
+2020-12-09 10:49:34 URL:http://localhost:4000/zh/deployment/filesystems/ [41164/41164] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:35 URL:http://localhost:4000/zh/deployment/filesystems/common.html [35967/35967] -> "common.html.tmp.tmp" [1]
+2020-12-09 10:49:36 URL:http://localhost:4000/zh/deployment/filesystems/s3.html [43826/43826] -> "s3.html.tmp.tmp" [1]
+2020-12-09 10:49:37 URL:http://localhost:4000/zh/deployment/filesystems/oss.html [37211/37211] -> "oss.html.tmp.tmp" [1]
+2020-12-09 10:49:38 URL:http://localhost:4000/zh/deployment/filesystems/azure.html [36934/36934] -> "azure.html.tmp.tmp" [1]
+2020-12-09 10:49:39 URL:http://localhost:4000/zh/deployment/filesystems/plugins.html [38175/38175] -> "plugins.html.tmp.tmp" [1]
+2020-12-09 10:49:40 URL:http://localhost:4000/zh/deployment/ha/ [36073/36073] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:49:40 URL: http://localhost:4000/fig/jobmanager_ha_overview.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:42 URL:http://localhost:4000/zh/deployment/ha/zookeeper_ha.html [40223/40223] -> "zookeeper_ha.html.tmp.tmp" [1]
+2020-12-09 10:49:42 URL:http://localhost:4000/zh/deployment/ha/kubernetes_ha.html [35929/35929] -> "kubernetes_ha.html.tmp.tmp" [1]
+2020-12-09 10:49:43 URL:http://localhost:4000/zh/deployment/metric_reporters.html [57854/57854] -> "metric_reporters.html.tmp.tmp" [1]
+2020-12-09 10:49:44 URL:http://localhost:4000/zh/deployment/security/security-ssl.html [69606/69606] -> "security-ssl.html.tmp.tmp" [1]
+2020-12-09 10:49:44 URL: http://localhost:4000/fig/ssl_internal_external.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:45 URL:http://localhost:4000/zh/deployment/security/security-kerberos.html [40300/40300] -> "security-kerberos.html.tmp.tmp" [1]
+2020-12-09 10:49:46 URL:http://localhost:4000/zh/deployment/repls/python_shell.html [50486/50486] -> "python_shell.html.tmp.tmp" [1]
+2020-12-09 10:49:47 URL:http://localhost:4000/zh/deployment/repls/scala_shell.html [59345/59345] -> "scala_shell.html.tmp.tmp" [1]
+2020-12-09 10:49:47 URL:http://localhost:4000/zh/deployment/advanced/external_resources.html [63246/63246] -> "external_resources.html.tmp.tmp" [1]
+2020-12-09 10:49:48 URL:http://localhost:4000/zh/deployment/advanced/historyserver.html [38144/38144] -> "historyserver.html.tmp.tmp" [1]
+2020-12-09 10:49:50 URL:http://localhost:4000/zh/deployment/advanced/logging.html [41595/41595] -> "logging.html.tmp.tmp" [1]
+2020-12-09 10:49:51 URL:http://localhost:4000/zh/ops/state/checkpoints.html [38271/38271] -> "checkpoints.html.tmp.tmp" [1]
+2020-12-09 10:49:52 URL:http://localhost:4000/zh/ops/state/savepoints.html [51131/51131] -> "savepoints.html.tmp.tmp" [1]
+2020-12-09 10:49:52 URL:http://localhost:4000/zh/ops/state/state_backends.html [64411/64411] -> "state_backends.html.tmp.tmp" [1]
+2020-12-09 10:49:53 URL:http://localhost:4000/zh/ops/state/large_state_tuning.html [59757/59757] -> "large_state_tuning.html.tmp.tmp" [1]
+2020-12-09 10:49:54 URL: http://localhost:4000/fig/checkpoint_tuning.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:54 URL: http://localhost:4000/fig/local_recovery.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:49:55 URL:http://localhost:4000/zh/ops/metrics.html [127778/127778] -> "metrics.html.tmp.tmp" [1]
+2020-12-09 10:49:56 URL:http://localhost:4000/zh/ops/rest_api.html [168435/168435] -> "rest_api.html.tmp.tmp" [1]
+2020-12-09 10:49:58 URL:http://localhost:4000/zh/ops/debugging/debugging_event_time.html [34629/34629] -> "debugging_event_time.html.tmp.tmp" [1]
+2020-12-09 10:49:59 URL:http://localhost:4000/zh/ops/debugging/debugging_classloading.html [47204/47204] -> "debugging_classloading.html.tmp.tmp" [1]
+2020-12-09 10:50:00 URL:http://localhost:4000/zh/ops/debugging/application_profiling.html [39170/39170] -> "application_profiling.html.tmp.tmp" [1]
+2020-12-09 10:50:01 URL:http://localhost:4000/zh/ops/monitoring/checkpoint_monitoring.html [42579/42579] -> "checkpoint_monitoring.html.tmp.tmp" [1]
+2020-12-09 10:50:02 URL: http://localhost:4000/fig/checkpoint_monitoring-history.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:02 URL: http://localhost:4000/fig/checkpoint_monitoring-history-subtasks.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:02 URL: http://localhost:4000/fig/checkpoint_monitoring-summary.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:02 URL: http://localhost:4000/fig/checkpoint_monitoring-details.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:03 URL: http://localhost:4000/fig/checkpoint_monitoring-details_summary.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:03 URL: http://localhost:4000/fig/checkpoint_monitoring-details_subtasks.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:04 URL:http://localhost:4000/zh/ops/monitoring/back_pressure.html [36482/36482] -> "back_pressure.html.tmp.tmp" [1]
+2020-12-09 10:50:04 URL: http://localhost:4000/fig/back_pressure_sampling.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:05 URL: http://localhost:4000/fig/back_pressure_sampling_in_progress.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:05 URL: http://localhost:4000/fig/back_pressure_sampling_ok.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:05 URL: http://localhost:4000/fig/back_pressure_sampling_high.png 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:06 URL:http://localhost:4000/zh/ops/upgrading.html [60924/60924] -> "upgrading.html.tmp.tmp" [1]
+2020-12-09 10:50:07 URL:http://localhost:4000/zh/ops/production_ready.html [36337/36337] -> "production_ready.html.tmp.tmp" [1]
+2020-12-09 10:50:08 URL:http://localhost:4000/zh/flinkDev/ide_setup.html [44808/44808] -> "ide_setup.html.tmp.tmp" [1]
+2020-12-09 10:50:09 URL:http://localhost:4000/zh/flinkDev/building.html [40749/40749] -> "building.html.tmp.tmp" [1]
+2020-12-09 10:50:10 URL:http://localhost:4000/zh/internals/job_scheduling.html [39156/39156] -> "job_scheduling.html.tmp.tmp" [1]
+2020-12-09 10:50:11 URL: http://localhost:4000/fig/slots.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:11 URL: http://localhost:4000/fig/job_and_execution_graph.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:11 URL: http://localhost:4000/fig/job_status.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:12 URL: http://localhost:4000/fig/state_machine.svg 200 OK
+unlink: No such file or directory
+2020-12-09 10:50:13 URL:http://localhost:4000/zh/internals/task_lifecycle.html [47279/47279] -> "task_lifecycle.html.tmp.tmp" [1]
+2020-12-09 10:50:14 URL:http://localhost:4000/zh/internals/filesystems.html [40898/40898] -> "filesystems.html.tmp.tmp" [1]
+2020-12-09 10:50:15 URL:http://localhost:4000/zh/deployment/resource-providers/ [32332/32332] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:50:17 URL:http://localhost:4000/zh/release-notes/flink-1.11.html [69835/69835] -> "flink-1.11.html.tmp.tmp" [1]
+2020-12-09 10:50:18 URL:http://localhost:4000/zh/release-notes/flink-1.10.html [67809/67809] -> "flink-1.10.html.tmp.tmp" [1]
+2020-12-09 10:50:19 URL:http://localhost:4000/zh/release-notes/flink-1.9.html [51819/51819] -> "flink-1.9.html.tmp.tmp" [1]
+2020-12-09 10:50:20 URL:http://localhost:4000/zh/release-notes/flink-1.8.html [46595/46595] -> "flink-1.8.html.tmp.tmp" [1]
+2020-12-09 10:50:21 URL:http://localhost:4000/zh/release-notes/flink-1.7.html [42490/42490] -> "flink-1.7.html.tmp.tmp" [1]
+2020-12-09 10:50:22 URL:http://localhost:4000/zh/release-notes/flink-1.12.html [48973/48973] -> "flink-1.12.html.tmp.tmp" [1]
+2020-12-09 10:50:22 URL:http://localhost:4000/zh/dev/batch/fault_tolerance.html [32339/32339] -> "fault_tolerance.html.tmp.tmp" [1]
+2020-12-09 10:50:23 URL:http://localhost:4000/zh/dev/batch/index.html [273661/273661] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:50:24 URL:http://localhost:4000/zh/dev/table/connect.html [237069/237069] -> "connect.html.tmp.tmp" [1]
+2020-12-09 10:50:26 URL:http://localhost:4000/zh/dev/table/legacySourceSinks.html [114211/114211] -> "legacySourceSinks.html.tmp.tmp" [1]
+2020-12-09 10:50:27 URL:http://localhost:4000/zh/dev/python/table-api-users-guide/ [33507/33507] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:50:29 URL:http://localhost:4000/zh/dev/python/datastream-api-users-guide/ [32329/32329] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:50:30 URL:http://localhost:4000/zh/dev/table/tableApi.html?code_tab=python [409878/409878] -> "tableApi.html?code_tab=python.tmp.tmp" [1]
+2020-12-09 10:50:31 URL:http://localhost:4000/zh/dev/stream/operators/?code_tab=python [131617/131617] -> "index.html?code_tab=python.tmp.tmp" [1]
+2020-12-09 10:50:32 URL:http://localhost:4000/zh/dev/ [32272/32272] -> "index.html.tmp.tmp" [1]
+2020-12-09 10:50:33 URL: http://localhost:4000/page/img/quickstart_cluster.png 200 OK
+unlink: No such file or directory
+Found 3 broken links.
+
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/resource-providers/standalone/docker.md%20%25%7D
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/resource-providers/standalone/kubernetes.md%20%25%7D
+http://localhost:4000/deployment/resource-providers/standalone/%7B$%20link%20deployment/index.md%20%25%7D
+
+FINISHED --2020-12-09 10:50:33--
+Total wall clock time: 2m 8s
+Downloaded: 469 files, 31M in 14s (2,29 MB/s)

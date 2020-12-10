@@ -1,0 +1,798 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: 流上的 Join</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/dev/table/streaming/joins.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"class="active"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</a><div class="collapse in" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse"class="active">Table API & SQL</a><div class="collapse in" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse"class="active">流式概念</a><div class="collapse in" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html" class="active">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/streaming/joins.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">Table API & SQL</a></li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">流式概念</a></li>
+  
+    <li class="active">流上的 Join</li>
+</ol>
+
+<h1>流上的 Join</h1>
+
+
+
+
+<p>Join 在批数据处理中是比较常见且广为人知的运算，一般用于连接两张关系表。然而在<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表</a>中 Join 的语义会难以理解甚至让人困惑。</p>
+
+<p>因而，Flink 提供了几种基于 Table API 和 SQL 的 Join 方法。</p>
+
+<p>欲获取更多关于 Join 语法的细节，请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html#joins">Table API</a> 和 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html#joins">SQL</a> 中的 Join 章节。</p>
+
+<ul id="markdown-toc">
+  <li><a href="#常规-join" id="markdown-toc-常规-join">常规 Join</a></li>
+  <li><a href="#时间区间-join" id="markdown-toc-时间区间-join">时间区间 Join</a></li>
+  <li><a href="#时态表-join" id="markdown-toc-时态表-join">时态表 Join</a>    <ul>
+      <li><a href="#基于事件时间的时态-join" id="markdown-toc-基于事件时间的时态-join">基于事件时间的时态 Join</a></li>
+      <li><a href="#基于处理时间的时态-join" id="markdown-toc-基于处理时间的时态-join">基于处理时间的时态 Join</a></li>
+    </ul>
+  </li>
+  <li><a href="#时态表函数-join" id="markdown-toc-时态表函数-join">时态表函数 Join</a>    <ul>
+      <li><a href="#用法" id="markdown-toc-用法">用法</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><a name="regular-joins"></a></p>
+
+<h2 id="常规-join">常规 Join</h2>
+
+<p>常规 Join 是最常用的 Join 用法。在常规 Join 中，任何新记录或对 Join 两侧表的任何更改都是可见的，并会影响最终整个 Join 的结果。例如，如果 Join 左侧插入了一条新的记录，那么它将会与 Join 右侧过去与将来的所有记录进行 Join 运算。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">Product</span>
+<span class="k">ON</span> <span class="n">Orders</span><span class="p">.</span><span class="n">productId</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">id</span></code></pre></figure>
+
+<p>上述语意允许对输入表进行任意类型的更新操作（insert, update, delete）。</p>
+
+<p>然而，常规 Join 隐含了一个重要的前提：即它需要在 Flink 的状态中永久保存 Join 两侧的数据。因而，如果 Join 操作中的一方或双方输入表持续增长的话，资源消耗也将会随之无限增长。</p>
+
+<p><a name="interval-joins"></a></p>
+
+<h2 id="时间区间-join">时间区间 Join</h2>
+
+<p>如果一个 Join 限定输入<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a>必须在一定的时间限制中（即时间窗口），那么就称之为时间区间 Join。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">Shipments</span> <span class="n">s</span>
+<span class="k">WHERE</span> <span class="n">o</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">orderId</span> <span class="k">AND</span>
+      <span class="n">o</span><span class="p">.</span><span class="n">ordertime</span> <span class="k">BETWEEN</span> <span class="n">s</span><span class="p">.</span><span class="n">shiptime</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'4'</span> <span class="n">HOUR</span> <span class="k">AND</span> <span class="n">s</span><span class="p">.</span><span class="n">shiptime</span></code></pre></figure>
+
+<p>与常规 Join 操作相比，时间区间 Join 只支持带有时间属性的递增表。由于时间属性是单调递增的，Flink 可以从状态中移除过期的数据，而不会影响结果的正确性。</p>
+
+<p><a name="join-with-a-temporal-table-function"></a></p>
+
+<h2 id="时态表-join">时态表 Join</h2>
+<p><span class="label label-danger">注意</span> 只在 Blink planner 中支持。
+<span class="label label-danger">注意</span> 时态表有两种方式去定义，即 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#时态表函数">时态表函数</a> 和 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#时态表">时态表 DDL</a>，使用时态表函数的时态表 join 只支持在 Table API 中使用，使用时态表 DDL 的时态表 join 只支持在 SQL 中使用。
+请参考<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表</a>页面获取更多关于时态表和时态表函数的区别。</p>
+
+<p>时态表 Join 意味着对任意表（左输入/探针侧）去关联一个时态表（右输入/构建侧）的版本，时态表可以是一张跟踪所有变更记录的表（例如数据库表的 changelog，包含多个表快照），也可以是物化所有变更之后的表（例如数据库表，只有最新表快照）。</p>
+
+<p>Flink 使用了 SQL:2011 标准引入的时态表 Join 语法，时态表 Join 的语法如下:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">[</span><span class="n">column_list</span><span class="p">]</span>
+<span class="k">FROM</span> <span class="n">table1</span> <span class="p">[</span><span class="k">AS</span> <span class="o">&lt;</span><span class="n">alias1</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="p">[</span><span class="k">LEFT</span><span class="p">]</span> <span class="k">JOIN</span> <span class="n">table2</span> <span class="k">FOR</span> <span class="n">SYSTEM_TIME</span> <span class="k">AS</span> <span class="k">OF</span> <span class="n">table1</span><span class="p">.</span><span class="err">{</span> <span class="n">proctime</span> <span class="o">|</span> <span class="n">rowtime</span> <span class="err">}</span> <span class="p">[</span><span class="k">AS</span> <span class="o">&lt;</span><span class="n">alias2</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="k">ON</span> <span class="n">table1</span><span class="p">.</span><span class="k">column</span><span class="o">-</span><span class="n">name1</span> <span class="o">=</span> <span class="n">table2</span><span class="p">.</span><span class="k">column</span><span class="o">-</span><span class="n">name1</span></code></pre></figure>
+
+<p><a name="processing-time-temporal-joins"></a></p>
+
+<h3 id="基于事件时间的时态-join">基于事件时间的时态 Join</h3>
+<p>基于事件时间的时态表 join 使用(左侧输入/探针侧) 的 事件时间 去关联(右侧输入/构建侧) <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#声明版本表">版本表</a> 对应的版本。
+基于事件时间的时态表 join 仅支持关版本表或版本视图，版本表或版本视图只能是一个 changelog 流。 但是，Flink 支持将 append-only 流转换成 changelog 流，因此版本表也可以来自一个 append-only 流。
+查看<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#声明版本视图">声明版本视图</a> 获取更多的信息关于如何声明一张来自 append-only 流的版本表。</p>
+
+<p>将事件时间作为时间属性时，可将 <em>过去</em> 时间属性与时态表一起使用。这允许对两个表中在相同时间点的记录执行 Join 操作。
+与基于处理时间的时态 Join 相比，时态表不仅将构建侧记录的最新版本（是否最新由所定义的主键所决定）保存在 state 中，同时也会存储自上一个 watermarks 以来的所有版本（按时间区分）。</p>
+
+<p>例如，在探针侧表新插入一条事件时间时间为 <code class="highlighter-rouge">12:30:00</code> 的记录，它将和构建侧表时间点为 <code class="highlighter-rouge">12:30:00</code> 的版本根据<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表的概念</a>进行 Join 运算。
+因此，新插入的记录仅与时间戳小于等于 <code class="highlighter-rouge">12:30:00</code> 的记录进行 Join 计算（由主键决定哪些时间点的数据将参与计算）。</p>
+
+<p>通过定义事件时间，<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">watermarks</a> 允许 Join 运算不断向前滚动，丢弃不再需要的构建侧快照。因为不再需要时间戳更低或相等的记录。</p>
+
+<p>下面的例子展示了订单流关联产品表这个场景举例，<code class="highlighter-rouge">orders</code> 表包含了来自 Kafka 的实时订单流，<code class="highlighter-rouge">product_changelog</code> 表来自数据库表 <code class="highlighter-rouge">products</code> 的 changelog , 产品的价格在数据库表 <code class="highlighter-rouge">products</code> 中是随时间实时变化的。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">product_changelog</span><span class="p">;</span>
+
+<span class="p">(</span><span class="n">changelog</span> <span class="n">kind</span><span class="p">)</span>  <span class="n">update_time</span> <span class="n">product_name</span> <span class="n">price</span>
+<span class="o">=================</span> <span class="o">===========</span> <span class="o">============</span> <span class="o">=====</span> 
+<span class="o">+</span><span class="p">(</span><span class="k">INSERT</span><span class="p">)</span>         <span class="mi">00</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">00</span>    <span class="n">scooter</span>      <span class="mi">11</span><span class="p">.</span><span class="mi">11</span>
+<span class="o">+</span><span class="p">(</span><span class="k">INSERT</span><span class="p">)</span>         <span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span>    <span class="n">basketball</span>   <span class="mi">23</span><span class="p">.</span><span class="mi">11</span>
+<span class="o">-</span><span class="p">(</span><span class="n">UPDATE_BEFORE</span><span class="p">)</span>  <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>    <span class="n">scooter</span>      <span class="mi">11</span><span class="p">.</span><span class="mi">11</span>
+<span class="o">+</span><span class="p">(</span><span class="n">UPDATE_AFTER</span><span class="p">)</span>   <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>    <span class="n">scooter</span>      <span class="mi">12</span><span class="p">.</span><span class="mi">99</span>  <span class="o">&lt;=</span> <span class="err">产品</span> <span class="nv">`scooter`</span> <span class="err">在</span> <span class="nv">`12:00:00`</span> <span class="err">时涨价到了</span> <span class="nv">`12.99`</span>
+<span class="o">-</span><span class="p">(</span><span class="n">UPDATE_BEFORE</span><span class="p">)</span>  <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>    <span class="n">basketball</span>   <span class="mi">23</span><span class="p">.</span><span class="mi">11</span> 
+<span class="o">+</span><span class="p">(</span><span class="n">UPDATE_AFTER</span><span class="p">)</span>   <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>    <span class="n">basketball</span>   <span class="mi">19</span><span class="p">.</span><span class="mi">99</span>  <span class="o">&lt;=</span> <span class="err">产品</span> <span class="nv">`basketball`</span> <span class="err">在</span> <span class="nv">`12:00:00`</span> <span class="err">时降价到了</span> <span class="nv">`19.99`</span>
+<span class="o">-</span><span class="p">(</span><span class="k">DELETE</span><span class="p">)</span>         <span class="mi">18</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>    <span class="n">scooter</span>      <span class="mi">12</span><span class="p">.</span><span class="mi">99</span>  <span class="o">&lt;=</span> <span class="err">产品</span> <span class="nv">`scooter`</span> <span class="err">在</span> <span class="nv">`18:00:00`</span> <span class="err">从数据库表中删除</span></code></pre></figure>
+
+<p>如果我们想输出 <code class="highlighter-rouge">product_changelog</code> 表在 <code class="highlighter-rouge">10:00:00</code> 对应的版本，表的内容如下所示：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">update_time</span>  <span class="n">product_id</span> <span class="n">product_name</span> <span class="n">price</span>
+<span class="o">===========</span>  <span class="o">==========</span> <span class="o">============</span> <span class="o">=====</span> 
+<span class="mi">00</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">00</span>     <span class="n">p_001</span>      <span class="n">scooter</span>      <span class="mi">11</span><span class="p">.</span><span class="mi">11</span>
+<span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span>     <span class="n">p_002</span>      <span class="n">basketball</span>   <span class="mi">23</span><span class="p">.</span><span class="mi">11</span></code></pre></figure>
+
+<p>如果我们想输出 <code class="highlighter-rouge">product_changelog</code> 表在 <code class="highlighter-rouge">13:00:00</code> 对应的版本，表的内容如下所示：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">update_time</span>  <span class="n">product_id</span> <span class="n">product_name</span> <span class="n">price</span>
+<span class="o">===========</span>  <span class="o">==========</span> <span class="o">============</span> <span class="o">=====</span> 
+<span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>     <span class="n">p_001</span>      <span class="n">scooter</span>      <span class="mi">12</span><span class="p">.</span><span class="mi">99</span>
+<span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>     <span class="n">p_002</span>      <span class="n">basketball</span>   <span class="mi">19</span><span class="p">.</span><span class="mi">99</span></code></pre></figure>
+
+<p>通过基于事件时间的时态表 join, 我们可以 join 上版本表中的不同版本：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(</span>
+  <span class="n">order_id</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">product_id</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">order_time</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+  <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">order_time</span> <span class="k">AS</span> <span class="n">order_time</span>  <span class="c1">-- defines the necessary event time</span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+<span class="p">...</span>
+<span class="p">);</span>
+
+<span class="c1">-- 设置会话的时间区间, changelog 里的数据库操作时间是以 epoch 开始的毫秒数存储的，</span>
+<span class="c1">-- 在从毫秒转化为时间戳时，Flink SQL 会使用会话的时间区间</span>
+<span class="c1">-- 因此，请根据 changelog 中的数据库操作时间设置合适的时间区间</span>
+<span class="k">SET</span> <span class="k">table</span><span class="p">.</span><span class="k">local</span><span class="o">-</span><span class="nb">time</span><span class="o">-</span><span class="k">zone</span><span class="o">=</span><span class="n">UTC</span><span class="p">;</span>
+
+<span class="c1">-- 声明一张版本表</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">product_changelog</span> <span class="p">(</span>
+  <span class="n">product_id</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">product_name</span> <span class="n">STRING</span><span class="p">,</span>
+  <span class="n">product_price</span> <span class="nb">DECIMAL</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+  <span class="n">update_time</span> <span class="nb">TIMESTAMP</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">METADATA</span> <span class="k">FROM</span> <span class="s1">'value.source.timestamp'</span> <span class="n">VIRTUAL</span><span class="p">,</span> <span class="c1">-- 注意：自动从毫秒数转为时间戳</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="n">product_id</span><span class="p">)</span> <span class="k">NOT</span> <span class="n">ENFORCED</span><span class="p">,</span>      <span class="c1">-- (1) defines the primary key constraint</span>
+  <span class="n">WATERMARK</span> <span class="k">FOR</span> <span class="n">update_time</span> <span class="k">AS</span> <span class="n">update_time</span>   <span class="c1">-- (2) defines the event time by watermark                               </span>
+<span class="p">)</span> <span class="k">WITH</span> <span class="p">(</span>
+  <span class="s1">'connector'</span> <span class="o">=</span> <span class="s1">'kafka'</span><span class="p">,</span>
+  <span class="s1">'topic'</span> <span class="o">=</span> <span class="s1">'products'</span><span class="p">,</span>
+  <span class="s1">'scan.startup.mode'</span> <span class="o">=</span> <span class="s1">'earliest-offset'</span><span class="p">,</span>
+  <span class="s1">'properties.bootstrap.servers'</span> <span class="o">=</span> <span class="s1">'localhost:9092'</span><span class="p">,</span>
+  <span class="s1">'value.format'</span> <span class="o">=</span> <span class="s1">'debezium-json'</span>
+<span class="p">);</span>
+
+<span class="c1">-- 基于事件时间的时态表 Join</span>
+<span class="k">SELECT</span>
+  <span class="n">order_id</span><span class="p">,</span>
+  <span class="n">order_time</span><span class="p">,</span>
+  <span class="n">product_name</span><span class="p">,</span>
+  <span class="n">product_time</span><span class="p">,</span>
+  <span class="n">price</span>
+<span class="k">FROM</span> <span class="n">orders</span> <span class="k">AS</span> <span class="n">O</span>
+<span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">product_changelog</span> <span class="k">FOR</span> <span class="n">SYSTEM_TIME</span> <span class="k">AS</span> <span class="k">OF</span> <span class="n">O</span><span class="p">.</span><span class="n">order_time</span> <span class="k">AS</span> <span class="n">P</span>
+<span class="k">ON</span> <span class="n">O</span><span class="p">.</span><span class="n">product_id</span> <span class="o">=</span> <span class="n">P</span><span class="p">.</span><span class="n">product_id</span><span class="p">;</span>
+
+<span class="n">order_id</span> <span class="n">order_time</span> <span class="n">product_name</span> <span class="n">product_time</span> <span class="n">price</span>
+<span class="o">========</span> <span class="o">==========</span> <span class="o">============</span> <span class="o">============</span> <span class="o">=====</span>
+<span class="n">o_001</span>    <span class="mi">00</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">00</span>   <span class="n">scooter</span>      <span class="mi">00</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">00</span>     <span class="mi">11</span><span class="p">.</span><span class="mi">11</span>
+<span class="n">o_002</span>    <span class="mi">00</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">00</span>   <span class="n">basketball</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">02</span><span class="p">:</span><span class="mi">00</span>     <span class="mi">23</span><span class="p">.</span><span class="mi">11</span>
+<span class="n">o_003</span>    <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>   <span class="n">scooter</span>      <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>     <span class="mi">12</span><span class="p">.</span><span class="mi">99</span>
+<span class="n">o_004</span>    <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>   <span class="n">basketball</span>   <span class="mi">12</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>     <span class="mi">19</span><span class="p">.</span><span class="mi">99</span>
+<span class="n">o_005</span>    <span class="mi">18</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>   <span class="k">NULL</span>         <span class="k">NULL</span>         <span class="k">NULL</span></code></pre></figure>
+
+<p>基于事件时间的时态表 Join 通常用在通过 changelog 丰富流上数据的场景。</p>
+
+<p><strong>注意</strong>: 基于事件时间的时态表 Join 是通过左右两侧的 watermark 触发，请确保为 join 两侧的表设置了合适的 watermark。</p>
+
+<p><strong>注意</strong>: 基于事件时间的时态表 Join 的 join key 必须包含时态表的主键，例如：表 <code class="highlighter-rouge">product_changelog</code> 的主键 <code class="highlighter-rouge">P.product_id</code> 必须包含在 join 条件 <code class="highlighter-rouge">O.product_id = P.product_id</code> 中。</p>
+
+<h3 id="基于处理时间的时态-join">基于处理时间的时态 Join</h3>
+
+<p>基于处理时间的时态表 join 使用任意表 (左侧输入/探针侧) 的 处理时间 去关联 (右侧输入/构建侧) <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#声明普通表">普通表</a>的最新版本.
+基于处理时间的时态表 join 当前只支持关联普通表或普通视图，且支持普通表或普通视图当前只能是 append-only 流。</p>
+
+<p>如果将处理时间作为时间属性，<em>过去</em> 时间属性将无法与时态表一起使用。根据定义，处理时间总会是当前时间戳。
+因此，关联时态表的调用将始终返回底层表的最新已知版本，并且底层表中的任何更新也将立即覆盖当前值。</p>
+
+<p>可以将处理时间的时态 Join 视作简单的 <code class="highlighter-rouge">HashMap &lt;K，V&gt;</code>，HashMap 中存储来自构建侧的所有记录。
+当来自构建侧的新插入的记录与旧值具有相同的 Key 时，旧值会被覆盖。
+探针侧的每条记录将总会根据 <code class="highlighter-rouge">HashMap</code> 的最新/当前状态来计算。</p>
+
+<p>接下来的示例展示了订单流 <code class="highlighter-rouge">Orders</code> 该如何与实时变化的汇率表 <code class="highlighter-rouge">Lates</code> 进行基于处理时间的时态 Join 操作，<code class="highlighter-rouge">LatestRates</code> 总是表示 HBase 表 <code class="highlighter-rouge">Rates</code> 的最新内容。</p>
+
+<p>表 <code class="highlighter-rouge">LastestRates</code> 中的数据在时间点 <code class="highlighter-rouge">10:15</code> 和 <code class="highlighter-rouge">10:30</code> 时是相等的。欧元汇率在时间点 <code class="highlighter-rouge">10:52</code> 从 114 变化至 116 。</p>
+
+<p>表 <code class="highlighter-rouge">Orders</code> 包含了金额字段 <code class="highlighter-rouge">amount</code> 和货币字段 <code class="highlighter-rouge">currency</code> 的支付记录数据。例如在 <code class="highlighter-rouge">10:15</code> 有一笔金额为 <code class="highlighter-rouge">2</code> 欧元的订单记录。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span><span class="p">;</span>
+
+<span class="n">amount</span> <span class="n">currency</span>
+<span class="o">======</span> <span class="o">=========</span>
+     <span class="mi">2</span> <span class="n">Euro</span>             <span class="o">&lt;==</span> <span class="n">arrived</span> <span class="k">at</span> <span class="nb">time</span> <span class="mi">10</span><span class="p">:</span><span class="mi">15</span>
+     <span class="mi">1</span> <span class="n">US</span> <span class="n">Dollar</span>        <span class="o">&lt;==</span> <span class="n">arrived</span> <span class="k">at</span> <span class="nb">time</span> <span class="mi">10</span><span class="p">:</span><span class="mi">30</span>
+     <span class="mi">2</span> <span class="n">Euro</span>             <span class="o">&lt;==</span> <span class="n">arrived</span> <span class="k">at</span> <span class="nb">time</span> <span class="mi">10</span><span class="p">:</span><span class="mi">52</span></code></pre></figure>
+
+<p>基于以上，我们想要计算所有 <code class="highlighter-rouge">Orders</code> 表的订单金额总和，并同时转换为对应成日元的金额。</p>
+
+<p>例如，我们想要以表 <code class="highlighter-rouge">LatestRates</code> 中的汇率将以下订单转换，则结果将为：</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">amount currency     rate   amout*rate
+====== ========= ======= ============
+     2 Euro          114          228    &lt;== arrived at time 10:15
+     1 US Dollar     102          102    &lt;== arrived at time 10:30
+     2 Euro          116          232    &lt;== arrived at time 10:52</code></pre></figure>
+
+<p>通过时态表 Join，我们可以将上述操作表示为以下 SQL 查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">o</span><span class="p">.</span><span class="n">amout</span><span class="p">,</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span><span class="p">,</span> <span class="n">o</span><span class="p">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span> <span class="k">AS</span> <span class="n">o</span>
+  <span class="k">JOIN</span> <span class="n">LatestRates</span> <span class="k">FOR</span> <span class="n">SYSTEM_TIME</span> <span class="k">AS</span> <span class="k">OF</span> <span class="n">o</span><span class="p">.</span><span class="n">proctime</span> <span class="k">AS</span> <span class="n">r</span>
+  <span class="k">ON</span> <span class="n">r</span><span class="p">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span></code></pre></figure>
+
+<p>探针侧表中的每个记录都将与构建侧表的当前版本所关联。 在此示例中，查询使用<code class="highlighter-rouge">处理时间</code>作为处理时间，因而新增订单将始终与表 <code class="highlighter-rouge">LatestRates</code> 的最新汇率执行 Join 操作。注意，结果对于处理时间来说不是确定的。
+基于处理时间的时态表 Join 通常用在通过外部表（例如维度表）丰富流上数据的场景。</p>
+
+<p>与<a href="#常规-join">常规 Join</a> 相比，尽管构建侧表的数据发生了变化，但时态表 Join 的变化前结果不会随之变化。</p>
+<ul>
+  <li>对于基于事件时间的时态 Join， join 算子保留 Join 两侧流的状态并通过 watermark 清理。</li>
+  <li>对于基于处理时间的时态 Join， join 算子保留仅保留右侧（构建侧）的状态，且构建侧的状态只包含数据的最新版本，右侧的状态是轻量级的; 对于在运行时有能力查询外部系统的时态表，join 算子还可以优化成不保留任何状态，此时算子是非常轻量级的。</li>
+</ul>
+
+<p>与<a href="#时间区间-join">时间区间 Join</a> 相比，时态表 Join 没有定义决定构建侧记录所属的将被 Join 时间窗口。
+探针侧的记录将总是与构建侧在对应<code class="highlighter-rouge">处理时间</code>的最新数据执行 Join，因而构建侧的数据可能是任意旧的。</p>
+
+<h2 id="时态表函数-join">时态表函数 Join</h2>
+
+<p>时态表函数 Join 连接了一个递增表（左输入/探针侧）和一个时态表（右输入/构建侧），即一个随时间变化且不断追踪其改动的表。请参考<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表</a>的相关章节查看更多细节。</p>
+
+<p>下方示例展示了一个递增表 <code class="highlighter-rouge">Orders</code> 与一个不断改变的汇率表 <code class="highlighter-rouge">RatesHistory</code> 的 Join 操作。</p>
+
+<p><code class="highlighter-rouge">Orders</code> 表示了包含支付数据（数量字段 <code class="highlighter-rouge">amount</code> 和货币字段 <code class="highlighter-rouge">currency</code>）的递增表。例如 <code class="highlighter-rouge">10:15</code> 对应行的记录代表了一笔 2 欧元支付记录。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span><span class="p">;</span>
+
+<span class="n">rowtime</span> <span class="n">amount</span> <span class="n">currency</span>
+<span class="o">=======</span> <span class="o">======</span> <span class="o">=========</span>
+<span class="mi">10</span><span class="p">:</span><span class="mi">15</span>        <span class="mi">2</span> <span class="n">Euro</span>
+<span class="mi">10</span><span class="p">:</span><span class="mi">30</span>        <span class="mi">1</span> <span class="n">US</span> <span class="n">Dollar</span>
+<span class="mi">10</span><span class="p">:</span><span class="mi">32</span>       <span class="mi">50</span> <span class="n">Yen</span>
+<span class="mi">10</span><span class="p">:</span><span class="mi">52</span>        <span class="mi">3</span> <span class="n">Euro</span>
+<span class="mi">11</span><span class="p">:</span><span class="mi">04</span>        <span class="mi">5</span> <span class="n">US</span> <span class="n">Dollar</span></code></pre></figure>
+
+<p>字段 <code class="highlighter-rouge">RatesHistory</code> 表示不断变化的汇率信息。汇率以日元为基准（即 <code class="highlighter-rouge">Yen</code> 永远为 1）。例如，<code class="highlighter-rouge">09:00</code> 到 <code class="highlighter-rouge">10:45</code> 间欧元对日元的汇率是 <code class="highlighter-rouge">114</code>，<code class="highlighter-rouge">10:45</code> 到 <code class="highlighter-rouge">11:15</code> 间为 <code class="highlighter-rouge">116</code>。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">RatesHistory</span><span class="p">;</span>
+
+<span class="n">rowtime</span> <span class="n">currency</span>   <span class="n">rate</span>
+<span class="o">=======</span> <span class="o">========</span> <span class="o">======</span>
+<span class="mi">09</span><span class="p">:</span><span class="mi">00</span>   <span class="n">US</span> <span class="n">Dollar</span>   <span class="mi">102</span>
+<span class="mi">09</span><span class="p">:</span><span class="mi">00</span>   <span class="n">Euro</span>        <span class="mi">114</span>
+<span class="mi">09</span><span class="p">:</span><span class="mi">00</span>   <span class="n">Yen</span>           <span class="mi">1</span>
+<span class="mi">10</span><span class="p">:</span><span class="mi">45</span>   <span class="n">Euro</span>        <span class="mi">116</span>
+<span class="mi">11</span><span class="p">:</span><span class="mi">15</span>   <span class="n">Euro</span>        <span class="mi">119</span>
+<span class="mi">11</span><span class="p">:</span><span class="mi">49</span>   <span class="n">Pounds</span>      <span class="mi">108</span></code></pre></figure>
+
+<p>基于上述信息，欲计算 <code class="highlighter-rouge">Orders</code> 表中所有交易量并全部转换成日元。例如，若要转换下表中的交易，需要使用对应时间区间内的汇率（即 <code class="highlighter-rouge">114</code>）。</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">rowtime amount currency
+======= ====== =========
+10:15        2 Euro</code></pre></figure>
+
+<p>如果没有<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表</a>概念，则需要写一段这样的查询：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="k">SUM</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span><span class="p">)</span> <span class="k">AS</span> <span class="n">amount</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">AS</span> <span class="n">o</span><span class="p">,</span>
+  <span class="n">RatesHistory</span> <span class="k">AS</span> <span class="n">r</span>
+<span class="k">WHERE</span> <span class="n">r</span><span class="p">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span>
+<span class="k">AND</span> <span class="n">r</span><span class="p">.</span><span class="n">rowtime</span> <span class="o">=</span> <span class="p">(</span>
+  <span class="k">SELECT</span> <span class="k">MAX</span><span class="p">(</span><span class="n">rowtime</span><span class="p">)</span>
+  <span class="k">FROM</span> <span class="n">RatesHistory</span> <span class="k">AS</span> <span class="n">r2</span>
+  <span class="k">WHERE</span> <span class="n">r2</span><span class="p">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span>
+  <span class="k">AND</span> <span class="n">r2</span><span class="p">.</span><span class="n">rowtime</span> <span class="o">&lt;=</span> <span class="n">o</span><span class="p">.</span><span class="n">rowtime</span><span class="p">);</span></code></pre></figure>
+
+<p>有了时态表函数 <code class="highlighter-rouge">Rates</code> 和 <code class="highlighter-rouge">RatesHistory</code> 的帮助，我们可以将上述查询写成：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">o</span><span class="p">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span> <span class="k">AS</span> <span class="n">amount</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span> <span class="k">AS</span> <span class="n">o</span><span class="p">,</span>
+  <span class="k">LATERAL</span> <span class="k">TABLE</span> <span class="p">(</span><span class="n">Rates</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">rowtime</span><span class="p">))</span> <span class="k">AS</span> <span class="n">r</span>
+<span class="k">WHERE</span> <span class="n">r</span><span class="p">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span></code></pre></figure>
+
+<p>探针侧的每条记录都将与构建侧的表执行 Join 运算，构建侧的表中与探针侧对应时间属性的记录将参与运算。为了支持更新（包括覆盖）构建侧的表，该表必须定义主键。</p>
+
+<p>在示例中，<code class="highlighter-rouge">Orders</code> 表中的每一条记录都与时间点 <code class="highlighter-rouge">o.rowtime</code> 的 <code class="highlighter-rouge">Rates</code> 进行 Join 运算。<code class="highlighter-rouge">currency</code> 字段已被定义为 <code class="highlighter-rouge">Rates</code> 表的主键，在示例中该字段也被用于连接两个表。如果该查询采用的是处理时间，则在执行时新增的订单将始终与最新的 <code class="highlighter-rouge">Rates</code> 执行 Join。</p>
+
+<p>与<a href="#常规-join">常规 Join</a> 相反，时态表函数 Join 意味着如果在构建侧新增一行记录将不会影响之前的结果。这同时使得 Flink 能够限制必须保存在 state 中的元素数量（因为不再需要保存之前的状态）。</p>
+
+<p>与<a href="#时间区间-join">时间区间 Join</a> 相比，时态表 Join 没有定义限制了每次参与 Join 运算的元素的时间范围。探针侧的记录总是会和构建侧中对应特定时间属性的数据进行 Join 操作。因而在构建侧的记录可以是任意时间之前的。随着时间流动，之前产生的和不再需要的给定 primary key 所对应的记录将从 state 中移除。</p>
+
+<p>这种做法让时态表 Join 成为一个很好的用于表达不同流之间关联的方法。</p>
+
+<p><a href="#时态表函数-join">时态表函数 Join</a> 和<a href="#时态表-join">时态表 Join</a>都有类似的功能，但是有不同的 SQL 语法和 runtime 实现：</p>
+
+<ul>
+  <li>时态表函数 Join 的 SQL 语法是一种 Join 用户定义生成表函数(UDTF，User-Defined Table-Generating Functions)，而时态表 Join 使用了 SQL:2011 标准引入的标准时态表语法。</li>
+  <li>时态表 Join 的覆盖了时态表函数 Join 支持的所有功能，两者共享部分算子实现，基于事件时间的时态表 Join 从 Flink 1.12 开始支持。</li>
+  <li>时态表函数 Join 总是保留数据流的状态，但在一些情况下，时态表 Join 可以不用保留流的状态，即：基于处理时间的时态表 Join 中， join 算子可以在运行时根据记录的键值查找外部数据库而不是从状态中获取。</li>
+  <li>时态表函数 Join 在 legacy planer 和 Blink planer 中均支持，而时态表 Join 仅在 Blink planner 中支持，legacy planner 在将来会被废弃。。</li>
+</ul>
+
+<p><strong>注意</strong>: 基于处理时间的时态 Join 中， 如果右侧表不是可以直接查询外部系统的表而是普通的数据流，时态表函数 Join 和 时态表 Join 的语义都有问题，时态表函数 Join 仍然允许使用，但是时态表 Join 禁用了该功能。
+语义问题的原因是 join 算子没办法知道右侧时态表（构建侧）的完整快照是否到齐，这可能导致左侧的流在启动时关联不到用户期待的数据, 在生产环境中可能误导用户。</p>
+
+<p>Flink SQL 在未来可能需要引入新的机制去获取右侧时态表的完整快照。</p>
+
+<h3 id="用法">用法</h3>
+
+<p>在<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#defining-temporal-table-function">定义时态表函数</a>之后就可以使用了。时态表函数可以和普通表函数一样使用。</p>
+
+<p>接下来这段代码解决了我们一开始提出的问题，即从计算订单表 <code class="highlighter-rouge">Orders</code> 的交易量之和，并转换为对应货币：</p>
+
+<div class="codetabs">
+  <div data-lang="SQL">
+
+    <figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="k">SUM</span><span class="p">(</span><span class="n">o_amount</span> <span class="o">*</span> <span class="n">r_rate</span><span class="p">)</span> <span class="k">AS</span> <span class="n">amount</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span><span class="p">,</span>
+  <span class="k">LATERAL</span> <span class="k">TABLE</span> <span class="p">(</span><span class="n">Rates</span><span class="p">(</span><span class="n">o_proctime</span><span class="p">))</span>
+<span class="k">WHERE</span>
+  <span class="n">r_currency</span> <span class="o">=</span> <span class="n">o_currency</span></code></pre></figure>
+
+  </div>
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">Table</span> <span class="n">result</span> <span class="o">=</span> <span class="n">orders</span>
+    <span class="o">.</span><span class="na">joinLateral</span><span class="o">(</span><span class="s">"rates(o_proctime)"</span><span class="o">,</span> <span class="s">"o_currency = r_currency"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="s">"(o_amount * r_rate).sum as amount"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="n">orders</span>
+    <span class="o">.</span><span class="py">joinLateral</span><span class="o">(</span><span class="nf">rates</span><span class="o">(</span><span class="ss">'o_proctime</span><span class="o">),</span> <span class="ss">'r_currency</span> <span class="o">===</span> <span class="ss">'o_currency</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">select</span><span class="o">((</span><span class="ss">'o_amount</span> <span class="o">*</span> <span class="ss">'r_rate</span><span class="o">).</span><span class="py">sum</span> <span class="n">as</span> <span class="ss">'amount</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

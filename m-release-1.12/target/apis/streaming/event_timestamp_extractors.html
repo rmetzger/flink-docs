@@ -1,0 +1,487 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.1-SNAPSHOT Documentation: Pre-defined Timestamp Extractors / Watermark Emitters</title>
+    <link rel="shortcut icon" href="/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/page/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/page/css/flink.css">
+    <link rel="stylesheet" href="/page/css/syntax.css">
+    <link rel="stylesheet" href="/page/css/codetabs.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+    
+
+
+
+
+
+    <!-- Top navbar. -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <!-- The logo. -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <div class="navbar-logo">
+            <a href="http://flink.apache.org"><img alt="Apache Flink" src="/page/img/navbar-brand-logo.jpg"></a>
+          </div>
+        </div><!-- /.navbar-header -->
+
+        <!-- The navigation links. -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="hidden-sm "><a href="/">Docs v1.1</a></li>
+
+            <li class=""><a href="/concepts/concepts.html">Concepts</a></li>
+
+            <!-- Setup -->
+            <li class="dropdown">
+              <a href="/setup" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Setup <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                
+                
+                <li class=""><a href="/setup/building.html">Build Flink from Source</a></li>
+                
+                <li class=""><a href="/setup/config.html">Configuration</a></li>
+                
+
+                <li class="divider"></li>
+                <li role="presentation" class="dropdown-header"><strong>Quickstart</strong></li>
+
+                <!-- Quickstart -->
+                
+                
+                <li class=""><a href="/quickstart/setup_quickstart.html">Setup & Run Example</a></li>
+                
+                <li class=""><a href="/quickstart/java_api_quickstart.html">Java API</a></li>
+                
+                <li class=""><a href="/quickstart/scala_api_quickstart.html">Scala API</a></li>
+                
+
+                <li class="divider"></li>
+                <li role="presentation" class="dropdown-header"><strong>Deployment</strong></li>
+                
+                
+                <li class=""><a href="/setup/local_setup.html">Local</a></li>
+                
+                <li class=""><a href="/setup/cluster_setup.html">Cluster (Standalone)</a></li>
+                
+                <li class=""><a href="/setup/yarn_setup.html">YARN</a></li>
+                
+                <li class=""><a href="/setup/gce_setup.html">Google Compute Engine</a></li>
+                
+                <li class=""><a href="/setup/aws.html">AWS</a></li>
+                
+                <li class=""><a href="/setup/jobmanager_high_availability.html">High Availability</a></li>
+                
+              </ul>
+            </li>
+
+            <!-- Programming Guides -->
+            <li class="dropdown active">
+              <a href="/apis" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Programming Guides <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                
+                
+                <li class=""><a href="/apis/common/index.html"><strong>Basic API Concepts</strong></a></li>
+                
+                <li class=""><a href="/apis/streaming/index.html"><strong>Streaming Guide</strong> (DataStream API)</a></li>
+                
+                <li class=""><a href="/apis/batch/index.html"><strong>Batch Guide</strong> (DataSet API)</a></li>
+                
+                <li class=""><a href="/apis/best_practices.html">Best Practices</a></li>
+                
+                <li class=""><a href="/apis/table.html">Table API and SQL</a></li>
+                
+                <li class=""><a href="/apis/cli.html">Command-Line Interface</a></li>
+                
+                <li class=""><a href="/apis/local_execution.html">Local Execution</a></li>
+                
+                <li class=""><a href="/apis/cluster_execution.html">Cluster Execution</a></li>
+                
+                <li class=""><a href="/apis/scala_shell.html">Scala Shell</a></li>
+                
+                <li class=""><a href="/apis/scala_api_extensions.html">Scala API Extensions</a></li>
+                
+                <li class=""><a href="/apis/java8.html">Java 8</a></li>
+                
+              </ul>
+            </li>
+
+            <!-- Libraries -->
+            <li class="dropdown">
+              <a href="/libs" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Libraries <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  
+                  
+                  <li class=""><a href="/apis/batch/libs/gelly.html">Graphs: Gelly</a></li>
+                  
+                  <li class=""><a href="/apis/streaming/libs/cep.html">CEP</a></li>
+                  
+                  <li class=""><a href="/apis/batch/libs/ml/index.html">Machine Learning</a></li>
+                  
+              </ul>
+            </li>
+
+            <!-- Internals -->
+            <li class="dropdown">
+              <a href="/internals" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Internals <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li role="presentation" class="dropdown-header"><strong>Contribute</strong></li>
+                <li><a href="http://flink.apache.org/how-to-contribute.html"><small><span class="glyphicon glyphicon-new-window"></span></small> How to Contribute</a></li>
+                <li><a href="http://flink.apache.org/contribute-code.html#coding-guidelines"><small><span class="glyphicon glyphicon-new-window"></span></small> Coding Guidelines</a></li>
+                
+                
+                <li class=""><a href="/internals/ide_setup.html">IDE Setup</a></li>
+                
+                <li class=""><a href="/internals/logging.html">Logging</a></li>
+                
+                <li class=""><a href="/internals/general_arch.html">Architecture and Process Model</a></li>
+                
+                <li class=""><a href="/internals/stream_checkpointing.html">Fault Tolerance for Data Streaming</a></li>
+                
+                <li class=""><a href="/internals/types_serialization.html">Type Extraction and Serialization</a></li>
+                
+                <li class=""><a href="/internals/monitoring_rest_api.html">Monitoring REST API</a></li>
+                
+                <li class=""><a href="/internals/job_scheduling.html">Jobs and Scheduling</a></li>
+                
+                <li class=""><a href="/internals/add_operator.html">How-To: Add an Operator</a></li>
+                
+                <li class=""><a href="/internals/back_pressure_monitoring.html">Back Pressure Monitoring</a></li>
+                
+              </ul>
+            </li>
+          </ul>
+          <form class="navbar-form navbar-right hidden-sm hidden-md" role="search" action="/search-results.html">
+            <div class="form-group">
+              <input type="text" class="form-control" size="16px" name="q" placeholder="Search all pages">
+            </div>
+            <button type="submit" class="btn btn-default">Search</button>
+          </form>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+
+
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      
+<div class="row">
+
+
+  <!-- Sub Navigation -->
+  <div class="col-sm-3">
+    <ul id="sub-nav">
+      
+      
+      
+        
+        
+        
+        <li><a href="/apis/streaming/index.html" class="">DataStream API</a>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/quickstart/run_example_quickstart.html" class="">Example: Wikipedia Edits</a>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/event_time.html" class="">Event Time</a>
+          
+          <ul>
+            
+              <li><a href="/apis/streaming/event_timestamp_extractors.html" class="active">Pre-defined Timestamp Extractors / Watermark Emitters</a></li>
+            
+              <li><a href="/apis/streaming/event_timestamps_watermarks.html" class="">Generating Timestamps / Watermarks</a></li>
+            
+          </ul>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/windows.html" class="">Windows</a>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/fault_tolerance.html" class="">Fault Tolerance</a>
+          
+          <ul>
+            
+              <li><a href="/apis/streaming/state.html" class="">Working with State</a></li>
+            
+              <li><a href="/apis/streaming/state_backends.html" class="">State Backends</a></li>
+            
+          </ul>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/connectors/index.html" class="">Connectors</a>
+          
+          <ul>
+            
+              <li><a href="/apis/streaming/connectors/kafka.html" class="">Kafka</a></li>
+            
+              <li><a href="/apis/streaming/connectors/elasticsearch.html" class="">Elasticsearch</a></li>
+            
+              <li><a href="/apis/streaming/connectors/elasticsearch2.html" class="">Elasticsearch 2.x</a></li>
+            
+              <li><a href="/apis/streaming/connectors/filesystem_sink.html" class="">Filesystem Sink</a></li>
+            
+              <li><a href="/apis/streaming/connectors/rabbitmq.html" class="">RabbitMQ</a></li>
+            
+              <li><a href="/apis/streaming/connectors/kinesis.html" class="">Amazon Kinesis Streams</a></li>
+            
+              <li><a href="/apis/streaming/connectors/twitter.html" class="">Twitter</a></li>
+            
+          </ul>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/savepoints.html" class="">Savepoints</a>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/libs/index.html" class="">Libraries</a>
+          
+          <ul>
+            
+              <li><a href="/apis/streaming/libs/cep.html" class="">Event Processing (CEP)</a></li>
+            
+          </ul>
+          
+        </li>
+      
+        
+        
+        
+        <li><a href="/apis/streaming/storm_compatibility.html" class="">Storm Compatibility</a>
+          
+        </li>
+      
+    </ul>
+  </div>
+  <!-- Main -->
+  <div class="col-sm-9">
+    <!-- Top anchor -->
+    <a href="#top"></a>
+
+    <!-- Artifact name change warning. Remove for the 1.0 release. -->
+    <div class="panel panel-default">
+      <div class="panel-body"><strong>Important</strong>: Maven artifacts which depend on Scala are now suffixed with the Scala major version, e.g. "2.10" or "2.11". Please consult the <a href="https://cwiki.apache.org/confluence/display/FLINK/Maven+artifact+names+suffixed+with+Scala+version">migration guide on the project Wiki</a>.</div>
+    </div>
+
+    <!-- Breadcrumbs above the main heading -->
+    <ol class="breadcrumb">
+      
+      
+      <li><a href="/apis/streaming/index.html">Streaming Guide</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      
+      
+      
+
+      
+
+      <li><a href="/apis/streaming/event_time.html">Event Time</a></li>
+      
+      
+      <li class="active">Pre-defined Timestamp Extractors / Watermark Emitters</li>
+    </ol>
+
+    <div class="text">
+      <!-- Main heading -->
+      <h1>Pre-defined Timestamp Extractors / Watermark Emitters</h1>
+
+      <!-- Content -->
+      
+
+
+<p>As described in the <a href="/apis/streaming/event_timestamps_watermarks.html">timestamps and watermark handling</a> page,
+Flink provides abstractions that allow the programmer to assign their own timestamps and emit their own watermarks. More specifically, 
+one can do so by implementing one of the <code>AssignerWithPeriodicWatermarks</code> and <code>AssignerWithPunctuatedWatermarks</code> interfaces, depending 
+on their use-case. In a nutshell, the first will emit watermarks periodically, while the second does so based on some property of 
+the incoming records, e.g. whenever a special element is encountered in the stream.</p>
+
+<p>In order to further ease the programming effort for such tasks, Flink comes with some pre-implemented timestamp assigners. 
+This section provides a list of them. Apart from their out-of-the-box functionality, their implementation can serve as an example 
+for custom assigner implementations.</p>
+
+<h4 id="assigner-with-ascending-timestamps"><strong>Assigner with Ascending Timestamps</strong></h4>
+
+<p>The simplest special case for <em>periodic</em> watermark generation is the case where timestamps seen by a given source task 
+occur in ascending order. In that case, the current timestamp can always act as a watermark, because no lower timestamps will 
+occur any more.</p>
+
+<p>Note that it is only necessary that timestamps are ascending <em>per parallel data source task</em>. For example, if
+in a specific setup one Kafka partition is read by one parallel data source instance, then it is only necessary that
+timestamps are ascending within each Kafka partition. Flink’s Watermark merging mechanism will generate correct
+watermarks whenever parallel streams are shuffled, unioned, connected, or merged.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">DataStream</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;</span> <span class="n">stream</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="n">DataStream</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;</span> <span class="n">withTimestampsAndWatermarks</span> <span class="o">=</span> 
+    <span class="n">stream</span><span class="o">.</span><span class="na">assignTimestampsAndWatermarks</span><span class="o">(</span><span class="k">new</span> <span class="n">AscendingTimestampExtractor</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;()</span> <span class="o">{</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">long</span> <span class="nf">extractAscendingTimestamp</span><span class="o">(</span><span class="n">MyEvent</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="na">getCreationTime</span><span class="o">();</span>
+        <span class="o">}</span>
+<span class="o">});</span></code></pre></div>
+
+  </div>
+  <div data-lang="scala">
+
+    <div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">stream</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">MyEvent</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="n">withTimestampsAndWatermarks</span> <span class="k">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">assignAscendingTimestamps</span><span class="o">(</span> <span class="k">_</span><span class="o">.</span><span class="n">getCreationTime</span> <span class="o">)</span></code></pre></div>
+
+  </div>
+</div>
+
+<h4 id="assigner-which-allows-a-fixed-amount-of-record-lateness"><strong>Assigner which allows a fixed amount of record lateness</strong></h4>
+
+<p>Another example of periodic watermark generation is the one where the watermark lags behind the maximum (event-time) timestamp 
+seen in the stream, by a fixed amount of time. This case covers scenarios where the maximum lateness that can be encountered in a 
+stream is known in advance, e.g. when creating a custom source containing elements with timestamps spread within a fixed period of 
+time for testing. For these cases, Flink provides the <code>BoundedOutOfOrdernessTimestampExtractor</code> which takes as argument 
+the <code>maxOutOfOrderness</code>, i.e. the maximum amount of time an element is allowed to be late, before being ignored when computing the 
+final result for the given window. Lateness corresponds to the result of <code>t - t_w</code>, where <code>t</code> is the (event-time) timestamp of an 
+element, and <code>t_w</code> that of the previous watermark. If <code>lateness &gt; 0</code> then the element is considered late and is ignored when computing 
+the result of the job for its corresponding window.</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">DataStream</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;</span> <span class="n">stream</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="n">DataStream</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;</span> <span class="n">withTimestampsAndWatermarks</span> <span class="o">=</span> 
+    <span class="n">stream</span><span class="o">.</span><span class="na">assignTimestampsAndWatermarks</span><span class="o">(</span><span class="k">new</span> <span class="n">BoundedOutOfOrdernessTimestampExtractor</span><span class="o">&lt;</span><span class="n">MyEvent</span><span class="o">&gt;(</span><span class="n">Time</span><span class="o">.</span><span class="na">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span> <span class="o">{</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">long</span> <span class="nf">extractAscendingTimestamp</span><span class="o">(</span><span class="n">MyEvent</span> <span class="n">element</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">element</span><span class="o">.</span><span class="na">getCreationTime</span><span class="o">();</span>
+        <span class="o">}</span>
+<span class="o">});</span></code></pre></div>
+
+  </div>
+  <div data-lang="scala">
+
+    <div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">stream</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">MyEvent</span><span class="o">]</span> <span class="k">=</span> <span class="o">...</span>
+
+<span class="k">val</span> <span class="n">withTimestampsAndWatermarks</span> <span class="k">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">assignTimestampsAndWatermarks</span><span class="o">(</span><span class="k">new</span> <span class="nc">BoundedOutOfOrdernessTimestampExtractor</span><span class="o">[</span><span class="kt">MyEvent</span><span class="o">](</span><span class="nc">Time</span><span class="o">.</span><span class="n">seconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))(</span> <span class="k">_</span><span class="o">.</span><span class="n">getCreationTime</span> <span class="o">))</span></code></pre></div>
+
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  
+</div>
+
+    </div><!-- /.container -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

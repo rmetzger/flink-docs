@@ -1,0 +1,1391 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: 基于 DataStream API 实现欺诈检测</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/try-flink/datastream_api.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"class="active"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink</a><div class="collapse in" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html" class="active">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse">Table API & SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">流式概念<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse">SQL<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/try-flink/datastream_api.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink</li>
+  
+    <li class="active">基于 DataStream API 实现欺诈检测</li>
+</ol>
+
+<h1>基于 DataStream API 实现欺诈检测</h1>
+
+
+
+
+<p>Apache Flink 提供了 DataStream API 来实现稳定可靠的、有状态的流处理应用程序。
+Flink 支持对状态和时间的细粒度控制，以此来实现复杂的事件驱动数据处理系统。
+这个入门指导手册讲述了如何通过 Flink DataStream API 来实现一个有状态流处理程序。</p>
+
+<ul id="markdown-toc">
+  <li><a href="#你要搭建一个什么系统" id="markdown-toc-你要搭建一个什么系统">你要搭建一个什么系统</a></li>
+  <li><a href="#准备条件" id="markdown-toc-准备条件">准备条件</a></li>
+  <li><a href="#困难求助" id="markdown-toc-困难求助">困难求助</a></li>
+  <li><a href="#怎样跟着教程练习" id="markdown-toc-怎样跟着教程练习">怎样跟着教程练习</a></li>
+  <li><a href="#代码分析" id="markdown-toc-代码分析">代码分析</a></li>
+  <li><a href="#实现一个真正的应用程序" id="markdown-toc-实现一个真正的应用程序">实现一个真正的应用程序</a></li>
+  <li><a href="#欺诈检测器-v2状态--时间--️" id="markdown-toc-欺诈检测器-v2状态--时间--️">欺诈检测器 v2：状态 + 时间 = ❤️</a></li>
+  <li><a href="#完整的程序" id="markdown-toc-完整的程序">完整的程序</a>    <ul>
+      <li><a href="#期望的结果" id="markdown-toc-期望的结果">期望的结果</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><a name="what-are-you-building"></a></p>
+
+<h2 id="你要搭建一个什么系统">你要搭建一个什么系统</h2>
+
+<p>在当今数字时代，信用卡欺诈行为越来越被重视。
+罪犯可以通过诈骗或者入侵安全级别较低系统来盗窃信用卡卡号。
+用盗得的信用卡进行很小额度的例如一美元或者更小额度的消费进行测试。
+如果测试消费成功，那么他们就会用这个信用卡进行大笔消费，来购买一些他们希望得到的，或者可以倒卖的财物。</p>
+
+<p>在这个教程中，你将会建立一个针对可疑信用卡交易行为的反欺诈检测系统。
+通过使用一组简单的规则，你将了解到 Flink 如何为我们实现复杂业务逻辑并实时执行。</p>
+
+<p><a name="prerequisites"></a></p>
+
+<h2 id="准备条件">准备条件</h2>
+
+<p>这个代码练习假定你对 Java 或 Scala 有一定的了解，当然，如果你之前使用的是其他开发语言，你也应该能够跟随本教程进行学习。</p>
+
+<p><a name="help-im-stuck"></a></p>
+
+<h2 id="困难求助">困难求助</h2>
+
+<p>如果遇到困难，可以参考 <a href="https://flink.apache.org/zh/gettinghelp.html">社区支持资源</a>。
+当然也可以在邮件列表提问，Flink 的 <a href="https://flink.apache.org/zh/community.html#mailing-lists">用户邮件列表</a>  一直被评为所有Apache项目中最活跃的一个，这也是快速获得帮助的好方法。</p>
+
+<p><a name="how-to-follow-along"></a></p>
+
+<h2 id="怎样跟着教程练习">怎样跟着教程练习</h2>
+
+<p>首先，你需要在你的电脑上准备以下环境：</p>
+
+<ul>
+  <li>Java 8 or 11</li>
+  <li>Maven</li>
+</ul>
+
+<p>一个准备好的 Flink Maven Archetype 能够快速创建一个包含了必要依赖的 Flink 程序骨架，基于此，你可以把精力集中在编写业务逻辑上即可。
+这些已包含的依赖包括 <code class="highlighter-rouge">flink-streaming-java</code>、<code class="highlighter-rouge">flink-walkthrough-common</code> 等，他们分别是 Flink 应用程序的核心依赖项和这个代码练习需要的数据生成器，当然还包括其他本代码练习所依赖的类。</p>
+
+<div class="panel panel-default"><div class="panel-body"><strong>说明:</strong> 为简洁起见，本练习中的代码块中可能不包含完整的类路径。完整的类路径可以在文档底部 <a href="#final-application">链接</a> 中找到。</div></div>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn archetype:generate <span class="se">\</span>
+    <span class="nt">-DarchetypeGroupId</span><span class="o">=</span>org.apache.flink <span class="se">\</span>
+    <span class="nt">-DarchetypeArtifactId</span><span class="o">=</span>flink-walkthrough-datastream-java <span class="se">\</span>
+    <span class="nt">-DarchetypeVersion</span><span class="o">=</span>1.12.0 <span class="se">\</span>
+    <span class="nt">-DgroupId</span><span class="o">=</span>frauddetection <span class="se">\</span>
+    <span class="nt">-DartifactId</span><span class="o">=</span>frauddetection <span class="se">\</span>
+    <span class="nt">-Dversion</span><span class="o">=</span>0.1 <span class="se">\</span>
+    <span class="nt">-Dpackage</span><span class="o">=</span>spendreport <span class="se">\</span>
+    <span class="nt">-DinteractiveMode</span><span class="o">=</span><span class="nb">false</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mvn archetype:generate <span class="se">\</span>
+    <span class="nt">-DarchetypeGroupId</span><span class="o">=</span>org.apache.flink <span class="se">\</span>
+    <span class="nt">-DarchetypeArtifactId</span><span class="o">=</span>flink-walkthrough-datastream-scala <span class="se">\</span>
+    <span class="nt">-DarchetypeVersion</span><span class="o">=</span>1.12.0 <span class="se">\</span>
+    <span class="nt">-DgroupId</span><span class="o">=</span>frauddetection <span class="se">\</span>
+    <span class="nt">-DartifactId</span><span class="o">=</span>frauddetection <span class="se">\</span>
+    <span class="nt">-Dversion</span><span class="o">=</span>0.1 <span class="se">\</span>
+    <span class="nt">-Dpackage</span><span class="o">=</span>spendreport <span class="se">\</span>
+    <span class="nt">-DinteractiveMode</span><span class="o">=</span><span class="nb">false</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>你可以根据自己的情况修改 <code class="highlighter-rouge">groupId</code>、 <code class="highlighter-rouge">artifactId</code> 和 <code class="highlighter-rouge">package</code>。通过这三个参数，
+Maven 将会创建一个名为 <code class="highlighter-rouge">frauddetection</code> 的文件夹，包含了所有依赖的整个工程项目将会位于该文件夹下。
+将工程目录导入到你的开发环境之后，你可以找到 <code class="highlighter-rouge">FraudDetectionJob.java</code> （或 <code class="highlighter-rouge">FraudDetectionJob.scala</code>） 代码文件，文件中的代码如下所示。你可以在 IDE 中直接运行这个文件。
+同时，你可以试着在数据流中设置一些断点或者以 DEBUG 模式来运行程序，体验 Flink 是如何运行的。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <p><a name="frauddetectionjobjava"></a></p>
+
+    <h4 id="frauddetectionjobjava">FraudDetectionJob.java</h4>
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">spendreport</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.flink.streaming.api.datastream.DataStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.streaming.api.environment.StreamExecutionEnvironment</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.sink.AlertSink</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.source.TransactionSource</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FraudDetectionJob</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+
+        <span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Transaction</span><span class="o">&gt;</span> <span class="n">transactions</span> <span class="o">=</span> <span class="n">env</span>
+            <span class="o">.</span><span class="na">addSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">TransactionSource</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">);</span>
+
+        <span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">alerts</span> <span class="o">=</span> <span class="n">transactions</span>
+            <span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="nl">Transaction:</span><span class="o">:</span><span class="n">getAccountId</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="nc">FraudDetector</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"fraud-detector"</span><span class="o">);</span>
+
+        <span class="n">alerts</span>
+            <span class="o">.</span><span class="na">addSink</span><span class="o">(</span><span class="k">new</span> <span class="nc">AlertSink</span><span class="o">())</span>
+            <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"send-alerts"</span><span class="o">);</span>
+
+        <span class="n">env</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">"Fraud Detection"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+    <p><a name="frauddetectorjava"></a></p>
+
+    <h4 id="frauddetectorjava">FraudDetector.java</h4>
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">spendreport</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.flink.streaming.api.functions.KeyedProcessFunction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.util.Collector</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FraudDetector</span> <span class="kd">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Transaction</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">SMALL_AMOUNT</span> <span class="o">=</span> <span class="mf">1.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">LARGE_AMOUNT</span> <span class="o">=</span> <span class="mf">500.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">ONE_MINUTE</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processElement</span><span class="o">(</span>
+            <span class="nc">Transaction</span> <span class="n">transaction</span><span class="o">,</span>
+            <span class="nc">Context</span> <span class="n">context</span><span class="o">,</span>
+            <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">collector</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="nc">Alert</span> <span class="n">alert</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Alert</span><span class="o">();</span>
+        <span class="n">alert</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAccountId</span><span class="o">());</span>
+
+        <span class="n">collector</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <p><a name="frauddetectionjobscala"></a></p>
+
+    <h4 id="frauddetectionjobscala">FraudDetectionJob.scala</h4>
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">package</span> <span class="nn">spendreport</span>
+
+<span class="k">import</span> <span class="nn">org.apache.flink.streaming.api.scala._</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.sink.AlertSink</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.source.TransactionSource</span>
+
+<span class="k">object</span> <span class="nc">FraudDetectionJob</span> <span class="o">{</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">def</span> <span class="nf">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">env</span><span class="k">:</span> <span class="kt">StreamExecutionEnvironment</span> <span class="o">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+
+    <span class="k">val</span> <span class="nv">transactions</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Transaction</span><span class="o">]</span> <span class="k">=</span> <span class="n">env</span>
+      <span class="o">.</span><span class="py">addSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">TransactionSource</span><span class="o">)</span>
+      <span class="o">.</span><span class="py">name</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">alerts</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Alert</span><span class="o">]</span> <span class="k">=</span> <span class="n">transactions</span>
+      <span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="n">transaction</span> <span class="k">=&gt;</span> <span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+      <span class="o">.</span><span class="py">process</span><span class="o">(</span><span class="k">new</span> <span class="nc">FraudDetector</span><span class="o">)</span>
+      <span class="o">.</span><span class="py">name</span><span class="o">(</span><span class="s">"fraud-detector"</span><span class="o">)</span>
+
+    <span class="n">alerts</span>
+      <span class="o">.</span><span class="py">addSink</span><span class="o">(</span><span class="k">new</span> <span class="nc">AlertSink</span><span class="o">)</span>
+      <span class="o">.</span><span class="py">name</span><span class="o">(</span><span class="s">"send-alerts"</span><span class="o">)</span>
+
+    <span class="nv">env</span><span class="o">.</span><span class="py">execute</span><span class="o">(</span><span class="s">"Fraud Detection"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+    <p><a name="frauddetectorscala"></a></p>
+
+    <h4 id="frauddetectorscala">FraudDetector.scala</h4>
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">package</span> <span class="nn">spendreport</span>
+
+<span class="k">import</span> <span class="nn">org.apache.flink.streaming.api.functions.KeyedProcessFunction</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.util.Collector</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span>
+
+<span class="k">object</span> <span class="nc">FraudDetector</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">SMALL_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">1.00</span>
+  <span class="k">val</span> <span class="nv">LARGE_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">500.00</span>
+  <span class="k">val</span> <span class="nv">ONE_MINUTE</span><span class="k">:</span> <span class="kt">Long</span>     <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span>
+<span class="o">}</span>
+
+<span class="nd">@SerialVersionUID</span><span class="o">(</span><span class="mi">1L</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">FraudDetector</span> <span class="k">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">def</span> <span class="nf">processElement</span><span class="o">(</span>
+      <span class="n">transaction</span><span class="k">:</span> <span class="kt">Transaction</span><span class="o">,</span>
+      <span class="n">context</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">,</span>
+      <span class="n">collector</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="k">val</span> <span class="nv">alert</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alert</span>
+    <span class="nv">alert</span><span class="o">.</span><span class="py">setId</span><span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+
+    <span class="nv">collector</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="breaking-down-the-code"></a></p>
+
+<h2 id="代码分析">代码分析</h2>
+
+<p>让我们一步步地来分析一下这两个代码文件。<code class="highlighter-rouge">FraudDetectionJob</code> 类定义了程序的数据流，而 <code class="highlighter-rouge">FraudDetector</code> 类定义了欺诈交易检测的业务逻辑。</p>
+
+<p>下面我们开始讲解整个 Job 是如何组装到 <code class="highlighter-rouge">FraudDetectionJob</code> 类的 <code class="highlighter-rouge">main</code> 函数中的。</p>
+
+<p><a name="the-execution-environment"></a></p>
+
+<h4 id="执行环境">执行环境</h4>
+
+<p>第一行的 <code class="highlighter-rouge">StreamExecutionEnvironment</code> 用于设置你的执行环境。
+任务执行环境用于定义任务的属性、创建数据源以及最终启动任务的执行。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span><span class="k">:</span> <span class="kt">StreamExecutionEnvironment</span> <span class="o">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="creating-a-source"></a></p>
+
+<h4 id="创建数据源">创建数据源</h4>
+
+<p>数据源从外部系统例如 Apache Kafka、Rabbit MQ 或者 Apache Pulsar 接收数据，然后将数据送到 Flink 程序中。
+这个代码练习使用的是一个能够无限循环生成信用卡模拟交易数据的数据源。
+每条交易数据包括了信用卡 ID （<code class="highlighter-rouge">accountId</code>），交易发生的时间 （<code class="highlighter-rouge">timestamp</code>） 以及交易的金额（<code class="highlighter-rouge">amount</code>）。
+绑定到数据源上的 <code class="highlighter-rouge">name</code> 属性是为了调试方便，如果发生一些异常，我们能够通过它快速定位问题发生在哪里。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Transaction</span><span class="o">&gt;</span> <span class="n">transactions</span> <span class="o">=</span> <span class="n">env</span>
+    <span class="o">.</span><span class="na">addSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">TransactionSource</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">transactions</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Transaction</span><span class="o">]</span> <span class="k">=</span> <span class="n">env</span>
+  <span class="o">.</span><span class="py">addSource</span><span class="o">(</span><span class="k">new</span> <span class="nc">TransactionSource</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">name</span><span class="o">(</span><span class="s">"transactions"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="partitioning-events--detecting-fraud"></a></p>
+
+<h4 id="对事件分区--欺诈检测">对事件分区 &amp; 欺诈检测</h4>
+
+<p><code class="highlighter-rouge">transactions</code> 这个数据流包含了大量的用户交易数据，需要被划分到多个并发上进行欺诈检测处理。由于欺诈行为的发生是基于某一个账户的，所以，必须要要保证同一个账户的所有交易行为数据要被同一个并发的 task 进行处理。</p>
+
+<p>为了保证同一个 task 处理同一个 key 的所有数据，你可以使用 <code class="highlighter-rouge">DataStream#keyBy</code> 对流进行分区。
+<code class="highlighter-rouge">process()</code> 函数对流绑定了一个操作，这个操作将会对流上的每一个消息调用所定义好的函数。
+通常，一个操作会紧跟着 <code class="highlighter-rouge">keyBy</code> 被调用，在这个例子中，这个操作是<code class="highlighter-rouge">FraudDetector</code>，该操作是在一个 <em>keyed context</em> 上执行的。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">alerts</span> <span class="o">=</span> <span class="n">transactions</span>
+    <span class="o">.</span><span class="na">keyBy</span><span class="o">(</span><span class="nl">Transaction:</span><span class="o">:</span><span class="n">getAccountId</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="k">new</span> <span class="nc">FraudDetector</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"fraud-detector"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">alerts</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[</span><span class="kt">Alert</span><span class="o">]</span> <span class="k">=</span> <span class="n">transactions</span>
+  <span class="o">.</span><span class="py">keyBy</span><span class="o">(</span><span class="n">transaction</span> <span class="k">=&gt;</span> <span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">process</span><span class="o">(</span><span class="k">new</span> <span class="nc">FraudDetector</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">name</span><span class="o">(</span><span class="s">"fraud-detector"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="outputting-results"></a></p>
+
+<h4 id="输出结果">输出结果</h4>
+
+<p>sink 会将 <code class="highlighter-rouge">DataStream</code> 写出到外部系统，例如 Apache Kafka、Cassandra 或者 AWS Kinesis 等。
+<code class="highlighter-rouge">AlertSink</code> 使用 <strong>INFO</strong> 的日志级别打印每一个 <code class="highlighter-rouge">Alert</code> 的数据记录，而不是将其写入持久存储，以便你可以方便地查看结果。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">alerts</span><span class="o">.</span><span class="na">addSink</span><span class="o">(</span><span class="k">new</span> <span class="nc">AlertSink</span><span class="o">());</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">alerts</span><span class="o">.</span><span class="py">addSink</span><span class="o">(</span><span class="k">new</span> <span class="nc">AlertSink</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="executing-the-job"></a></p>
+
+<h4 id="运行作业">运行作业</h4>
+
+<p>Flink 程序是懒加载的，并且只有在完全搭建好之后，才能够发布到集群上执行。
+调用 <code class="highlighter-rouge">StreamExecutionEnvironment#execute</code> 时给任务传递一个任务名参数，就可以开始运行任务。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">env</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="s">"Fraud Detection"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nv">env</span><span class="o">.</span><span class="py">execute</span><span class="o">(</span><span class="s">"Fraud Detection"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="the-fraud-detector"></a></p>
+
+<h4 id="欺诈检测器">欺诈检测器</h4>
+
+<p>欺诈检查类 <code class="highlighter-rouge">FraudDetector</code> 是 <code class="highlighter-rouge">KeyedProcessFunction</code> 接口的一个实现。
+他的方法 <code class="highlighter-rouge">KeyedProcessFunction#processElement</code> 将会在每个交易事件上被调用。
+这个程序里边会对每笔交易发出警报，有人可能会说这做报过于保守了。</p>
+
+<p>本教程的后续步骤将指导你对这个欺诈检测器进行更有意义的业务逻辑扩展。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FraudDetector</span> <span class="kd">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Transaction</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">SMALL_AMOUNT</span> <span class="o">=</span> <span class="mf">1.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">LARGE_AMOUNT</span> <span class="o">=</span> <span class="mf">500.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">ONE_MINUTE</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processElement</span><span class="o">(</span>
+            <span class="nc">Transaction</span> <span class="n">transaction</span><span class="o">,</span>
+            <span class="nc">Context</span> <span class="n">context</span><span class="o">,</span>
+            <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">collector</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="nc">Alert</span> <span class="n">alert</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Alert</span><span class="o">();</span>
+        <span class="n">alert</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAccountId</span><span class="o">());</span>
+
+        <span class="n">collector</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">object</span> <span class="nc">FraudDetector</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">SMALL_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">1.00</span>
+  <span class="k">val</span> <span class="nv">LARGE_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">500.00</span>
+  <span class="k">val</span> <span class="nv">ONE_MINUTE</span><span class="k">:</span> <span class="kt">Long</span>     <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span>
+<span class="o">}</span>
+
+<span class="nd">@SerialVersionUID</span><span class="o">(</span><span class="mi">1L</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">FraudDetector</span> <span class="k">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">def</span> <span class="nf">processElement</span><span class="o">(</span>
+      <span class="n">transaction</span><span class="k">:</span> <span class="kt">Transaction</span><span class="o">,</span>
+      <span class="n">context</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">,</span>
+      <span class="n">collector</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="k">val</span> <span class="nv">alert</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alert</span>
+    <span class="nv">alert</span><span class="o">.</span><span class="py">setId</span><span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+
+    <span class="nv">collector</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="writing-a-real-application-v1"></a></p>
+
+<h2 id="实现一个真正的应用程序">实现一个真正的应用程序</h2>
+
+<p>我们先实现第一版报警程序，对于一个账户，如果出现小于 $1 美元的交易后紧跟着一个大于 $500 的交易，就输出一个报警信息。</p>
+
+<p>假设你的欺诈检测器所处理的交易数据如下：</p>
+
+<p class="text-center">
+    <img alt="Transactions" width="80%" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/fig/fraud-transactions.svg" />
+</p>
+
+<p>交易 3 和交易 4 应该被标记为欺诈行为，因为交易 3 是一个 $0.09 的小额交易，而紧随着的交易 4 是一个 $510 的大额交易。
+另外，交易 7、8 和 交易 9 就不属于欺诈交易了，因为在交易 7 这个 $0.02 的小额交易之后，并没有跟随一个大额交易，而是一个金额适中的交易，这使得交易 7 到 交易 9 不属于欺诈行为。</p>
+
+<p>欺诈检测器需要在多个交易事件之间记住一些信息。仅当一个大额的交易紧随一个小额交易的情况发生时，这个大额交易才被认为是欺诈交易。
+在多个事件之间存储信息就需要使用到 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html#managed-state">状态</a>，这也是我们选择使用 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">KeyedProcessFunction</a> 的原因。
+它能够同时提供对状态和时间的细粒度操作，这使得我们能够在接下来的代码练习中实现更复杂的算法。</p>
+
+<p>最直接的实现方式是使用一个 boolean 型的标记状态来表示是否刚处理过一个小额交易。
+当处理到该账户的一个大额交易时，你只需要检查这个标记状态来确认上一个交易是是否小额交易即可。</p>
+
+<p>然而，仅使用一个标记作为 <code class="highlighter-rouge">FraudDetector</code> 的类成员来记录账户的上一个交易状态是不准确的。
+Flink 会在同一个 <code class="highlighter-rouge">FraudDetector</code> 的并发实例中处理多个账户的交易数据，假设，当账户 A 和账户 B 的数据被分发的同一个并发实例上处理时，账户 A 的小额交易行为可能会将标记状态设置为真，随后账户 B 的大额交易可能会被误判为欺诈交易。
+当然，我们可以使用如 <code class="highlighter-rouge">Map</code> 这样的数据结构来保存每一个账户的状态，但是常规的类成员变量是无法做到容错处理的，当任务失败重启后，之前的状态信息将会丢失。
+这样的话，如果程序曾出现过失败重启的情况，将会漏掉一些欺诈报警。</p>
+
+<p>为了应对这个问题，Flink 提供了一套支持容错状态的原语，这些原语几乎与常规成员变量一样易于使用。</p>
+
+<p>Flink 中最基础的状态类型是 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html#using-managed-keyed-state">ValueState</a>，这是一种能够为被其封装的变量添加容错能力的类型。
+<code class="highlighter-rouge">ValueState</code> 是一种 <em>keyed state</em>，也就是说它只能被用于 <em>keyed context</em> 提供的 operator 中，即所有能够紧随 <code class="highlighter-rouge">DataStream#keyBy</code> 之后被调用的operator。
+一个 operator 中的  <em>keyed state</em> 的作用域默认是属于它所属的 key 的。
+这个例子中，key 就是当前正在处理的交易行为所属的信用卡账户（key 传入 keyBy() 函数调用），而 <code class="highlighter-rouge">FraudDetector</code> 维护了每个帐户的标记状态。
+<code class="highlighter-rouge">ValueState</code> 需要使用 <code class="highlighter-rouge">ValueStateDescriptor</code> 来创建，<code class="highlighter-rouge">ValueStateDescriptor</code> 包含了 Flink 如何管理变量的一些元数据信息。状态在使用之前需要先被注册。
+状态需要使用 <code class="highlighter-rouge">open()</code> 函数来注册状态。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FraudDetector</span> <span class="kd">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Transaction</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">ValueState</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagState</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">parameters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ValueStateDescriptor</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagDescriptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">&lt;&gt;(</span>
+                <span class="s">"flag"</span><span class="o">,</span>
+                <span class="nc">Types</span><span class="o">.</span><span class="na">BOOLEAN</span><span class="o">);</span>
+        <span class="n">flagState</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">().</span><span class="na">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nd">@SerialVersionUID</span><span class="o">(</span><span class="mi">1L</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">FraudDetector</span> <span class="k">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">flagState</span><span class="k">:</span> <span class="kt">ValueState</span><span class="o">[</span><span class="kt">java.lang.Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">flagDescriptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">(</span><span class="s">"flag"</span><span class="o">,</span> <span class="nv">Types</span><span class="o">.</span><span class="py">BOOLEAN</span><span class="o">)</span>
+    <span class="n">flagState</span> <span class="k">=</span> <span class="nv">getRuntimeContext</span><span class="o">.</span><span class="py">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">)</span>
+  <span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><code class="highlighter-rouge">ValueState</code> 是一个包装类，类似于 Java 标准库里边的 <code class="highlighter-rouge">AtomicReference</code> 和 <code class="highlighter-rouge">AtomicLong</code>。
+它提供了三个用于交互的方法。<code class="highlighter-rouge">update</code> 用于更新状态，<code class="highlighter-rouge">value</code> 用于获取状态值，还有 <code class="highlighter-rouge">clear</code> 用于清空状态。
+如果一个 key 还没有状态，例如当程序刚启动或者调用过 <code class="highlighter-rouge">ValueState#clear</code> 方法时，<code class="highlighter-rouge">ValueState#value</code> 将会返回 <code class="highlighter-rouge">null</code>。
+如果需要更新状态，需要调用 <code class="highlighter-rouge">ValueState#update</code> 方法，直接更改 <code class="highlighter-rouge">ValueState#value</code> 的返回值可能不会被系统识别。
+容错处理将在 Flink 后台自动管理，你可以像与常规变量那样与状态变量进行交互。</p>
+
+<p>下边的示例，说明了如何使用标记状态来追踪可能的欺诈交易行为。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">processElement</span><span class="o">(</span>
+        <span class="nc">Transaction</span> <span class="n">transaction</span><span class="o">,</span>
+        <span class="nc">Context</span> <span class="n">context</span><span class="o">,</span>
+        <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">collector</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+    <span class="c1">// Get the current state for the current key</span>
+    <span class="nc">Boolean</span> <span class="n">lastTransactionWasSmall</span> <span class="o">=</span> <span class="n">flagState</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+
+    <span class="c1">// Check if the flag is set</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">lastTransactionWasSmall</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&gt;</span> <span class="no">LARGE_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// Output an alert downstream</span>
+            <span class="nc">Alert</span> <span class="n">alert</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Alert</span><span class="o">();</span>
+            <span class="n">alert</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAccountId</span><span class="o">());</span>
+
+            <span class="n">collector</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Clean up our state</span>
+        <span class="n">flagState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&lt;</span> <span class="no">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Set the flag to true</span>
+        <span class="n">flagState</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">override</span> <span class="k">def</span> <span class="nf">processElement</span><span class="o">(</span>
+    <span class="n">transaction</span><span class="k">:</span> <span class="kt">Transaction</span><span class="o">,</span>
+    <span class="n">context</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">,</span>
+    <span class="n">collector</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+  <span class="c1">// Get the current state for the current key</span>
+  <span class="k">val</span> <span class="nv">lastTransactionWasSmall</span> <span class="k">=</span> <span class="nv">flagState</span><span class="o">.</span><span class="py">value</span>
+
+  <span class="c1">// Check if the flag is set</span>
+  <span class="nf">if</span> <span class="o">(</span><span class="n">lastTransactionWasSmall</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAmount</span> <span class="o">&gt;</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">LARGE_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// Output an alert downstream</span>
+      <span class="k">val</span> <span class="nv">alert</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alert</span>
+      <span class="nv">alert</span><span class="o">.</span><span class="py">setId</span><span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+
+      <span class="nv">collector</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="c1">// Clean up our state</span>
+    <span class="nv">flagState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="nf">if</span> <span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAmount</span> <span class="o">&lt;</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// set the flag to true</span>
+    <span class="nv">flagState</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>对于每笔交易，欺诈检测器都会检查该帐户的标记状态。
+请记住，<code class="highlighter-rouge">ValueState</code> 的作用域始终限于当前的 key，即信用卡帐户。
+如果标记状态不为空，则该帐户的上一笔交易是小额的，因此，如果当前这笔交易的金额很大，那么检测程序将输出报警信息。</p>
+
+<p>在检查之后，不论是什么状态，都需要被清空。
+不管是当前交易触发了欺诈报警而造成模式的结束，还是当前交易没有触发报警而造成模式的中断，都需要重新开始新的模式检测。</p>
+
+<p>最后，检查当前交易的金额是否属于小额交易。
+如果是，那么需要设置标记状态，以便可以在下一个事件中对其进行检查。
+注意，<code class="highlighter-rouge">ValueState&lt;Boolean&gt;</code> 实际上有 3 种状态：unset (<code class="highlighter-rouge">null</code>)，<code class="highlighter-rouge">true</code>，和 <code class="highlighter-rouge">false</code>，<code class="highlighter-rouge">ValueState</code> 是允许空值的。
+我们的程序只使用了 unset (<code class="highlighter-rouge">null</code>) 和 <code class="highlighter-rouge">true</code> 两种来判断标记状态被设置了与否。</p>
+
+<h2 id="欺诈检测器-v2状态--时间--️">欺诈检测器 v2：状态 + 时间 = ❤️</h2>
+
+<p>骗子们在小额交易后不会等很久就进行大额消费，这样可以降低小额测试交易被发现的几率。
+比如，假设你为欺诈检测器设置了一分钟的超时，对于上边的例子，交易 3 和 交易 4 只有间隔在一分钟之内才被认为是欺诈交易。
+Flink 中的 <code class="highlighter-rouge">KeyedProcessFunction</code> 允许您设置计时器，该计时器在将来的某个时间点执行回调函数。</p>
+
+<p>让我们看看如何修改程序以符合我们的新要求：</p>
+
+<ul>
+  <li>当标记状态被设置为 <code class="highlighter-rouge">true</code> 时，设置一个在当前时间一分钟后触发的定时器。</li>
+  <li>当定时器被触发时，重置标记状态。</li>
+  <li>当标记状态被重置时，删除定时器。</li>
+</ul>
+
+<p>要删除一个定时器，你需要记录这个定时器的触发时间，这同样需要状态来实现，所以你需要在标记状态后也创建一个记录定时器时间的状态。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">transient</span> <span class="nc">ValueState</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagState</span><span class="o">;</span>
+<span class="kd">private</span> <span class="kd">transient</span> <span class="nc">ValueState</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">timerState</span><span class="o">;</span>
+
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">parameters</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">ValueStateDescriptor</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagDescriptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">&lt;&gt;(</span>
+            <span class="s">"flag"</span><span class="o">,</span>
+            <span class="nc">Types</span><span class="o">.</span><span class="na">BOOLEAN</span><span class="o">);</span>
+    <span class="n">flagState</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">().</span><span class="na">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">);</span>
+
+    <span class="nc">ValueStateDescriptor</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">timerDescriptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">&lt;&gt;(</span>
+            <span class="s">"timer-state"</span><span class="o">,</span>
+            <span class="nc">Types</span><span class="o">.</span><span class="na">LONG</span><span class="o">);</span>
+    <span class="n">timerState</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">().</span><span class="na">getState</span><span class="o">(</span><span class="n">timerDescriptor</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nd">@SerialVersionUID</span><span class="o">(</span><span class="mi">1L</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">FraudDetector</span> <span class="k">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">flagState</span><span class="k">:</span> <span class="kt">ValueState</span><span class="o">[</span><span class="kt">java.lang.Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">timerState</span><span class="k">:</span> <span class="kt">ValueState</span><span class="o">[</span><span class="kt">java.lang.Long</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">flagDescriptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">(</span><span class="s">"flag"</span><span class="o">,</span> <span class="nv">Types</span><span class="o">.</span><span class="py">BOOLEAN</span><span class="o">)</span>
+    <span class="n">flagState</span> <span class="k">=</span> <span class="nv">getRuntimeContext</span><span class="o">.</span><span class="py">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">timerDescriptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">(</span><span class="s">"timer-state"</span><span class="o">,</span> <span class="nv">Types</span><span class="o">.</span><span class="py">LONG</span><span class="o">)</span>
+    <span class="n">timerState</span> <span class="k">=</span> <span class="nv">getRuntimeContext</span><span class="o">.</span><span class="py">getState</span><span class="o">(</span><span class="n">timerDescriptor</span><span class="o">)</span>
+  <span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><code class="highlighter-rouge">KeyedProcessFunction#processElement</code> 需要使用提供了定时器服务的 <code class="highlighter-rouge">Context</code> 来调用。
+定时器服务可以用于查询当前时间、注册定时器和删除定时器。
+使用它，你可以在标记状态被设置时，也设置一个当前时间一分钟后触发的定时器，同时，将触发时间保存到 <code class="highlighter-rouge">timerState</code> 状态中。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&lt;</span> <span class="no">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// set the flag to true</span>
+    <span class="n">flagState</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+    <span class="c1">// set the timer and timer state</span>
+    <span class="kt">long</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">currentProcessingTime</span><span class="o">()</span> <span class="o">+</span> <span class="no">ONE_MINUTE</span><span class="o">;</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">registerProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+    <span class="n">timerState</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nf">if</span> <span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAmount</span> <span class="o">&lt;</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// set the flag to true</span>
+  <span class="nv">flagState</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+
+  <span class="c1">// set the timer and timer state</span>
+  <span class="k">val</span> <span class="nv">timer</span> <span class="k">=</span> <span class="nv">context</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">currentProcessingTime</span> <span class="o">+</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">ONE_MINUTE</span>
+  <span class="nv">context</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">registerProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+  <span class="nv">timerState</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>处理时间是本地时钟时间，这是由运行任务的服务器的系统时间来决定的。</p>
+
+<p>当定时器触发时，将会调用 <code class="highlighter-rouge">KeyedProcessFunction#onTimer</code> 方法。
+通过重写这个方法来实现一个你自己的重置状态的回调逻辑。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTimer</span><span class="o">(</span><span class="kt">long</span> <span class="n">timestamp</span><span class="o">,</span> <span class="nc">OnTimerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// remove flag after 1 minute</span>
+    <span class="n">timerState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="n">flagState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">override</span> <span class="k">def</span> <span class="nf">onTimer</span><span class="o">(</span>
+    <span class="n">timestamp</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
+    <span class="n">ctx</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">OnTimerContext</span><span class="o">,</span>
+    <span class="n">out</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="c1">// remove flag after 1 minute</span>
+  <span class="nv">timerState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+  <span class="nv">flagState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>最后，如果要取消定时器，你需要删除已经注册的定时器，并同时清空保存定时器的状态。
+你可以把这些逻辑封装到一个助手函数中，而不是直接调用 <code class="highlighter-rouge">flagState.clear()</code>。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">cleanUp</span><span class="o">(</span><span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+    <span class="c1">// delete timer</span>
+    <span class="nc">Long</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">timerState</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">deleteProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+
+    <span class="c1">// clean up all state</span>
+    <span class="n">timerState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="n">flagState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+<span class="k">private</span> <span class="k">def</span> <span class="nf">cleanUp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  <span class="c1">// delete timer</span>
+  <span class="k">val</span> <span class="nv">timer</span> <span class="k">=</span> <span class="nv">timerState</span><span class="o">.</span><span class="py">value</span>
+  <span class="nv">ctx</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">deleteProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+
+  <span class="c1">// clean up all states</span>
+  <span class="nv">timerState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+  <span class="nv">flagState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p>这就是一个功能完备的，有状态的分布式流处理程序了。</p>
+
+<p><a name="final-application"></a></p>
+
+<h2 id="完整的程序">完整的程序</h2>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">spendreport</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.flink.api.common.state.ValueState</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.api.common.state.ValueStateDescriptor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.api.common.typeinfo.Types</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.configuration.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.streaming.api.functions.KeyedProcessFunction</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.util.Collector</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FraudDetector</span> <span class="kd">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">Transaction</span><span class="o">,</span> <span class="nc">Alert</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">SMALL_AMOUNT</span> <span class="o">=</span> <span class="mf">1.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">LARGE_AMOUNT</span> <span class="o">=</span> <span class="mf">500.00</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="no">ONE_MINUTE</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">ValueState</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagState</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">transient</span> <span class="nc">ValueState</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">timerState</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span><span class="nc">Configuration</span> <span class="n">parameters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ValueStateDescriptor</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">flagDescriptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">&lt;&gt;(</span>
+                <span class="s">"flag"</span><span class="o">,</span>
+                <span class="nc">Types</span><span class="o">.</span><span class="na">BOOLEAN</span><span class="o">);</span>
+        <span class="n">flagState</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">().</span><span class="na">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">);</span>
+
+        <span class="nc">ValueStateDescriptor</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">timerDescriptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">&lt;&gt;(</span>
+                <span class="s">"timer-state"</span><span class="o">,</span>
+                <span class="nc">Types</span><span class="o">.</span><span class="na">LONG</span><span class="o">);</span>
+        <span class="n">timerState</span> <span class="o">=</span> <span class="n">getRuntimeContext</span><span class="o">().</span><span class="na">getState</span><span class="o">(</span><span class="n">timerDescriptor</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">processElement</span><span class="o">(</span>
+            <span class="nc">Transaction</span> <span class="n">transaction</span><span class="o">,</span>
+            <span class="nc">Context</span> <span class="n">context</span><span class="o">,</span>
+            <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">collector</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="c1">// Get the current state for the current key</span>
+        <span class="nc">Boolean</span> <span class="n">lastTransactionWasSmall</span> <span class="o">=</span> <span class="n">flagState</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+
+        <span class="c1">// Check if the flag is set</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">lastTransactionWasSmall</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&gt;</span> <span class="no">LARGE_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">//Output an alert downstream</span>
+                <span class="nc">Alert</span> <span class="n">alert</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Alert</span><span class="o">();</span>
+                <span class="n">alert</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAccountId</span><span class="o">());</span>
+
+                <span class="n">collector</span><span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">// Clean up our state</span>
+            <span class="n">cleanUp</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">transaction</span><span class="o">.</span><span class="na">getAmount</span><span class="o">()</span> <span class="o">&lt;</span> <span class="no">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// set the flag to true</span>
+            <span class="n">flagState</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+            <span class="kt">long</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">currentProcessingTime</span><span class="o">()</span> <span class="o">+</span> <span class="no">ONE_MINUTE</span><span class="o">;</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">registerProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+
+            <span class="n">timerState</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onTimer</span><span class="o">(</span><span class="kt">long</span> <span class="n">timestamp</span><span class="o">,</span> <span class="nc">OnTimerContext</span> <span class="n">ctx</span><span class="o">,</span> <span class="nc">Collector</span><span class="o">&lt;</span><span class="nc">Alert</span><span class="o">&gt;</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// remove flag after 1 minute</span>
+        <span class="n">timerState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+        <span class="n">flagState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">cleanUp</span><span class="o">(</span><span class="nc">Context</span> <span class="n">ctx</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="c1">// delete timer</span>
+        <span class="nc">Long</span> <span class="n">timer</span> <span class="o">=</span> <span class="n">timerState</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
+        <span class="n">ctx</span><span class="o">.</span><span class="na">timerService</span><span class="o">().</span><span class="na">deleteProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">);</span>
+
+        <span class="c1">// clean up all state</span>
+        <span class="n">timerState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+        <span class="n">flagState</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">package</span> <span class="nn">spendreport</span>
+
+<span class="k">import</span> <span class="nn">org.apache.flink.api.common.state.</span><span class="o">{</span><span class="nc">ValueState</span><span class="o">,</span> <span class="nc">ValueStateDescriptor</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.api.scala.typeutils.Types</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.configuration.Configuration</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.streaming.api.functions.KeyedProcessFunction</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.util.Collector</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Alert</span>
+<span class="k">import</span> <span class="nn">org.apache.flink.walkthrough.common.entity.Transaction</span>
+
+<span class="k">object</span> <span class="nc">FraudDetector</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">SMALL_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">1.00</span>
+  <span class="k">val</span> <span class="nv">LARGE_AMOUNT</span><span class="k">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mf">500.00</span>
+  <span class="k">val</span> <span class="nv">ONE_MINUTE</span><span class="k">:</span> <span class="kt">Long</span>     <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000L</span>
+<span class="o">}</span>
+
+<span class="nd">@SerialVersionUID</span><span class="o">(</span><span class="mi">1L</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">FraudDetector</span> <span class="k">extends</span> <span class="nc">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span> <span class="o">{</span>
+
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">flagState</span><span class="k">:</span> <span class="kt">ValueState</span><span class="o">[</span><span class="kt">java.lang.Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+  <span class="nd">@transient</span> <span class="k">private</span> <span class="k">var</span> <span class="n">timerState</span><span class="k">:</span> <span class="kt">ValueState</span><span class="o">[</span><span class="kt">java.lang.Long</span><span class="o">]</span> <span class="k">=</span> <span class="k">_</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">open</span><span class="o">(</span><span class="n">parameters</span><span class="k">:</span> <span class="kt">Configuration</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">flagDescriptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">(</span><span class="s">"flag"</span><span class="o">,</span> <span class="nv">Types</span><span class="o">.</span><span class="py">BOOLEAN</span><span class="o">)</span>
+    <span class="n">flagState</span> <span class="k">=</span> <span class="nv">getRuntimeContext</span><span class="o">.</span><span class="py">getState</span><span class="o">(</span><span class="n">flagDescriptor</span><span class="o">)</span>
+
+    <span class="k">val</span> <span class="nv">timerDescriptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ValueStateDescriptor</span><span class="o">(</span><span class="s">"timer-state"</span><span class="o">,</span> <span class="nv">Types</span><span class="o">.</span><span class="py">LONG</span><span class="o">)</span>
+    <span class="n">timerState</span> <span class="k">=</span> <span class="nv">getRuntimeContext</span><span class="o">.</span><span class="py">getState</span><span class="o">(</span><span class="n">timerDescriptor</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">processElement</span><span class="o">(</span>
+      <span class="n">transaction</span><span class="k">:</span> <span class="kt">Transaction</span><span class="o">,</span>
+      <span class="n">context</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">,</span>
+      <span class="n">collector</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c1">// Get the current state for the current key</span>
+    <span class="k">val</span> <span class="nv">lastTransactionWasSmall</span> <span class="k">=</span> <span class="nv">flagState</span><span class="o">.</span><span class="py">value</span>
+
+    <span class="c1">// Check if the flag is set</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">lastTransactionWasSmall</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nf">if</span> <span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAmount</span> <span class="o">&gt;</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">LARGE_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Output an alert downstream</span>
+        <span class="k">val</span> <span class="nv">alert</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Alert</span>
+        <span class="nv">alert</span><span class="o">.</span><span class="py">setId</span><span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAccountId</span><span class="o">)</span>
+
+        <span class="nv">collector</span><span class="o">.</span><span class="py">collect</span><span class="o">(</span><span class="n">alert</span><span class="o">)</span>
+      <span class="o">}</span>
+      <span class="c1">// Clean up our state</span>
+      <span class="nf">cleanUp</span><span class="o">(</span><span class="n">context</span><span class="o">)</span>
+    <span class="o">}</span>
+
+    <span class="nf">if</span> <span class="o">(</span><span class="nv">transaction</span><span class="o">.</span><span class="py">getAmount</span> <span class="o">&lt;</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">SMALL_AMOUNT</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// set the flag to true</span>
+      <span class="nv">flagState</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+      <span class="k">val</span> <span class="nv">timer</span> <span class="k">=</span> <span class="nv">context</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">currentProcessingTime</span> <span class="o">+</span> <span class="nv">FraudDetector</span><span class="o">.</span><span class="py">ONE_MINUTE</span>
+
+      <span class="nv">context</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">registerProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+      <span class="nv">timerState</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">onTimer</span><span class="o">(</span>
+      <span class="n">timestamp</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
+      <span class="n">ctx</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">OnTimerContext</span><span class="o">,</span>
+      <span class="n">out</span><span class="k">:</span> <span class="kt">Collector</span><span class="o">[</span><span class="kt">Alert</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// remove flag after 1 minute</span>
+    <span class="nv">timerState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+    <span class="nv">flagState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="nd">@throws</span><span class="o">[</span><span class="kt">Exception</span><span class="o">]</span>
+  <span class="k">private</span> <span class="k">def</span> <span class="nf">cleanUp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">KeyedProcessFunction</span><span class="o">[</span><span class="kt">Long</span>, <span class="kt">Transaction</span>, <span class="kt">Alert</span><span class="o">]</span><span class="k">#</span><span class="nc">Context</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// delete timer</span>
+    <span class="k">val</span> <span class="nv">timer</span> <span class="k">=</span> <span class="nv">timerState</span><span class="o">.</span><span class="py">value</span>
+    <span class="nv">ctx</span><span class="o">.</span><span class="py">timerService</span><span class="o">.</span><span class="py">deleteProcessingTimeTimer</span><span class="o">(</span><span class="n">timer</span><span class="o">)</span>
+
+    <span class="c1">// clean up all states</span>
+    <span class="nv">timerState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+    <span class="nv">flagState</span><span class="o">.</span><span class="py">clear</span><span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a name="expected-output"></a></p>
+
+<h3 id="期望的结果">期望的结果</h3>
+
+<p>使用已准备好的 <code class="highlighter-rouge">TransactionSource</code> 数据源运行这个代码，将会检测到账户 3 的欺诈行为，并输出报警信息。
+你将能够在你的 task manager 的日志中看到下边输出：</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">2019-08-19 14:22:06,220 INFO  org.apache.flink.walkthrough.common.sink.AlertSink            - Alert<span class="o">{</span><span class="nb">id</span><span class="o">=</span>3<span class="o">}</span>
+2019-08-19 14:22:11,383 INFO  org.apache.flink.walkthrough.common.sink.AlertSink            - Alert<span class="o">{</span><span class="nb">id</span><span class="o">=</span>3<span class="o">}</span>
+2019-08-19 14:22:16,551 INFO  org.apache.flink.walkthrough.common.sink.AlertSink            - Alert<span class="o">{</span><span class="nb">id</span><span class="o">=</span>3<span class="o">}</span>
+2019-08-19 14:22:21,723 INFO  org.apache.flink.walkthrough.common.sink.AlertSink            - Alert<span class="o">{</span><span class="nb">id</span><span class="o">=</span>3<span class="o">}</span>
+2019-08-19 14:22:26,896 INFO  org.apache.flink.walkthrough.common.sink.AlertSink            - Alert<span class="o">{</span><span class="nb">id</span><span class="o">=</span>3<span class="o">}</span></code></pre></figure>
+
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>

@@ -1,0 +1,1822 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Apache Flink 1.12 Documentation: 查询语句</title>
+    <link rel="shortcut icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/favicon.ico" type="image/x-icon">
+    <link rel="canonical" href="//ci.apache.org/projects/flink/flink-docs-stable/zh/dev/table/sql/queries.html">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/flink.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/syntax.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/css/codetabs.css">
+    <link rel="stylesheet" href="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/font-awesome/css/font-awesome.min.css">
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+
+    <!-- Main content. -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-lg-3" id="sidenavcol">
+          <div class="sidenav-logo">
+  <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><img class="bottom" alt="Apache Flink" src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/img/navbar-brand-logo.jpg"></a> v1.12</p>
+</div>
+<ul id="sidenav">
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/"><i class="fa fa-home title" aria-hidden="true"></i> Home</a></li><hr class="section-break"></hr>
+<li><a href="#collapse-2" data-toggle="collapse"><i class="fa fa-rocket title appetizer" aria-hidden="true"></i> Try Flink<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-2"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/local_installation.html">本地模式安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/datastream_api.html">基于 DataStream API 实现欺诈检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/table_api.html">基于 Table API 实现实时报表</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/try-flink/flink-operations-playground.html">Flink 操作场景</a></li>
+</ul></div></li>
+<li><a href="#collapse-8" data-toggle="collapse"><i class="fa fa-hand-paper-o title appetizer" aria-hidden="true"></i> 实践练习<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-8"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/datastream_api.html">DataStream API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/etl.html">数据管道 & ETL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/streaming_analytics.html">流式分析</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/event_driven.html">事件驱动应用</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/learn-flink/fault_tolerance.html">容错处理</a></li>
+</ul></div></li>
+<li><a href="#collapse-15" data-toggle="collapse"><i class="fa fa-map-o title appetizer" aria-hidden="true"></i> 概念透析<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-15"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/index.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/stateful-stream-processing.html">有状态流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/timely-stream-processing.html">及时流处理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/flink-architecture.html">Flink 架构</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/concepts/glossary.html">词汇表</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-21" data-toggle="collapse"class="active"><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</a><div class="collapse in" id="collapse-21"><ul>
+<li><a href="#collapse-22" data-toggle="collapse">DataStream API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-22"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_api.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/datastream_execution_mode.html">Execution Mode (Batch/Streaming)</a></li>
+<li><a href="#collapse-24" data-toggle="collapse">事件时间<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-24"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_time.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamps_watermarks.html">生成 Watermark</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/event_timestamp_extractors.html">内置 Watermark 生成器</a></li>
+</ul></div></li>
+<li><a href="#collapse-28" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-28"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state.html">Working with State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/broadcast_state.html">Broadcast State 模式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/checkpointing.html">Checkpointing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/queryable_state.html">Queryable State</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/schema_evolution.html">状态数据结构升级</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/state/custom_serialization.html">自定义状态序列化</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/user_defined_functions.html">用户自定义 Functions</a></li>
+<li><a href="#collapse-38" data-toggle="collapse">算子<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-38"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/windows.html">窗口</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/joining.html">Joining</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/process_function.html">Process Function</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/operators/asyncio.html">异步 I/O</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/sources.html">Data Sources</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/side_output.html">旁路输出</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/application_parameters.html">Handling Application Parameters</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/testing.html">测试</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/stream/experimental.html">实验功能</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/scala_api_extensions.html">Scala API Extensions</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/java_lambdas.html">Java Lambda 表达式</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/project-configuration.html">Project Configuration</a></li>
+</ul></div></li>
+<li><a href="#collapse-53" data-toggle="collapse">DataSet API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-53"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/dataset_transformations.html">Transformations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/iterations.html">迭代</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/zip_elements_guide.html">Zipping Elements</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/hadoop_compatibility.html">Hadoop 兼容</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/local_execution.html">本地执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/cluster_execution.html">集群执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/examples.html">Batch 示例</a></li>
+</ul></div></li>
+<li><a href="#collapse-62" data-toggle="collapse"class="active">Table API & SQL</a><div class="collapse in" id="collapse-62"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html">概念与通用 API</a></li>
+<li><a href="#collapse-64" data-toggle="collapse">流式概念<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-64"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表 (Dynamic Table)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/joins.html">流上的 Join</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">时态表（Temporal Tables）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">模式检测</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">Query Configuration</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tableApi.html">Table API</a></li>
+<li><a href="#collapse-74" data-toggle="collapse"class="active">SQL</a><div class="collapse in" id="collapse-74"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/queries.html" class="active">查询语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/create.html">CREATE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/drop.html">DROP 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/alter.html">ALTER 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/insert.html">INSERT 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/hints.html">SQL Hints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/describe.html">DESCRIBE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/explain.html">EXPLAIN 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/use.html">USE 语句</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/show.html">SHOW 语句</a></li>
+</ul></div></li>
+<li><a href="#collapse-86" data-toggle="collapse">函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-86"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/systemFunctions.html">系统（内置）函数</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/modules.html">模块</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sqlClient.html">SQL 客户端</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html">配置</a></li>
+<li><a href="#collapse-94" data-toggle="collapse">Performance Tuning<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-94"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/tuning/streaming_aggregation_optimization.html">流式聚合</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sourceSinks.html">User-defined Sources & Sinks</a></li>
+</ul></div></li>
+<li><a href="#collapse-99" data-toggle="collapse">Python API<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-99"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/installation.html">环境安装</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table_api_tutorial.html">Table API 教程</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream_tutorial.html">DataStream API 教程</a></li>
+<li><a href="#collapse-103" data-toggle="collapse">Table API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-103"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/intro_to_table_api.html">Python Table API 简介</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/table_environment.html">TableEnvironment</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/operations.html">Operations</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/built_in_functions.html">系统（内置）函数</a></li>
+<li><a href="#collapse-109" data-toggle="collapse">自定义函数<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-109"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/python_udfs.html">普通自定义函数（UDF）</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/udfs/vectorized_python_udfs.html">向量化自定义函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/conversion_of_pandas.html">PyFlink Table 和 Pandas DataFrame 互转</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/dependency_management.html">依赖管理</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/sql.html">SQL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/catalogs.html">Catalogs</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/table-api-users-guide/python_table_api_connectors.html">连接器</a></li>
+</ul></div></li>
+<li><a href="#collapse-120" data-toggle="collapse">DataStream API用户指南<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-120"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/data_types.html">数据类型</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/operators.html">算子</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/datastream-api-users-guide/dependency_management.html">依赖管理</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/python_config.html">配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/environment_variables.html">环境变量</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/python/faq.html">常见问题</a></li>
+</ul></div></li>
+<li><a href="#collapse-129" data-toggle="collapse">数据类型以及序列化<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-129"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/types_serialization.html">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/custom_serializers.html">自定义序列化器</a></li>
+</ul></div></li>
+<li><a href="#collapse-132" data-toggle="collapse">管理执行<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-132"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_configuration.html">执行配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/packaging.html">程序打包</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/parallel.html">并行执行</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/execution_plans.html">执行计划</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/task_failure_recovery.html">Task 故障恢复</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/migration.html">API 迁移指南</a></li>
+</ul></div></li>
+<li><a href="#collapse-141" data-toggle="collapse"><i class="fa fa-book title maindish" aria-hidden="true"></i> Libraries<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-141"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/cep.html">事件处理 (CEP)</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/state_processor_api.html">State Processor API</a></li>
+<li><a href="#collapse-144" data-toggle="collapse">图计算: Gelly<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-144"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_api.html">Graph API</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/iterative_graph_processing.html">Iterative Graph Processing</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/library_methods.html">Library Methods</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_algorithms.html">Graph Algorithms</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/graph_generators.html">Graph Generators</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/libs/gelly/bipartite_graph.html">Bipartite Graph</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-153" data-toggle="collapse"><i class="fa fa-random title maindish" aria-hidden="true"></i> Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-153"><ul>
+<li><a href="#collapse-154" data-toggle="collapse">DataStream Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-154"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/guarantees.html">容错保证</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/cassandra.html">Cassandra</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/file_sink.html">File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/streamfile_sink.html">Streaming File Sink</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/rabbitmq.html">RabbitMQ</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/nifi.html">NiFi</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/pubsub.html">Google Cloud PubSub</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/twitter.html">Twitter</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/connectors/jdbc.html">JDBC</a></li>
+</ul></div></li>
+<li><a href="#collapse-168" data-toggle="collapse">Table & SQL Connectors<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-168"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/">概览</a></li>
+<li><a href="#collapse-169" data-toggle="collapse">Formats<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-169"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/csv.html">CSV</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/json.html">JSON</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro-confluent.html">Confluent Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/avro.html">Avro</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/debezium.html">Debezium</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/canal.html">Canal</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/maxwell.html">Maxwell</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/parquet.html">Parquet</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/orc.html">Orc</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/formats/raw.html">Raw</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kafka.html">Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/upsert-kafka.html">Upsert Kafka</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/kinesis.html">Kinesis</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/jdbc.html">JDBC</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/elasticsearch.html">Elasticsearch</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/filesystem.html">FileSystem</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hbase.html">HBase</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/datagen.html">DataGen</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/print.html">Print</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/blackhole.html">BlackHole</a></li>
+<li><a href="#collapse-191" data-toggle="collapse">Hive<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-191"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_catalog.html">Hive Catalog</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_dialect.html">Hive 方言</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_read_write.html">Hive Read & Write</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/hive/hive_functions.html">Hive 函数</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/connectors/downloads.html">下载</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/batch/connectors.html">DataSet Connectors</a></li>
+</ul></div></li>
+<li><a href="#collapse-201" data-toggle="collapse"><i class="fa fa-sliders title maindish" aria-hidden="true"></i> Deployment<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-201"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/">概览</a></li>
+<li><a href="#collapse-202" data-toggle="collapse">Resource Providers<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-202"><ul>
+<li><a href="#collapse-203" data-toggle="collapse">Standalone<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-203"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/local.html">本地集群</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/docker.html">Docker</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/standalone/kubernetes.html">Kubernetes</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/native_kubernetes.html">Native Kubernetes</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/yarn.html">YARN</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/resource-providers/mesos.html">Mesos</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html">配置参数</a></li>
+<li><a href="#collapse-213" data-toggle="collapse">内存配置<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-213"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup.html">配置 Flink 进程的内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_tm.html">配置 TaskManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_setup_jobmanager.html">配置 JobManager 内存</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_tuning.html">调优指南</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_trouble.html">常见问题</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/memory/mem_migration.html">升级指南</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/cli.html">Command-Line Interface</a></li>
+<li><a href="#collapse-222" data-toggle="collapse">文件系统<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-222"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/common.html">通用配置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/s3.html">Amazon S3</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/oss.html">阿里云 OSS</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/azure.html">Azure Blob 存储</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/filesystems/plugins.html">Plugins</a></li>
+</ul></div></li>
+<li><a href="#collapse-229" data-toggle="collapse">High Availability (HA)<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-229"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/">概览</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/zookeeper_ha.html">ZooKeeper HA Services</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/ha/kubernetes_ha.html">Kubernetes HA Services</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/metric_reporters.html">Metric Reporters</a></li>
+<li><a href="#collapse-234" data-toggle="collapse">Security<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-234"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-ssl.html">SSL 设置</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/security/security-kerberos.html">Kerberos</a></li>
+</ul></div></li>
+<li><a href="#collapse-238" data-toggle="collapse">REPLs<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-238"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/python_shell.html">Python REPL</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/repls/scala_shell.html">Scala REPL</a></li>
+</ul></div></li>
+<li><a href="#collapse-242" data-toggle="collapse">Advanced<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-242"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/external_resources.html">扩展资源</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/historyserver.html">History Server</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/advanced/logging.html">日志</a></li>
+</ul></div></li>
+</ul></div></li>
+<li><a href="#collapse-248" data-toggle="collapse"><i class="fa fa-cogs title maindish" aria-hidden="true"></i> Operations<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-248"><ul>
+<li><a href="#collapse-249" data-toggle="collapse">状态与容错<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-249"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/checkpoints.html">Checkpoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/savepoints.html">Savepoints</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/state_backends.html">State Backends</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/state/large_state_tuning.html">大状态与 Checkpoint 调优</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/metrics.html">指标</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/rest_api.html">REST API</a></li>
+<li><a href="#collapse-257" data-toggle="collapse">Debugging<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-257"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_event_time.html">调试窗口与事件时间</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/debugging_classloading.html">调试类加载</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/debugging/application_profiling.html">应用程序分析</a></li>
+</ul></div></li>
+<li><a href="#collapse-262" data-toggle="collapse">Monitoring<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-262"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/checkpoint_monitoring.html">监控 Checkpoint</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/monitoring/back_pressure.html">监控反压</a></li>
+</ul></div></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/upgrading.html">升级应用程序和 Flink 版本</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/ops/production_ready.html">生产就绪情况核对清单</a></li>
+</ul></div></li><hr class="section-break"></hr>
+<li><a href="#collapse-269" data-toggle="collapse"><i class="fa fa-cogs title dessert" aria-hidden="true"></i> Flink 开发<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-269"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/ide_setup.html">导入 Flink 到 IDE 中</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/flinkDev/building.html">从源码构建 Flink</a></li>
+</ul></div></li>
+<li><a href="#collapse-273" data-toggle="collapse"><i class="fa fa-book title dessert" aria-hidden="true"></i> 内幕<i class="fa fa-caret-down pull-right" aria-hidden="true" style="padding-top: 4px"></i></a><div class="collapse" id="collapse-273"><ul>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/job_scheduling.html">作业调度</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/task_lifecycle.html">Task 生命周期</a></li>
+<li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/internals/filesystems.html">文件系统</a></li>
+</ul></div></li>
+  <li class="divider"></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/java"><i class="fa fa-external-link title" aria-hidden="true"></i> Javadocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/scala/index.html#org.apache.flink.api.scala.package"><i class="fa fa-external-link title" aria-hidden="true"></i> Scaladocs</a></li>
+  <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/api/python"><i class="fa fa-external-link title" aria-hidden="true"></i> Pythondocs</a></li>
+  <li><a href="http://flink.apache.org"><i class="fa fa-external-link title" aria-hidden="true"></i> Project Page</a></li>
+</ul>
+
+<div class="sidenav-search-box">
+  <form class="navbar-form" role="search" action="//ci.apache.org/projects/flink/flink-docs-release-1.12/search-results.html">
+    <div class="form-group">
+      <input type="text" class="form-control" size="16px" name="q" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Go</button>
+  </form>
+</div>
+
+<div class="sidenav-versions">
+  <div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">选择文档版本<span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.11">v1.11</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.10">v1.10</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.9">v1.9</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.8">v1.8</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.7">v1.7</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.6">v1.6</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.5">v1.5</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.4">v1.4</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.3">v1.3</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.2">v1.2</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.1">v1.1</a></li>
+      <li><a href="http://ci.apache.org/projects/flink/flink-docs-release-1.0">v1.0</a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="sidenav-languages"><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/dev/table/sql/queries.html">
+      <button type="submit" class="btn btn-default">English</button>
+    </a>
+</div>
+
+        </div>
+        <div class="col-lg-9 content" id="contentcol">
+
+          
+
+<ol class="breadcrumb">
+  
+    <li><i class="fa fa-code title maindish" aria-hidden="true"></i> 应用开发</li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/">Table API & SQL</a></li>
+  
+    <li><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/sql/">SQL</a></li>
+  
+    <li class="active">查询语句</li>
+</ol>
+
+<h1>查询语句</h1>
+
+
+
+
+<ul id="markdown-toc">
+  <li><a href="#指定查询" id="markdown-toc-指定查询">指定查询</a></li>
+  <li><a href="#执行查询" id="markdown-toc-执行查询">执行查询</a></li>
+  <li><a href="#语法" id="markdown-toc-语法">语法</a></li>
+  <li><a href="#操作符" id="markdown-toc-操作符">操作符</a>    <ul>
+      <li><a href="#scanprojection-与-filter" id="markdown-toc-scanprojection-与-filter">Scan、Projection 与 Filter</a></li>
+      <li><a href="#聚合" id="markdown-toc-聚合">聚合</a></li>
+      <li><a href="#joins" id="markdown-toc-joins">Joins</a></li>
+      <li><a href="#集合操作" id="markdown-toc-集合操作">集合操作</a></li>
+      <li><a href="#orderby--limit" id="markdown-toc-orderby--limit">OrderBy &amp; Limit</a></li>
+      <li><a href="#top-n" id="markdown-toc-top-n">Top-N</a></li>
+      <li><a href="#去重" id="markdown-toc-去重">去重</a></li>
+      <li><a href="#分组窗口" id="markdown-toc-分组窗口">分组窗口</a></li>
+      <li><a href="#模式匹配" id="markdown-toc-模式匹配">模式匹配</a></li>
+    </ul>
+  </li>
+</ul>
+<div class="codetabs" data-hide-tabs="1">
+  <div data-lang="java/scala">
+
+    <p>SELECT 语句和 VALUES 语句需要使用 <code class="highlighter-rouge">TableEnvironment</code> 的 <code class="highlighter-rouge">sqlQuery()</code> 方法加以指定。这个方法会以 <code class="highlighter-rouge">Table</code> 的形式返回 SELECT （或 VALUE）的查询结果。<code class="highlighter-rouge">Table</code> 可以被用于 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#mixing-table-api-and-sql">随后的SQL 与 Table API 查询</a> 、 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#integration-with-datastream-and-dataset-api">转换为 DataSet 或 DataStream </a>或 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#emit-a-table">输出到 TableSink </a>。SQL 与 Table API 的查询可以进行无缝融合、整体优化并翻译为单一的程序。</p>
+
+    <p>为了可以在 SQL 查询中访问到表，你需要先 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-tables-in-the-catalog">在 TableEnvironment 中注册表 </a>。表可以通过 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-a-tablesource">TableSource</a>、 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-a-table">Table</a>、<a href="create.html">CREATE TABLE 语句</a>、 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-a-datastream-or-dataset-as-table">DataStream 或 DataSet</a> 注册。 用户也可以通过 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">向 TableEnvironment 中注册 catalog </a> 的方式指定数据源的位置。</p>
+
+    <p>为方便起见 <code class="highlighter-rouge">Table.toString()</code> 将会在其 <code class="highlighter-rouge">TableEnvironment</code> 中自动使用一个唯一的名字注册表并返回表名。 因此， <code class="highlighter-rouge">Table</code> 对象可以如下文所示样例，直接内联到 SQL 语句中。</p>
+
+    <p><strong>注意：</strong> 查询若包括了不支持的 SQL 特性，将会抛出 <code class="highlighter-rouge">TableException</code>。批处理和流处理所支持的 SQL 特性将会在下述章节中列出。</p>
+
+  </div>
+
+  <div data-lang="python">
+
+    <p>SELECT 语句和 VALUES 语句需要使用 <code class="highlighter-rouge">TableEnvironment</code> 的 <code class="highlighter-rouge">sqlQuery()</code> 方法加以指定。这个方法会以 <code class="highlighter-rouge">Table</code> 的形式返回 SELECT （或 VALUE）的查询结果。<code class="highlighter-rouge">Table</code> 可以被用于 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#mixing-table-api-and-sql">随后的SQL 与 Table API 查询</a> 或 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#emit-a-table">输出到 TableSink </a>。SQL 与 Table API 的查询可以进行无缝融合、整体优化并翻译为单一的程序。</p>
+
+    <p>为了可以在 SQL 查询中访问到表，你需要先 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-tables-in-the-catalog">在 TableEnvironment 中注册表 </a>。表可以通过 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-a-tablesource">TableSource</a>、 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/common.html#register-a-table">Table</a>、<a href="create.html">CREATE TABLE 语句</a> 注册。 用户也可以通过 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/catalogs.html">向 TableEnvironment 中注册 catalog </a> 的方式指定数据源的位置。</p>
+
+    <p>为方便起见 <code class="highlighter-rouge">str(Table)</code> 将会在其 <code class="highlighter-rouge">TableEnvironment</code> 中自动使用一个唯一的名字注册表并返回表名。 因此， <code class="highlighter-rouge">Table</code> 对象可以如下文所示样例，直接内联到 SQL 语句中。</p>
+
+    <p><strong>注意：</strong> 查询若包括了不支持的 SQL 特性，将会抛出 <code class="highlighter-rouge">TableException</code>。批处理和流处理所支持的 SQL 特性将会在下述章节中列出。</p>
+
+  </div>
+</div>
+
+<h2 id="指定查询">指定查询</h2>
+
+<p>以下示例显示如何在已注册和内联表上指定 SQL 查询。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">StreamTableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+
+<span class="c1">// 从外部数据源读取 DataStream </span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple3</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">addSource</span><span class="o">(...);</span>
+
+<span class="c1">// 使用 SQL 查询内联的（未注册的）表</span>
+<span class="nc">Table</span> <span class="n">table</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">fromDataStream</span><span class="o">(</span><span class="n">ds</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"user"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"product"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">));</span>
+<span class="nc">Table</span> <span class="n">result</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT SUM(amount) FROM "</span> <span class="o">+</span> <span class="n">table</span> <span class="o">+</span> <span class="s">" WHERE product LIKE '%Rubber%'"</span><span class="o">);</span>
+
+<span class="c1">// SQL 查询一个已经注册的表</span>
+<span class="c1">// 根据视图 "Orders" 创建一个 DataStream</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"user"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"product"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">));</span>
+<span class="c1">// 在表上执行 SQL 查询并得到以新表返回的结果</span>
+<span class="nc">Table</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">);</span>
+
+<span class="c1">// 创建并注册一个 TableSink</span>
+<span class="kd">final</span> <span class="nc">Schema</span> <span class="n">schema</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Schema</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">field</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="nc">DataTypes</span><span class="o">.</span><span class="na">STRING</span><span class="o">())</span>
+    <span class="o">.</span><span class="na">field</span><span class="o">(</span><span class="s">"amount"</span><span class="o">,</span> <span class="nc">DataTypes</span><span class="o">.</span><span class="na">INT</span><span class="o">());</span>
+
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">connect</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileSystem</span><span class="o">().</span><span class="na">path</span><span class="o">(</span><span class="s">"/path/to/file"</span><span class="o">))</span>
+    <span class="o">.</span><span class="na">withFormat</span><span class="o">(...)</span>
+    <span class="o">.</span><span class="na">withSchema</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">createTemporaryTable</span><span class="o">(</span><span class="s">"RubberOrders"</span><span class="o">);</span>
+
+<span class="c1">// 在表上执行插入语句并把结果发出到 TableSink</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span>
+  <span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">StreamTableEnvironment</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+
+<span class="c1">//  从外部数据源读取 DataStream </span>
+<span class="k">val</span> <span class="nv">ds</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">Long</span>, <span class="kt">String</span>, <span class="kt">Integer</span><span class="o">)]</span> <span class="k">=</span> <span class="nv">env</span><span class="o">.</span><span class="py">addSource</span><span class="o">(...)</span>
+
+<span class="c1">// 使用 SQL 查询内联的（未注册的）表</span>
+<span class="k">val</span> <span class="nv">table</span> <span class="k">=</span> <span class="nv">ds</span><span class="o">.</span><span class="py">toTable</span><span class="o">(</span><span class="n">tableEnv</span><span class="o">,</span> <span class="n">$</span><span class="s">"user"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product"</span><span class="o">,</span> <span class="n">$</span><span class="s">"amount"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+  <span class="n">s</span><span class="s">"SELECT SUM(amount) FROM $table WHERE product LIKE '%Rubber%'"</span><span class="o">)</span>
+
+<span class="c1">// 使用名称 "Orders" 注册一个 DataStream </span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="n">$</span><span class="s">"user"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product"</span><span class="o">,</span> <span class="n">$</span><span class="s">"amount"</span><span class="o">)</span>
+<span class="c1">// 在表上执行 SQL 查询并得到以新表返回的结果</span>
+<span class="k">val</span> <span class="nv">result2</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">)</span>
+
+<span class="c1">// 创建并注册一个 TableSink</span>
+<span class="k">val</span> <span class="nv">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Schema</span><span class="o">()</span>
+    <span class="o">.</span><span class="py">field</span><span class="o">(</span><span class="s">"product"</span><span class="o">,</span> <span class="nv">DataTypes</span><span class="o">.</span><span class="py">STRING</span><span class="o">())</span>
+    <span class="o">.</span><span class="py">field</span><span class="o">(</span><span class="s">"amount"</span><span class="o">,</span> <span class="nv">DataTypes</span><span class="o">.</span><span class="py">INT</span><span class="o">())</span>
+
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">connect</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileSystem</span><span class="o">().</span><span class="py">path</span><span class="o">(</span><span class="s">"/path/to/file"</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">withFormat</span><span class="o">(...)</span>
+    <span class="o">.</span><span class="py">withSchema</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">createTemporaryTable</span><span class="o">(</span><span class="s">"RubberOrders"</span><span class="o">)</span>
+
+<span class="c1">// 在表上执行插入操作，并把结果发出到 TableSink</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span>
+  <span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="python">
+
+    <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">env</span> <span class="o">=</span> <span class="n">StreamExecutionEnvironment</span><span class="p">.</span><span class="n">get_execution_environment</span><span class="p">()</span>
+<span class="n">table_env</span> <span class="o">=</span> <span class="n">StreamTableEnvironment</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+<span class="c1"># SQL 查询内联的（未注册的）表
+# 元素数据类型： BIGINT, STRING, BIGINT
+</span><span class="n">table</span> <span class="o">=</span> <span class="n">table_env</span><span class="p">.</span><span class="n">from_elements</span><span class="p">(...,</span> <span class="p">[</span><span class="s">'user'</span><span class="p">,</span> <span class="s">'product'</span><span class="p">,</span> <span class="s">'amount'</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">table_env</span> \
+    <span class="p">.</span><span class="n">sql_query</span><span class="p">(</span><span class="s">"SELECT SUM(amount) FROM %s WHERE product LIKE '%%Rubber%%'"</span> <span class="o">%</span> <span class="n">table</span><span class="p">)</span>
+
+<span class="c1"># 创建并注册 TableSink
+</span><span class="n">t_env</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">FileSystem</span><span class="p">().</span><span class="n">path</span><span class="p">(</span><span class="s">"/path/to/file"</span><span class="p">)))</span>
+    <span class="p">.</span><span class="n">with_format</span><span class="p">(</span><span class="n">Csv</span><span class="p">()</span>
+                 <span class="p">.</span><span class="n">field_delimiter</span><span class="p">(</span><span class="s">','</span><span class="p">)</span>
+                 <span class="p">.</span><span class="n">deriveSchema</span><span class="p">())</span>
+    <span class="p">.</span><span class="n">with_schema</span><span class="p">(</span><span class="n">Schema</span><span class="p">()</span>
+                 <span class="p">.</span><span class="n">field</span><span class="p">(</span><span class="s">"product"</span><span class="p">,</span> <span class="n">DataTypes</span><span class="p">.</span><span class="n">STRING</span><span class="p">())</span>
+                 <span class="p">.</span><span class="n">field</span><span class="p">(</span><span class="s">"amount"</span><span class="p">,</span> <span class="n">DataTypes</span><span class="p">.</span><span class="n">BIGINT</span><span class="p">()))</span>
+    <span class="p">.</span><span class="n">create_temporary_table</span><span class="p">(</span><span class="s">"RubberOrders"</span><span class="p">)</span>
+
+<span class="c1"># 在表上执行插入操作，并把结果发出到 TableSink
+</span><span class="n">table_env</span> \
+    <span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"INSERT INTO RubberOrders SELECT product, amount FROM Orders WHERE product LIKE '%Rubber%'"</span><span class="p">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="执行查询">执行查询</h2>
+
+<div class="codetabs" data-hide-tabs="1">
+  <div data-lang="java/scala">
+
+    <p>SELECT 语句或者 VALUES 语句可以通过 <code class="highlighter-rouge">TableEnvironment.executeSql()</code> 方法来执行，将选择的结果收集到本地。该方法返回 <code class="highlighter-rouge">TableResult</code> 对象用于包装查询的结果。和 SELECT 语句很像，一个 <code class="highlighter-rouge">Table</code> 对象可以通过 <code class="highlighter-rouge">Table.execute()</code> 方法执行从而将 <code class="highlighter-rouge">Table</code> 的内容收集到本地客户端。
+<code class="highlighter-rouge">TableResult.collect()</code> 方法返回一个可以关闭的行迭代器。除非所有的数据都被收集到本地，否则一个查询作业永远不会结束。所以我们应该通过 <code class="highlighter-rouge">CloseableIterator#close()</code> 方法主动地关闭作业以防止资源泄露。
+我们还可以通过 <code class="highlighter-rouge">TableResult.print()</code> 方法将查询结果打印到本地控制台。<code class="highlighter-rouge">TableResult</code> 中的结果数据只能被访问一次，因此一个 <code class="highlighter-rouge">TableResult</code> 实例中，<code class="highlighter-rouge">collect()</code> 方法和 <code class="highlighter-rouge">print()</code> 方法不能被同时使用。</p>
+
+    <p><code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 的行为在不同的 checkpointing 模式下略有不同（流作业开启 checkpointing 的方法可参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#checkpointing">checkpointing 配置</a>）。</p>
+    <ul>
+      <li>对于批作业或没有配置任何 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 既不保证精确一次的数据交付、也不保证至少一次的数据交付。查询结果在产生后可被客户端即刻访问，但作业失败并重启时将会报错。</li>
+      <li>对于配置了精准一次 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 保证端到端精确一次的数据交付。一条结果数据只有在其对应的 checkpointing 完成后才能在客户端被访问。</li>
+      <li>对于配置了至少一次 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 保证端到端至少一次的数据交付。查询结果在产生后可被客户端即刻访问，但同一条结果可能被多次传递给客户端。</li>
+    </ul>
+
+  </div>
+
+  <div data-lang="python">
+
+    <p>SELECT 语句或者 VALUES 语句可以通过 <code class="highlighter-rouge">TableEnvironment.execute_sql()</code> 方法来执行，将选择的结果收集到本地。该方法返回 <code class="highlighter-rouge">TableResult</code> 对象用于包装查询的结果。和 SELECT 语句很像，一个 <code class="highlighter-rouge">Table</code> 对象可以通过 <code class="highlighter-rouge">Table.execute()</code> 方法执行从而将 <code class="highlighter-rouge">Table</code> 的内容收集到本地客户端。
+<code class="highlighter-rouge">TableResult.collect()</code> 方法返回一个可以关闭的行迭代器。除非所有的数据都被收集到本地，否则一个查询作业永远不会结束。所以我们应该通过 <code class="highlighter-rouge">CloseableIterator#close()</code> 方法主动地关闭作业以防止资源泄露。
+我们还可以通过 <code class="highlighter-rouge">TableResult.print()</code> 方法将查询结果打印到本地控制台。<code class="highlighter-rouge">TableResult</code> 中的结果数据只能被访问一次，因此一个 <code class="highlighter-rouge">TableResult</code> 实例中，<code class="highlighter-rouge">collect()</code> 方法和 <code class="highlighter-rouge">print()</code> 方法不能被同时使用。</p>
+
+    <p><code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 的行为在不同的 checkpointing 模式下略有不同（流作业开启 checkpointing 的方法可参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/deployment/config.html#checkpointing">checkpointing 配置</a>）。</p>
+    <ul>
+      <li>对于批作业或没有配置任何 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 既不保证精确一次的数据交付、也不保证至少一次的数据交付。查询结果在产生后可被客户端即刻访问，但作业失败并重启时将会报错。</li>
+      <li>对于配置了精准一次 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 保证端到端精确一次的数据交付。一条结果数据只有在其对应的 checkpointing 完成后才能在客户端被访问。</li>
+      <li>对于配置了至少一次 checkpointing 的流作业，<code class="highlighter-rouge">TableResult.collect()</code> 与 <code class="highlighter-rouge">TableResult.print()</code> 保证端到端至少一次的数据交付。查询结果在产生后可被客户端即刻访问，但同一条结果可能被多次传递给客户端。</li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">StreamTableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">env</span><span class="o">,</span> <span class="n">settings</span><span class="o">);</span>
+
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="o">);</span>
+
+<span class="c1">// execute SELECT statement</span>
+<span class="nc">TableResult</span> <span class="n">tableResult1</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">executeSql</span><span class="o">(</span><span class="s">"SELECT * FROM Orders"</span><span class="o">);</span>
+<span class="c1">// use try-with-resources statement to make sure the iterator will be closed automatically</span>
+<span class="k">try</span> <span class="o">(</span><span class="nc">CloseableIterator</span><span class="o">&lt;</span><span class="nc">Row</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">tableResult1</span><span class="o">.</span><span class="na">collect</span><span class="o">())</span> <span class="o">{</span>
+    <span class="k">while</span><span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">Row</span> <span class="n">row</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+        <span class="c1">// handle row</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// execute Table</span>
+<span class="nc">TableResult</span> <span class="n">tableResult2</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span><span class="s">"SELECT * FROM Orders"</span><span class="o">).</span><span class="na">execute</span><span class="o">();</span>
+<span class="n">tableResult2</span><span class="o">.</span><span class="na">print</span><span class="o">();</span></code></pre></figure>
+
+  </div>
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span><span class="o">()</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">StreamTableEnvironment</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="n">env</span><span class="o">,</span> <span class="n">settings</span><span class="o">)</span>
+<span class="c1">// enable checkpointing</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">getConfig</span><span class="o">.</span><span class="py">getConfiguration</span><span class="o">.</span><span class="py">set</span><span class="o">(</span>
+  <span class="nv">ExecutionCheckpointingOptions</span><span class="o">.</span><span class="py">CHECKPOINTING_MODE</span><span class="o">,</span> <span class="nv">CheckpointingMode</span><span class="o">.</span><span class="py">EXACTLY_ONCE</span><span class="o">)</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">getConfig</span><span class="o">.</span><span class="py">getConfiguration</span><span class="o">.</span><span class="py">set</span><span class="o">(</span>
+  <span class="nv">ExecutionCheckpointingOptions</span><span class="o">.</span><span class="py">CHECKPOINTING_INTERVAL</span><span class="o">,</span> <span class="nv">Duration</span><span class="o">.</span><span class="py">ofSeconds</span><span class="o">(</span><span class="mi">10</span><span class="o">))</span>
+
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="o">)</span>
+
+<span class="c1">// execute SELECT statement</span>
+<span class="k">val</span> <span class="nv">tableResult1</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">executeSql</span><span class="o">(</span><span class="s">"SELECT * FROM Orders"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">it</span> <span class="k">=</span> <span class="nv">tableResult1</span><span class="o">.</span><span class="py">collect</span><span class="o">()</span>
+<span class="k">try</span> <span class="nf">while</span> <span class="o">(</span><span class="nv">it</span><span class="o">.</span><span class="py">hasNext</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">row</span> <span class="k">=</span> <span class="nv">it</span><span class="o">.</span><span class="py">next</span>
+  <span class="c1">// handle row</span>
+<span class="o">}</span>
+<span class="k">finally</span> <span class="nv">it</span><span class="o">.</span><span class="py">close</span><span class="o">()</span> <span class="c1">// close the iterator to avoid resource leak</span>
+
+<span class="c1">// execute Table</span>
+<span class="k">val</span> <span class="nv">tableResult2</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span><span class="s">"SELECT * FROM Orders"</span><span class="o">).</span><span class="py">execute</span><span class="o">()</span>
+<span class="nv">tableResult2</span><span class="o">.</span><span class="py">print</span><span class="o">()</span></code></pre></figure>
+
+  </div>
+  <div data-lang="python">
+
+    <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">env</span> <span class="o">=</span> <span class="n">StreamExecutionEnvironment</span><span class="p">.</span><span class="n">get_execution_environment</span><span class="p">()</span>
+<span class="n">table_env</span> <span class="o">=</span> <span class="n">StreamTableEnvironment</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<span class="c1"># enable checkpointing
+</span><span class="n">table_env</span><span class="p">.</span><span class="n">get_config</span><span class="p">().</span><span class="n">get_configuration</span><span class="p">().</span><span class="n">set_string</span><span class="p">(</span><span class="s">"execution.checkpointing.mode"</span><span class="p">,</span> <span class="s">"EXACTLY_ONCE"</span><span class="p">)</span>
+<span class="n">table_env</span><span class="p">.</span><span class="n">get_config</span><span class="p">().</span><span class="n">get_configuration</span><span class="p">().</span><span class="n">set_string</span><span class="p">(</span><span class="s">"execution.checkpointing.interval"</span><span class="p">,</span> <span class="s">"10s"</span><span class="p">)</span>
+
+<span class="n">table_env</span><span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"CREATE TABLE Orders (`user` BIGINT, product STRING, amount INT) WITH (...)"</span><span class="p">)</span>
+
+<span class="c1"># execute SELECT statement
+</span><span class="n">table_result1</span> <span class="o">=</span> <span class="n">table_env</span><span class="p">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="s">"SELECT * FROM Orders"</span><span class="p">)</span>
+<span class="n">table_result1</span><span class="p">.</span><span class="k">print</span><span class="p">()</span>
+
+<span class="c1"># execute Table
+</span><span class="n">table_result2</span> <span class="o">=</span> <span class="n">table_env</span><span class="p">.</span><span class="n">sql_query</span><span class="p">(</span><span class="s">"SELECT * FROM Orders"</span><span class="p">).</span><span class="n">execute</span><span class="p">()</span>
+<span class="n">table_result2</span><span class="p">.</span><span class="k">print</span><span class="p">()</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="语法">语法</h2>
+
+<p>Flink 通过支持标准 ANSI SQL的 <a href="https://calcite.apache.org/docs/reference.html">Apache Calcite</a> 解析 SQL。</p>
+
+<p>以下 BNF-语法 描述了批处理和流处理查询中所支持的 SQL 特性的超集。其中 <a href="#操作符">操作符</a> 章节展示了所支持的特性的样例，并指明了哪些特性仅适用于批处理或流处理。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="n">query</span><span class="p">:</span>
+  <span class="k">values</span>
+  <span class="o">|</span> <span class="err">{</span>
+      <span class="k">select</span>
+      <span class="o">|</span> <span class="n">selectWithoutFrom</span>
+      <span class="o">|</span> <span class="n">query</span> <span class="k">UNION</span> <span class="p">[</span> <span class="k">ALL</span> <span class="p">]</span> <span class="n">query</span>
+      <span class="o">|</span> <span class="n">query</span> <span class="k">EXCEPT</span> <span class="n">query</span>
+      <span class="o">|</span> <span class="n">query</span> <span class="k">INTERSECT</span> <span class="n">query</span>
+    <span class="err">}</span>
+    <span class="p">[</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">orderItem</span> <span class="p">[,</span> <span class="n">orderItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="k">LIMIT</span> <span class="err">{</span> <span class="k">count</span> <span class="o">|</span> <span class="k">ALL</span> <span class="err">}</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="k">OFFSET</span> <span class="k">start</span> <span class="err">{</span> <span class="k">ROW</span> <span class="o">|</span> <span class="k">ROWS</span> <span class="err">}</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="k">FETCH</span> <span class="err">{</span> <span class="k">FIRST</span> <span class="o">|</span> <span class="k">NEXT</span> <span class="err">}</span> <span class="p">[</span> <span class="k">count</span> <span class="p">]</span> <span class="err">{</span> <span class="k">ROW</span> <span class="o">|</span> <span class="k">ROWS</span> <span class="err">}</span> <span class="k">ONLY</span><span class="p">]</span>
+
+<span class="n">orderItem</span><span class="p">:</span>
+  <span class="n">expression</span> <span class="p">[</span> <span class="k">ASC</span> <span class="o">|</span> <span class="k">DESC</span> <span class="p">]</span>
+
+<span class="k">select</span><span class="p">:</span>
+  <span class="k">SELECT</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span>
+  <span class="err">{</span> <span class="o">*</span> <span class="o">|</span> <span class="n">projectItem</span> <span class="p">[,</span> <span class="n">projectItem</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span>
+  <span class="k">FROM</span> <span class="n">tableExpression</span>
+  <span class="p">[</span> <span class="k">WHERE</span> <span class="n">booleanExpression</span> <span class="p">]</span>
+  <span class="p">[</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="err">{</span> <span class="n">groupItem</span> <span class="p">[,</span> <span class="n">groupItem</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span> <span class="p">]</span>
+  <span class="p">[</span> <span class="k">HAVING</span> <span class="n">booleanExpression</span> <span class="p">]</span>
+  <span class="p">[</span> <span class="n">WINDOW</span> <span class="n">windowName</span> <span class="k">AS</span> <span class="n">windowSpec</span> <span class="p">[,</span> <span class="n">windowName</span> <span class="k">AS</span> <span class="n">windowSpec</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+
+<span class="n">selectWithoutFrom</span><span class="p">:</span>
+  <span class="k">SELECT</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span>
+  <span class="err">{</span> <span class="o">*</span> <span class="o">|</span> <span class="n">projectItem</span> <span class="p">[,</span> <span class="n">projectItem</span> <span class="p">]</span><span class="o">*</span> <span class="err">}</span>
+
+<span class="n">projectItem</span><span class="p">:</span>
+  <span class="n">expression</span> <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="n">columnAlias</span> <span class="p">]</span>
+  <span class="o">|</span> <span class="n">tableAlias</span> <span class="p">.</span> <span class="o">*</span>
+
+<span class="n">tableExpression</span><span class="p">:</span>
+  <span class="n">tableReference</span> <span class="p">[,</span> <span class="n">tableReference</span> <span class="p">]</span><span class="o">*</span>
+  <span class="o">|</span> <span class="n">tableExpression</span> <span class="p">[</span> <span class="k">NATURAL</span> <span class="p">]</span> <span class="p">[</span> <span class="k">LEFT</span> <span class="o">|</span> <span class="k">RIGHT</span> <span class="o">|</span> <span class="k">FULL</span> <span class="p">]</span> <span class="k">JOIN</span> <span class="n">tableExpression</span> <span class="p">[</span> <span class="n">joinCondition</span> <span class="p">]</span>
+
+<span class="n">joinCondition</span><span class="p">:</span>
+  <span class="k">ON</span> <span class="n">booleanExpression</span>
+  <span class="o">|</span> <span class="k">USING</span> <span class="s1">'('</span> <span class="k">column</span> <span class="p">[,</span> <span class="k">column</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span>
+
+<span class="n">tableReference</span><span class="p">:</span>
+  <span class="n">tablePrimary</span>
+  <span class="p">[</span> <span class="n">matchRecognize</span> <span class="p">]</span>
+  <span class="p">[</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="k">alias</span> <span class="p">[</span> <span class="s1">'('</span> <span class="n">columnAlias</span> <span class="p">[,</span> <span class="n">columnAlias</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="p">]</span> <span class="p">]</span>
+
+<span class="n">tablePrimary</span><span class="p">:</span>
+  <span class="p">[</span> <span class="k">TABLE</span> <span class="p">]</span> <span class="n">tablePath</span> <span class="p">[</span> <span class="n">dynamicTableOptions</span> <span class="p">]</span> <span class="p">[</span><span class="n">systemTimePeriod</span><span class="p">]</span> <span class="p">[[</span><span class="k">AS</span><span class="p">]</span> <span class="n">correlationName</span><span class="p">]</span>
+  <span class="o">|</span> <span class="k">LATERAL</span> <span class="k">TABLE</span> <span class="s1">'('</span> <span class="n">functionName</span> <span class="s1">'('</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span> <span class="s1">')'</span>
+  <span class="o">|</span> <span class="k">UNNEST</span> <span class="s1">'('</span> <span class="n">expression</span> <span class="s1">')'</span>
+
+<span class="n">tablePath</span><span class="p">:</span>
+  <span class="p">[</span> <span class="p">[</span> <span class="n">catalogName</span> <span class="p">.</span> <span class="p">]</span> <span class="n">schemaName</span> <span class="p">.</span> <span class="p">]</span> <span class="n">tableName</span>  
+
+<span class="n">systemTimePeriod</span><span class="p">:</span>
+  <span class="k">FOR</span> <span class="n">SYSTEM_TIME</span> <span class="k">AS</span> <span class="k">OF</span> <span class="n">dateTimeExpression</span>
+
+<span class="n">dynamicTableOptions</span><span class="p">:</span>
+  <span class="cm">/*+ OPTIONS(key=val [, key=val]*) */</span>
+
+<span class="k">key</span><span class="p">:</span>
+  <span class="n">stringLiteral</span>
+
+<span class="n">val</span><span class="p">:</span>
+  <span class="n">stringLiteral</span>
+
+<span class="k">values</span><span class="p">:</span>
+  <span class="k">VALUES</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span>
+
+<span class="n">groupItem</span><span class="p">:</span>
+  <span class="n">expression</span>
+  <span class="o">|</span> <span class="s1">'('</span> <span class="s1">')'</span>
+  <span class="o">|</span> <span class="s1">'('</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span>
+  <span class="o">|</span> <span class="k">CUBE</span> <span class="s1">'('</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span>
+  <span class="o">|</span> <span class="k">ROLLUP</span> <span class="s1">'('</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span>
+  <span class="o">|</span> <span class="k">GROUPING</span> <span class="k">SETS</span> <span class="s1">'('</span> <span class="n">groupItem</span> <span class="p">[,</span> <span class="n">groupItem</span> <span class="p">]</span><span class="o">*</span> <span class="s1">')'</span>
+
+<span class="n">windowRef</span><span class="p">:</span>
+    <span class="n">windowName</span>
+  <span class="o">|</span> <span class="n">windowSpec</span>
+
+<span class="n">windowSpec</span><span class="p">:</span>
+    <span class="p">[</span> <span class="n">windowName</span> <span class="p">]</span>
+    <span class="s1">'('</span>
+    <span class="p">[</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">orderItem</span> <span class="p">[,</span> <span class="n">orderItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+    <span class="p">[</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+    <span class="p">[</span>
+        <span class="n">RANGE</span> <span class="n">numericOrIntervalExpression</span> <span class="err">{</span><span class="n">PRECEDING</span><span class="err">}</span>
+      <span class="o">|</span> <span class="k">ROWS</span> <span class="n">numericExpression</span> <span class="err">{</span><span class="n">PRECEDING</span><span class="err">}</span>
+    <span class="p">]</span>
+    <span class="s1">')'</span>
+
+<span class="n">matchRecognize</span><span class="p">:</span>
+      <span class="n">MATCH_RECOGNIZE</span> <span class="s1">'('</span>
+      <span class="p">[</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">expression</span> <span class="p">[,</span> <span class="n">expression</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+      <span class="p">[</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">orderItem</span> <span class="p">[,</span> <span class="n">orderItem</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+      <span class="p">[</span> <span class="n">MEASURES</span> <span class="n">measureColumn</span> <span class="p">[,</span> <span class="n">measureColumn</span> <span class="p">]</span><span class="o">*</span> <span class="p">]</span>
+      <span class="p">[</span> <span class="n">ONE</span> <span class="k">ROW</span> <span class="n">PER</span> <span class="k">MATCH</span> <span class="p">]</span>
+      <span class="p">[</span> <span class="k">AFTER</span> <span class="k">MATCH</span>
+            <span class="p">(</span> <span class="n">SKIP</span> <span class="k">TO</span> <span class="k">NEXT</span> <span class="k">ROW</span>
+            <span class="o">|</span> <span class="n">SKIP</span> <span class="n">PAST</span> <span class="k">LAST</span> <span class="k">ROW</span>
+            <span class="o">|</span> <span class="n">SKIP</span> <span class="k">TO</span> <span class="k">FIRST</span> <span class="k">variable</span>
+            <span class="o">|</span> <span class="n">SKIP</span> <span class="k">TO</span> <span class="k">LAST</span> <span class="k">variable</span>
+            <span class="o">|</span> <span class="n">SKIP</span> <span class="k">TO</span> <span class="k">variable</span> <span class="p">)</span>
+      <span class="p">]</span>
+      <span class="n">PATTERN</span> <span class="s1">'('</span> <span class="n">pattern</span> <span class="s1">')'</span>
+      <span class="p">[</span> <span class="n">WITHIN</span> <span class="n">intervalLiteral</span> <span class="p">]</span>
+      <span class="n">DEFINE</span> <span class="k">variable</span> <span class="k">AS</span> <span class="n">condition</span> <span class="p">[,</span> <span class="k">variable</span> <span class="k">AS</span> <span class="n">condition</span> <span class="p">]</span><span class="o">*</span>
+      <span class="s1">')'</span>
+
+<span class="n">measureColumn</span><span class="p">:</span>
+      <span class="n">expression</span> <span class="k">AS</span> <span class="k">alias</span>
+
+<span class="n">pattern</span><span class="p">:</span>
+      <span class="n">patternTerm</span> <span class="p">[</span> <span class="s1">'|'</span> <span class="n">patternTerm</span> <span class="p">]</span><span class="o">*</span>
+
+<span class="n">patternTerm</span><span class="p">:</span>
+      <span class="n">patternFactor</span> <span class="p">[</span> <span class="n">patternFactor</span> <span class="p">]</span><span class="o">*</span>
+
+<span class="n">patternFactor</span><span class="p">:</span>
+      <span class="k">variable</span> <span class="p">[</span> <span class="n">patternQuantifier</span> <span class="p">]</span>
+
+<span class="n">patternQuantifier</span><span class="p">:</span>
+      <span class="s1">'*'</span>
+  <span class="o">|</span>   <span class="s1">'*?'</span>
+  <span class="o">|</span>   <span class="s1">'+'</span>
+  <span class="o">|</span>   <span class="s1">'+?'</span>
+  <span class="o">|</span>   <span class="s1">'?'</span>
+  <span class="o">|</span>   <span class="s1">'??'</span>
+  <span class="o">|</span>   <span class="s1">'{'</span> <span class="err">{</span> <span class="p">[</span> <span class="n">minRepeat</span> <span class="p">],</span> <span class="p">[</span> <span class="n">maxRepeat</span> <span class="p">]</span> <span class="err">}</span> <span class="s1">'}'</span> <span class="p">[</span><span class="s1">'?'</span><span class="p">]</span>
+  <span class="o">|</span>   <span class="s1">'{'</span> <span class="n">repeat</span> <span class="s1">'}'</span></code></pre></figure>
+
+<p>Flink SQL 对于标识符（表、属性、函数名）有类似于 Java 的词法约定:</p>
+
+<ul>
+  <li>不管是否引用标识符，都保留标识符的大小写。</li>
+  <li>且标识符需区分大小写。</li>
+  <li>与 Java 不一样的地方在于，通过反引号，可以允许标识符带有非字母的字符（如：<code>"SELECT a AS `my field` FROM t"</code>）。</li>
+</ul>
+
+<p>字符串文本常量需要被单引号包起来（如 <code class="highlighter-rouge">SELECT 'Hello World'</code> ）。两个单引号表示转移（如 <code class="highlighter-rouge">SELECT 'It''s me.'</code>）。字符串文本常量支持 Unicode 字符，如需明确使用 Unicode 编码，请使用以下语法：</p>
+
+<ul>
+  <li>使用反斜杠（<code class="highlighter-rouge">\</code>）作为转义字符（默认）：<code class="highlighter-rouge">SELECT U&amp;'\263A'</code></li>
+  <li>使用自定义的转义字符： <code class="highlighter-rouge">SELECT U&amp;'#263A' UESCAPE '#'</code></li>
+</ul>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h2 id="操作符">操作符</h2>
+
+<h3 id="scanprojection-与-filter">Scan、Projection 与 Filter</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Scan / Select / As</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span>
+
+<span class="k">SELECT</span> <span class="n">a</span><span class="p">,</span> <span class="k">c</span> <span class="k">AS</span> <span class="n">d</span> <span class="k">FROM</span> <span class="n">Orders</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Where / Filter</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">b</span> <span class="o">=</span> <span class="s1">'red'</span>
+
+<span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">0</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>用户定义标量函数（Scalar UDF）</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+      <p>自定义函数必须事先注册到 TableEnvironment 中。 可阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数文档</a> 以获得如何指定和注册自定义函数的详细信息。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">PRETTY_PRINT</span><span class="p">(</span><span class="k">user</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">Orders</span></code></pre></figure>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="聚合">聚合</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>GroupBy 聚合</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span><br />
+        <span class="label label-info">结果更新</span>
+      </td>
+      <td>
+        <p><b>注意：</b> GroupBy 在流处理表中会产生更新结果（updating result）。详情请阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/dynamic_tables.html">动态表流概念</a> 。
+        </p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">a</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>GroupBy 窗口聚合</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>使用分组窗口对每个组进行计算并得到一个结果行。详情请阅读 <a href="#分组窗口">分组窗口</a> 章节</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">user</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">TUMBLE</span><span class="p">(</span><span class="n">rowtime</span><span class="p">,</span> <span class="n">INTERVAL</span> <span class="s1">'1'</span> <span class="k">DAY</span><span class="p">),</span> <span class="k">user</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Over Window aggregation</strong><br />
+        <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p><b>注意：</b> 所有的聚合必须定义到同一个窗口中，即相同的分区、排序和区间。当前仅支持 PRECEDING (无界或有界) 到 CURRENT ROW 范围内的窗口、FOLLOWING 所描述的区间并未支持，ORDER BY 必须指定于单个的<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a>。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="n">OVER</span> <span class="p">(</span>
+  <span class="n">PARTITION</span> <span class="k">BY</span> <span class="k">user</span>
+  <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">proctime</span>
+  <span class="k">ROWS</span> <span class="k">BETWEEN</span> <span class="mi">2</span> <span class="n">PRECEDING</span> <span class="k">AND</span> <span class="k">CURRENT</span> <span class="k">ROW</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+
+<span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="n">OVER</span> <span class="n">w</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="n">OVER</span> <span class="n">w</span>
+<span class="k">FROM</span> <span class="n">Orders</span> 
+<span class="n">WINDOW</span> <span class="n">w</span> <span class="k">AS</span> <span class="p">(</span>
+  <span class="n">PARTITION</span> <span class="k">BY</span> <span class="k">user</span>
+  <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">proctime</span>
+  <span class="k">ROWS</span> <span class="k">BETWEEN</span> <span class="mi">2</span> <span class="n">PRECEDING</span> <span class="k">AND</span> <span class="k">CURRENT</span> <span class="k">ROW</span><span class="p">)</span>  </code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Distinct</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span> <br />
+        <span class="label label-info">结果更新</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">users</span> <span class="k">FROM</span> <span class="n">Orders</span></code></pre></figure>
+
+       <p><b>注意：</b> 对于流处理查询，根据不同字段的数量，计算查询结果所需的状态可能会无限增长。请提供具有有效保留间隔的查询配置，以防止出现过多的状态。请阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">查询配置</a> 以获取详细的信息</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Grouping sets, Rollup, Cube</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+        <span class="label label-info">结果更新</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="k">GROUPING</span> <span class="k">SETS</span> <span class="p">((</span><span class="k">user</span><span class="p">),</span> <span class="p">(</span><span class="n">product</span><span class="p">))</span></code></pre></figure>
+
+        <p><b>Note:</b> 流式 Grouping sets、Rollup 以及 Cube 只在 Blink planner 中支持。</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Having</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">users</span>
+<span class="k">HAVING</span> <span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>用户自定义聚合函数 (UDAGG)</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>UDAGG 必须注册到 TableEnvironment. 参考<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">自定义函数文档</a> 以了解如何指定和注册 UDAGG 。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">MyAggregate</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">users</span></code></pre></figure>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="joins">Joins</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Inner Equi-join</strong><br />
+        <span class="label label-primary">批处理</span>
+        <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>目前仅支持 equi-join ，即 join 的联合条件至少拥有一个相等谓词。不支持任何 cross join 和 theta join。</p>
+        <p><b>注意：</b> Join 的顺序没有进行优化，join 会按照 FROM 中所定义的顺序依次执行。请确保 join 所指定的表在顺序执行中不会产生不支持的 cross join （笛卡儿积）以至查询失败。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">Product</span> <span class="k">ON</span> <span class="n">Orders</span><span class="p">.</span><span class="n">productId</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">id</span></code></pre></figure>
+
+        <p><b>注意：</b> 流查询中可能会因为不同行的输入数量导致计算结果的状态无限增长。请提供具有有效保留间隔的查询配置，以防止出现过多的状态。详情请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">查询配置</a> 页面.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Outer Equi-join</strong><br />
+        <span class="label label-primary">批处理</span>
+        <span class="label label-primary">流处理</span>
+        <span class="label label-info">结果更新</span>
+      </td>
+      <td>
+        <p>目前仅支持 equi-join ，即 join 的联合条件至少拥有一个相等谓词。不支持任何 cross join 和 theta join。</p>
+        <p><b>注意：</b> Join 的顺序没有进行优化，join 会按照 FROM 中所定义的顺序依次执行。请确保 join 所指定的表在顺序执行中不会产生不支持的 cross join （笛卡儿积）以至查询失败。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">Product</span> <span class="k">ON</span> <span class="n">Orders</span><span class="p">.</span><span class="n">productId</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">id</span>
+
+<span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">RIGHT</span> <span class="k">JOIN</span> <span class="n">Product</span> <span class="k">ON</span> <span class="n">Orders</span><span class="p">.</span><span class="n">productId</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">id</span>
+
+<span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">FULL</span> <span class="k">OUTER</span> <span class="k">JOIN</span> <span class="n">Product</span> <span class="k">ON</span> <span class="n">Orders</span><span class="p">.</span><span class="n">productId</span> <span class="o">=</span> <span class="n">Product</span><span class="p">.</span><span class="n">id</span></code></pre></figure>
+
+        <p><b>注意：</b> 流查询中可能会因为不同行的输入数量导致计算结果的状态无限增长。请提供具有有效保留间隔的查询配置，以防止出现过多的状态。详情请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">查询配置</a> 页面.</p>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Inner/Outer Interval Join</strong><br />
+        <span class="label label-primary">批处理</span>
+        <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p><b>注意：</b>Interval join （时间区间关联）是常规 join 的子集，可以使用流的方式进行处理。</p>
+
+        <p>Interval join需要至少一个 equi-join 谓词和一个限制了双方时间的 join 条件。例如使用两个适当的范围谓词（<code>&lt;, &lt;=, &gt;=, &gt;</code>），一个 <code>BETWEEN</code> 谓词或一个比较两个输入表中相同类型的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a> （即处理时间和事件时间）的相等谓词</p>
+        <p>比如，以下谓词是合法的 interval join 条件：</p>
+
+        <ul>
+          <li><code>ltime = rtime</code></li>
+          <li><code>ltime &gt;= rtime AND ltime &lt; rtime + INTERVAL '10' MINUTE</code></li>
+          <li><code>ltime BETWEEN rtime - INTERVAL '10' SECOND AND rtime + INTERVAL '5' SECOND</code></li>
+        </ul>
+
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="n">o</span><span class="p">,</span> <span class="n">Shipments</span> <span class="n">s</span>
+<span class="k">WHERE</span> <span class="n">o</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">orderId</span> <span class="k">AND</span>
+      <span class="n">o</span><span class="p">.</span><span class="n">ordertime</span> <span class="k">BETWEEN</span> <span class="n">s</span><span class="p">.</span><span class="n">shiptime</span> <span class="o">-</span> <span class="n">INTERVAL</span> <span class="s1">'4'</span> <span class="n">HOUR</span> <span class="k">AND</span> <span class="n">s</span><span class="p">.</span><span class="n">shiptime</span></code></pre></figure>
+
+
+以上示例中，所有在收到后四小时内发货的 order 会与他们相关的 shipment 进行 join。
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Expanding arrays into a relation</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>目前尚未支持非嵌套的 WITH ORDINALITY 。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">users</span><span class="p">,</span> <span class="n">tag</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">CROSS</span> <span class="k">JOIN</span> <span class="k">UNNEST</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span> <span class="k">AS</span> <span class="n">t</span> <span class="p">(</span><span class="n">tag</span><span class="p">)</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Join 表函数 (UDTF)</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>将表与表函数的结果进行 join 操作。左表（outer）中的每一行将会与调用表函数所产生的所有结果中相关联行进行 join 。</p>
+        <p>用户自定义表函数（ User-defined table functions，UDTFs ） 在执行前必须先注册。请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/functions/udfs.html">UDF 文档</a> 以获取更多关于指定和注册UDF的信息 </p>
+
+        <p><b>Inner Join</b></p>
+        <p>若表函数返回了空结果，左表（outer）的行将会被删除。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">users</span><span class="p">,</span> <span class="n">tag</span>
+<span class="k">FROM</span> <span class="n">Orders</span><span class="p">,</span> <span class="k">LATERAL</span> <span class="k">TABLE</span><span class="p">(</span><span class="n">unnest_udtf</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span> <span class="k">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+<span class="c1">-- 从1.11开始，也可以使用下面的方式：</span>
+<span class="k">SELECT</span> <span class="n">users</span><span class="p">,</span> <span class="n">tag</span>
+<span class="k">FROM</span> <span class="n">Orders</span><span class="p">,</span> <span class="k">LATERAL</span> <span class="k">TABLE</span><span class="p">(</span><span class="n">unnest_udtf</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span> <span class="k">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span></code></pre></figure>
+
+
+        <p><b>Left Outer Join</b></p>
+        <p>若表函数返回了空结果，将会保留相对应的外部行并用空值填充结果。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">users</span><span class="p">,</span> <span class="n">tag</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="k">LATERAL</span> <span class="k">TABLE</span><span class="p">(</span><span class="n">unnest_udtf</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span> <span class="k">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="k">ON</span> <span class="k">TRUE</span>
+<span class="c1">-- 从1.11开始，也可以使用下面的方式：</span>
+<span class="k">SELECT</span> <span class="n">users</span><span class="p">,</span> <span class="n">tag</span>
+<span class="k">FROM</span> <span class="n">Orders</span> <span class="k">LEFT</span> <span class="k">JOIN</span> <span class="k">LATERAL</span> <span class="k">TABLE</span><span class="p">(</span><span class="n">unnest_udtf</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span> <span class="k">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="k">ON</span> <span class="k">TRUE</span></code></pre></figure>
+
+
+        <p><b>注意：</b> 当前仅支持文本常量 <code>TRUE</code> 作为针对横向表的左外部联接的谓词。</p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Join Temporal Tables </strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">Temporal Tables</a> 是随时间变化而变化的表。
+        <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#temporal-table">Temporal Table</a> 提供访问指定时间点的 temporal table 版本的功能。</p>
+
+        <p>支持基于处理时间 或 基于事件时间 的 temporal table join, 支持 inner 和 left join。 </p>
+        <p>基于事件时间的 temporal table join 在 <span class="label label-primary">批处理</span> 中暂不支持。</p>
+        <p>下述示例中，假设 <strong>LatestRates</strong> 是一个根据最新的 rates 物化的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#temporal-table">Temporal Table</a> 。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">o</span><span class="p">.</span><span class="n">amount</span><span class="p">,</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span><span class="p">,</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span><span class="p">,</span> <span class="n">o</span><span class="p">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">r</span><span class="p">.</span><span class="n">rate</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span> <span class="k">AS</span> <span class="n">o</span>
+  <span class="k">JOIN</span> <span class="n">LatestRates</span> <span class="k">FOR</span> <span class="n">SYSTEM_TIME</span> <span class="k">AS</span> <span class="k">OF</span> <span class="n">o</span><span class="p">.</span><span class="n">proctime</span> <span class="k">AS</span> <span class="n">r</span>
+  <span class="k">ON</span> <span class="n">r</span><span class="p">.</span><span class="n">currency</span> <span class="o">=</span> <span class="n">o</span><span class="p">.</span><span class="n">currency</span></code></pre></figure>
+
+        <p>Join 的右表可以使用可选表达式 <code>[[<strong>AS</strong>] correlationName]</code> 取别名，注意 <code><strong>AS</strong></code> 关键词也是可选的。</p>
+        <p>请阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">Temporal Tables</a> 概念描述以了解详细信息。</p>
+        <p>仅 Blink planner 支持。</p>
+      </td>
+    </tr>    
+    <tr>
+      <td>
+        <strong>Join Temporal Table Function</strong><br />
+        <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html">Temporal Tables</a> 是跟随时间变化而变化的表。</p>
+        <p><a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#temporal-table-functions"> Temporal Table Function</a> 提供访问 Temporal Tables 在某一时间点的状态的能力。
+        Join Temporal Table Function 的语法与 <i>Join Table Function</i> 一致。</p>
+
+        <p><b>注意：</b> 目前仅支持在 Temporal Tables 上的 inner join 。</p>
+
+        <p>假如 <i>Rates</i> 是一个 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html#temporal-table-functions"> Temporal Table Function</a>, join 可以使用 SQL 进行如下的表达:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span>
+  <span class="n">o_amount</span><span class="p">,</span> <span class="n">r_rate</span>
+<span class="k">FROM</span>
+  <span class="n">Orders</span><span class="p">,</span>
+  <span class="k">LATERAL</span> <span class="k">TABLE</span> <span class="p">(</span><span class="n">Rates</span><span class="p">(</span><span class="n">o_proctime</span><span class="p">))</span>
+<span class="k">WHERE</span>
+  <span class="n">r_currency</span> <span class="o">=</span> <span class="n">o_currency</span></code></pre></figure>
+
+        <p>请查看 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/temporal_tables.html"> Temporal Tables 概念描述</a> 以了解详细信息。</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="集合操作">集合操作</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Union</strong><br />
+        <span class="label label-primary">批处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="p">(</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">UNION</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>UnionAll</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="p">(</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">UNION</span> <span class="k">ALL</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>Intersect / Except</strong><br />
+        <span class="label label-primary">批处理</span>
+      </td>
+      <td>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="p">(</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">INTERSECT</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="p">(</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">EXCEPT</span>
+    <span class="p">(</span><span class="k">SELECT</span> <span class="k">user</span> <span class="k">FROM</span> <span class="n">Orders</span> <span class="k">WHERE</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span></code></pre></figure>
+
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>In</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>若表达式在给定的表子查询中存在，则返回 true 。子查询表必须由单个列构成，且该列的数据类型需与表达式保持一致。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">user</span><span class="p">,</span> <span class="n">amount</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">WHERE</span> <span class="n">product</span> <span class="k">IN</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="n">product</span> <span class="k">FROM</span> <span class="n">NewProducts</span>
+<span class="p">)</span></code></pre></figure>
+
+        <p><b>注意：</b> 在流查询中，这一操作将会被重写为 join 和 group 操作。该查询所需要的状态可能会由于不同的输入行数而导致无限增长。请在查询配置中提合理的保留间隔以避免产生状态过大。请阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">查询配置</a> 以了解详细信息</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>Exists</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>若子查询的结果多于一行，将返回 true 。仅支持可以被通过 join 和 group 重写的操作。</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="k">user</span><span class="p">,</span> <span class="n">amount</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">WHERE</span> <span class="n">product</span> <span class="k">EXISTS</span> <span class="p">(</span>
+    <span class="k">SELECT</span> <span class="n">product</span> <span class="k">FROM</span> <span class="n">NewProducts</span>
+<span class="p">)</span></code></pre></figure>
+
+        <p><b>注意：</b> 在流查询中，这一操作将会被重写为 join 和 group 操作。该查询所需要的状态可能会由于不同的输入行数而导致无限增长。请在查询配置中提合理的保留间隔以避免产生状态过大。请阅读 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/query_configuration.html">查询配置</a> 以了解详细信息</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="orderby--limit">OrderBy &amp; Limit</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Order By</strong><br />
+        <span class="label label-primary">批处理</span> <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+<b>注意：</b> 流处理结果需主要根据 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a> 按照升序进行排序。支持使用其他排序属性。  
+
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">orderTime</span></code></pre></figure>
+
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>Limit</strong><br />
+        <span class="label label-primary">批处理</span>
+      </td>
+      <td>
+<b>注意：</b> LIMIT 查询需要有一个 ORDER BY 字句。
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">Orders</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">orderTime</span>
+<span class="k">LIMIT</span> <span class="mi">3</span></code></pre></figure>
+
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="top-n">Top-N</h3>
+
+<p><span class="label label-danger">注意</span> 目前仅 Blink 计划器支持 Top-N 。</p>
+
+<p>Top-N 查询是根据列排序找到N个最大或最小的值。最大值集和最小值集都被视为是一种 Top-N 的查询。若在批处理或流处理的表中需要显示出满足条件的 N 个最底层记录或最顶层记录， Top-N 查询将会十分有用。得到的结果集将可以进行进一步的分析。</p>
+
+<p>Flink 使用 OVER 窗口条件和过滤条件相结合以进行 Top-N 查询。利用 OVER 窗口的 <code class="highlighter-rouge">PARTITION BY</code> 子句的功能，Flink 还支持逐组 Top-N 。 例如，每个类别中实时销量最高的前五种产品。批处理表和流处理表都支持基于SQL的 Top-N 查询。
+以下是 TOP-N 表达式的语法:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">[</span><span class="n">column_list</span><span class="p">]</span>
+<span class="k">FROM</span> <span class="p">(</span>
+   <span class="k">SELECT</span> <span class="p">[</span><span class="n">column_list</span><span class="p">],</span>
+     <span class="n">ROW_NUMBER</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">([</span><span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">col1</span><span class="p">[,</span> <span class="n">col2</span><span class="p">...]]</span>
+       <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">col1</span> <span class="p">[</span><span class="k">asc</span><span class="o">|</span><span class="k">desc</span><span class="p">][,</span> <span class="n">col2</span> <span class="p">[</span><span class="k">asc</span><span class="o">|</span><span class="k">desc</span><span class="p">]...])</span> <span class="k">AS</span> <span class="n">rownum</span>
+   <span class="k">FROM</span> <span class="k">table_name</span><span class="p">)</span>
+<span class="k">WHERE</span> <span class="n">rownum</span> <span class="o">&lt;=</span> <span class="n">N</span> <span class="p">[</span><span class="k">AND</span> <span class="n">conditions</span><span class="p">]</span></code></pre></figure>
+
+<p><strong>参数说明：</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">ROW_NUMBER()</code>: 根据当前分区内的各行的顺序从第一行开始，依次为每一行分配一个唯一且连续的号码。目前，我们只支持 <code class="highlighter-rouge">ROW_NUMBER</code> 在 over 窗口函数中使用。未来将会支持 <code class="highlighter-rouge">RANK()</code> 和 <code class="highlighter-rouge">DENSE_RANK()</code>函数。</li>
+  <li><code class="highlighter-rouge">PARTITION BY col1[, col2...]</code>: 指定分区列，每个分区都将会有一个 Top-N 结果。</li>
+  <li><code class="highlighter-rouge">ORDER BY col1 [asc|desc][, col2 [asc|desc]...]</code>: 指定排序列，不同列的排序方向可以不一样。</li>
+  <li><code class="highlighter-rouge">WHERE rownum &lt;= N</code>: Flink 需要 <code class="highlighter-rouge">rownum &lt;= N</code> 才能识别一个查询是否为 Top-N 查询。 其中， N 代表最大或最小的 N 条记录会被保留。</li>
+  <li><code class="highlighter-rouge">[AND conditions]</code>: 在 where 语句中，可以随意添加其他的查询条件，但其他条件只允许通过 <code class="highlighter-rouge">AND</code> 与 <code class="highlighter-rouge">rownum &lt;= N</code> 结合使用。</li>
+</ul>
+
+<p><span class="label label-danger">流处理模式需注意</span> TopN 查询的结果会带有更新。 Flink SQL 会根据排序键对输入的流进行排序；若 top N 的记录发生了变化，变化的部分会以撤销、更新记录的形式发送到下游。
+推荐使用一个支持更新的存储作为 Top-N 查询的 sink 。另外，若 top N 记录需要存储到外部存储，则结果表需要拥有相同与 Top-N 查询相同的唯一键。</p>
+
+<p>Top-N 的唯一键是分区列和 rownum 列的结合，另外 Top-N 查询也可以获得上游的唯一键。以下面的任务为例，<code class="highlighter-rouge">product_id</code> 是 <code class="highlighter-rouge">ShopSales</code> 的唯一键，然后 Top-N 的唯一键是 [<code class="highlighter-rouge">category</code>, <code class="highlighter-rouge">rownum</code>] 和 [<code class="highlighter-rouge">product_id</code>] 。</p>
+
+<p>下面的样例描述了如何指定带有 Top-N 的 SQL 查询。这个例子的作用是我们上面提到的“查询每个分类实时销量最大的五个产品”。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+
+<span class="c1">// 接收来自外部数据源的 DataStream</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple4</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">addSource</span><span class="o">(...);</span>
+<span class="c1">// 把 DataStream 注册为表，表名是 “ShopSales”</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">createTemporaryView</span><span class="o">(</span><span class="s">"ShopSales"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="s">"product_id, category, product_name, sales"</span><span class="o">);</span>
+
+<span class="c1">// 选择每个分类中销量前5的产品</span>
+<span class="nc">Table</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT * "</span> <span class="o">+</span>
+  <span class="s">"FROM ("</span> <span class="o">+</span>
+  <span class="s">"   SELECT *,"</span> <span class="o">+</span>
+  <span class="s">"       ROW_NUMBER() OVER (PARTITION BY category ORDER BY sales DESC) as row_num"</span> <span class="o">+</span>
+  <span class="s">"   FROM ShopSales)"</span> <span class="o">+</span>
+  <span class="s">"WHERE row_num &lt;= 5"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">TableEnvironment</span><span class="o">.</span><span class="py">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+
+<span class="c1">// 读取外部数据源的 DataStream</span>
+<span class="k">val</span> <span class="nv">ds</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">Long</span><span class="o">)]</span> <span class="k">=</span> <span class="nv">env</span><span class="o">.</span><span class="py">addSource</span><span class="o">(...)</span>
+<span class="c1">// 注册名为 “ShopSales” 的 DataStream</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">createTemporaryView</span><span class="o">(</span><span class="s">"ShopSales"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="n">$</span><span class="s">"product_id"</span><span class="o">,</span> <span class="n">$</span><span class="s">"category"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product_name"</span><span class="o">,</span> <span class="n">$</span><span class="s">"sales"</span><span class="o">)</span>
+
+
+<span class="c1">// 选择每个分类中销量前5的产品</span>
+<span class="k">val</span> <span class="nv">result1</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+    <span class="s">"""
+      |SELECT *
+      |FROM (
+      |   SELECT *,
+      |       ROW_NUMBER() OVER (PARTITION BY category ORDER BY sales DESC) as row_num
+      |   FROM ShopSales)
+      |WHERE row_num &lt;= 5
+    """</span><span class="o">.</span><span class="py">stripMargin</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<h4 id="无排名输出优化">无排名输出优化</h4>
+
+<p>如上文所描述，<code class="highlighter-rouge">rownum</code> 字段会作为唯一键的其中一个字段写到结果表里面，这会导致大量的结果写出到结果表。比如，当原始结果（名为 <code class="highlighter-rouge">product-1001</code> ）从排序第九变化为排序第一时，排名 1-9 的所有结果都会以更新消息的形式发送到结果表。若结果表收到太多的数据，将会成为 SQL 任务的瓶颈。</p>
+
+<p>优化方法是在 Top-N 查询的外部 SELECT 子句中省略 rownum 字段。由于前N条记录的数量通常不大，因此消费者可以自己对记录进行快速排序，因此这是合理的。去掉 rownum 字段后，上述的例子中，只有变化了的记录（ <code class="highlighter-rouge">product-1001</code> ）需要发送到下游，从而可以节省大量的对结果表的 IO 操作。</p>
+
+<p>以下的例子描述了如何以这种方式优化上述的 Top-N 查询：</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+
+<span class="c1">// 从外部数据源读取 DataStream</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple4</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">addSource</span><span class="o">(...);</span>
+<span class="c1">// 把 DataStream 注册为表，表名是 “ShopSales”</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">createTemporaryView</span><span class="o">(</span><span class="s">"ShopSales"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"product_id"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"category"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"product_name"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"sales"</span><span class="o">));</span>
+
+<span class="c1">// 选择每个分类中销量前5的产品</span>
+<span class="nc">Table</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product_id, category, product_name, sales "</span> <span class="o">+</span> <span class="c1">// omit row_num field in the output</span>
+  <span class="s">"FROM ("</span> <span class="o">+</span>
+  <span class="s">"   SELECT *,"</span> <span class="o">+</span>
+  <span class="s">"       ROW_NUMBER() OVER (PARTITION BY category ORDER BY sales DESC) as row_num"</span> <span class="o">+</span>
+  <span class="s">"   FROM ShopSales)"</span> <span class="o">+</span>
+  <span class="s">"WHERE row_num &lt;= 5"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">TableEnvironment</span><span class="o">.</span><span class="py">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+
+<span class="c1">// 从外部数据源读取 DataStream</span>
+<span class="k">val</span> <span class="nv">ds</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">Long</span><span class="o">)]</span> <span class="k">=</span> <span class="nv">env</span><span class="o">.</span><span class="py">addSource</span><span class="o">(...)</span>
+<span class="c1">// 注册名为 “ShopSales” 的数据源</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">createTemporaryView</span><span class="o">(</span><span class="s">"ShopSales"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="n">$</span><span class="s">"product_id"</span><span class="o">,</span> <span class="n">$</span><span class="s">"category"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product_name"</span><span class="o">,</span> <span class="n">$</span><span class="s">"sales"</span><span class="o">)</span>
+
+
+<span class="c1">// 选择每个分类中销量前5的产品</span>
+<span class="k">val</span> <span class="nv">result1</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+    <span class="s">"""
+      |SELECT product_id, category, product_name, sales  -- omit row_num field in the output
+      |FROM (
+      |   SELECT *,
+      |       ROW_NUMBER() OVER (PARTITION BY category ORDER BY sales DESC) as row_num
+      |   FROM ShopSales)
+      |WHERE row_num &lt;= 5
+    """</span><span class="o">.</span><span class="py">stripMargin</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><span class="label label-danger">使用流处理模式时需注意</span> 为了使上述查询输出可以输出到外部存储并且结果正确，外部存储需要拥有与 Top-N 查询一致的唯一键。在上述的查询例子中，若 <code class="highlighter-rouge">product_id</code> 是查询的唯一键，那么外部表必须要有 <code class="highlighter-rouge">product_id</code> 作为其唯一键。</p>
+
+<h3 id="去重">去重</h3>
+
+<p><span class="label label-danger">注意</span> 仅 Blink planner 支持去重。</p>
+
+<p>去重是指对在列的集合内重复的行进行删除，只保留第一行或最后一行数据。 在某些情况下，上游的 ETL 作业不能实现精确一次的端到端，这将可能导致在故障恢复
+时，sink 中有重复的记录。 由于重复的记录将影响下游分析作业的正确性（例如，<code class="highlighter-rouge">SUM</code>、<code class="highlighter-rouge">COUNT</code>）， 所以在进一步分析之前需要进行数据去重。</p>
+
+<p>与 Top-N 查询相似，Flink 使用 <code class="highlighter-rouge">ROW_NUMBER()</code> 去除重复的记录。理论上来说，去重是一个特殊的 Top-N 查询，其中 N 是 1 ，记录则是以处理时间或事件事件进行排序的。</p>
+
+<p>以下代码展示了去重语句的语法：</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="p">[</span><span class="n">column_list</span><span class="p">]</span>
+<span class="k">FROM</span> <span class="p">(</span>
+   <span class="k">SELECT</span> <span class="p">[</span><span class="n">column_list</span><span class="p">],</span>
+     <span class="n">ROW_NUMBER</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">([</span><span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">col1</span><span class="p">[,</span> <span class="n">col2</span><span class="p">...]]</span>
+       <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">time_attr</span> <span class="p">[</span><span class="k">asc</span><span class="o">|</span><span class="k">desc</span><span class="p">])</span> <span class="k">AS</span> <span class="n">rownum</span>
+   <span class="k">FROM</span> <span class="k">table_name</span><span class="p">)</span>
+<span class="k">WHERE</span> <span class="n">rownum</span> <span class="o">=</span> <span class="mi">1</span></code></pre></figure>
+
+<p><strong>参数说明：</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">ROW_NUMBER()</code>: 从第一行开始，依次为每一行分配一个唯一且连续的号码。</li>
+  <li><code class="highlighter-rouge">PARTITION BY col1[, col2...]</code>: 指定分区的列，例如去重的键。</li>
+  <li><code class="highlighter-rouge">ORDER BY time_attr [asc|desc]</code>: 指定排序的列。所指定的列必须为 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性</a>, 目前 Flink 支持 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html#处理时间">处理时间属性</a> 和 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html#事件时间">事件时间属性</a> 。升序（ ASC ）排列指只保留第一行，而降序排列（ DESC ）则指保留最后一行。</li>
+  <li><code class="highlighter-rouge">WHERE rownum = 1</code>: Flink 需要 <code class="highlighter-rouge">rownum = 1</code> 以确定该查询是否为去重查询。</li>
+</ul>
+
+<p>以下的例子描述了如何指定 SQL 查询以在一个流计算表中进行去重操作。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">TableEnvironment</span><span class="o">.</span><span class="na">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+
+<span class="c1">// 从外部数据源读取 DataStream</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple4</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">addSource</span><span class="o">(...);</span>
+<span class="c1">// 注册名为 “Orders” 的 DataStream</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"order_id"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"user"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"product"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"number"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"proctime"</span><span class="o">).</span><span class="na">proctime</span><span class="o">());</span>
+
+<span class="c1">// 由于不应该出现两个订单有同一个order_id，所以根据 order_id 去除重复的行，并保留第一行</span>
+<span class="nc">Table</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT order_id, user, product, number "</span> <span class="o">+</span>
+  <span class="s">"FROM ("</span> <span class="o">+</span>
+  <span class="s">"   SELECT *,"</span> <span class="o">+</span>
+  <span class="s">"       ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY proctime ASC) as row_num"</span> <span class="o">+</span>
+  <span class="s">"   FROM Orders)"</span> <span class="o">+</span>
+  <span class="s">"WHERE row_num = 1"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">TableEnvironment</span><span class="o">.</span><span class="py">getTableEnvironment</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+
+<span class="c1">// 从外部数据源读取 DataStream</span>
+<span class="k">val</span> <span class="nv">ds</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nv">env</span><span class="o">.</span><span class="py">addSource</span><span class="o">(...)</span>
+<span class="c1">// 注册名为 “Orders” 的 DataStream</span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="n">$</span><span class="s">"order_id"</span><span class="o">,</span> <span class="n">$</span><span class="s">"user"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product"</span><span class="o">,</span> <span class="n">$</span><span class="s">"number"</span><span class="o">,</span> <span class="n">$</span><span class="s">"proctime"</span><span class="o">.</span><span class="py">proctime</span><span class="o">)</span>
+
+<span class="c1">// 由于不应该出现两个订单有同一个order_id，所以根据 order_id 去除重复的行，并保留第一行</span>
+<span class="k">val</span> <span class="nv">result1</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+    <span class="s">"""
+      |SELECT order_id, user, product, number
+      |FROM (
+      |   SELECT *,
+      |       ROW_NUMBER() OVER (PARTITION BY order_id ORDER BY proctime DESC) as row_num
+      |   FROM Orders)
+      |WHERE row_num = 1
+    """</span><span class="o">.</span><span class="py">stripMargin</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<p>去重能够保留输入流的时间属性，当下游操作是 window 聚合 或 join 关联操作时非常有用。
+基于处理时间的去重和基于事件时间的去重都支持 mini-batch 模式，这对性能更加友好, 查看 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/config.html#table-exec-mini-batch-enabled">mini-batch 配置</a> 了解如何开启 mini-batch 模式。</p>
+
+<h3 id="分组窗口">分组窗口</h3>
+
+<p>SQL 查询的分组窗口是通过 <code class="highlighter-rouge">GROUP BY</code> 子句定义的。类似于使用常规 <code class="highlighter-rouge">GROUP BY</code> 语句的查询，窗口分组语句的 <code class="highlighter-rouge">GROUP BY</code> 子句中带有一个窗口函数为每个分组计算出一个结果。以下是批处理表和流处理表支持的分组窗口函数：</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 30%">分组窗口函数</th>
+      <th class="text-left">描述</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><code>TUMBLE(time_attr, interval)</code></td>
+      <td>定义一个滚动窗口。滚动窗口把行分配到有固定持续时间（ <code>interval</code> ）的不重叠的连续窗口。比如，5 分钟的滚动窗口以 5 分钟为间隔对行进行分组。滚动窗口可以定义在事件时间（批处理、流处理）或处理时间（流处理）上。</td>
+    </tr>
+    <tr>
+      <td><code>HOP(time_attr, interval, interval)</code></td>
+      <td>定义一个跳跃的时间窗口（在 Table API 中称为滑动窗口）。滑动窗口有一个固定的持续时间（ 第二个 <code>interval</code> 参数 ）以及一个滑动的间隔（第一个 <code>interval</code> 参数 ）。若滑动间隔小于窗口的持续时间，滑动窗口则会出现重叠；因此，行将会被分配到多个窗口中。比如，一个大小为 15 分组的滑动窗口，其滑动间隔为 5 分钟，将会把每一行数据分配到 3 个 15 分钟的窗口中。滑动窗口可以定义在事件时间（批处理、流处理）或处理时间（流处理）上。</td>
+    </tr>
+    <tr>
+      <td><code>SESSION(time_attr, interval)</code></td>
+      <td>定义一个会话时间窗口。会话时间窗口没有一个固定的持续时间，但是它们的边界会根据 <code>interval</code> 所定义的不活跃时间所确定；即一个会话时间窗口在定义的间隔时间内没有时间出现，该窗口会被关闭。例如时间窗口的间隔时间是 30 分钟，当其不活跃的时间达到30分钟后，若观测到新的记录，则会启动一个新的会话时间窗口（否则该行数据会被添加到当前的窗口），且若在 30 分钟内没有观测到新纪录，这个窗口将会被关闭。会话时间窗口可以使用事件时间（批处理、流处理）或处理时间（流处理）。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="时间属性">时间属性</h4>
+
+<p>在流处理表中的 SQL 查询中，分组窗口函数的 <code class="highlighter-rouge">time_attr</code> 参数必须引用一个合法的时间属性，且该属性需要指定行的处理时间或事件时间。可参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性文档</a> 以了解如何定义时间属性。</p>
+
+<p>对于批处理的 SQL 查询，分组窗口函数的 <code class="highlighter-rouge">time_attr</code> 参数必须是一个 <code class="highlighter-rouge">TIMESTAMP</code> 类型的属性。</p>
+
+<h4 id="选择分组窗口的开始和结束时间戳">选择分组窗口的开始和结束时间戳</h4>
+
+<p>可以使用以下辅助函数选择组窗口的开始和结束时间戳以及时间属性：</p>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 40%">辅助函数</th>
+      <th class="text-left">描述</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        <code>TUMBLE_START(time_attr, interval)</code><br />
+        <code>HOP_START(time_attr, interval, interval)</code><br />
+        <code>SESSION_START(time_attr, interval)</code><br />
+      </td>
+      <td><p>返回相对应的滚动、滑动和会话窗口范围内的下界时间戳。</p></td>
+    </tr>
+    <tr>
+      <td>
+        <code>TUMBLE_END(time_attr, interval)</code><br />
+        <code>HOP_END(time_attr, interval, interval)</code><br />
+        <code>SESSION_END(time_attr, interval)</code><br />
+      </td>
+      <td><p>返回相对应的滚动、滑动和会话窗口<i>范围以外</i>的上界时间戳。</p>
+        <p><b>注意：</b> 范围以外的上界时间戳<i>不可以</i> 在随后基于时间的操作中，作为 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">行时间属性</a> 使用，比如 <a href="#joins">interval join</a> 以及 <a href="#aggregations">分组窗口或分组窗口上的聚合</a>。</p></td>
+    </tr>
+    <tr>
+      <td>
+        <code>TUMBLE_ROWTIME(time_attr, interval)</code><br />
+        <code>HOP_ROWTIME(time_attr, interval, interval)</code><br />
+        <code>SESSION_ROWTIME(time_attr, interval)</code><br />
+      </td>
+      <td><p>返回相对应的滚动、滑动和会话窗口<i>范围以内</i>的上界时间戳。</p>
+      <p>返回的是一个可用于后续需要基于时间的操作的<a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html">时间属性（rowtime attribute）</a>，比如<a href="#joins">interval join</a> 以及 <a href="#aggregations">分组窗口或分组窗口上的聚合</a>。</p></td>
+    </tr>
+    <tr>
+      <td>
+        <code>TUMBLE_PROCTIME(time_attr, interval)</code><br />
+        <code>HOP_PROCTIME(time_attr, interval, interval)</code><br />
+        <code>SESSION_PROCTIME(time_attr, interval)</code><br />
+      </td>
+      <td><p>返回一个可用于后续需要基于时间的操作的 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/time_attributes.html#processing-time">处理时间参数</a>，比如<a href="#joins">interval join</a> 以及 <a href="#aggregations">分组窗口或分组窗口上的聚合</a>.</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>注意：</em> 辅助函数必须使用与 <code class="highlighter-rouge">GROUP BY</code> 子句中的分组窗口函数完全相同的参数来调用.</p>
+
+<p>以下的例子展示了如何在流处理表中指定使用分组窗口函数的 SQL 查询。</p>
+
+<div class="codetabs">
+  <div data-lang="java">
+
+    <figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="nc">StreamExecutionEnvironment</span> <span class="n">env</span> <span class="o">=</span> <span class="nc">StreamExecutionEnvironment</span><span class="o">.</span><span class="na">getExecutionEnvironment</span><span class="o">();</span>
+<span class="nc">StreamTableEnvironment</span> <span class="n">tableEnv</span> <span class="o">=</span> <span class="nc">StreamTableEnvironment</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+
+<span class="c1">// 从外部数据源读取 DataSource</span>
+<span class="nc">DataStream</span><span class="o">&lt;</span><span class="nc">Tuple3</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="nc">String</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="na">addSource</span><span class="o">(...);</span>
+<span class="c1">// 使用“Orders”作为表名把 DataStream 注册为表</span>
+<span class="n">tableEnv</span><span class="o">.</span><span class="na">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="err">$</span><span class="o">(</span><span class="s">"user"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"product"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"amount"</span><span class="o">),</span> <span class="err">$</span><span class="o">(</span><span class="s">"proctime"</span><span class="o">).</span><span class="na">proctime</span><span class="o">(),</span> <span class="err">$</span><span class="o">(</span><span class="s">"rowtime"</span><span class="o">).</span><span class="na">rowtime</span><span class="o">());</span>
+
+<span class="c1">// 计算每日的 SUM(amount)（使用事件时间）</span>
+<span class="nc">Table</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT user, "</span> <span class="o">+</span>
+  <span class="s">"  TUMBLE_START(rowtime, INTERVAL '1' DAY) as wStart,  "</span> <span class="o">+</span>
+  <span class="s">"  SUM(amount) FROM Orders "</span> <span class="o">+</span>
+  <span class="s">"GROUP BY TUMBLE(rowtime, INTERVAL '1' DAY), user"</span><span class="o">);</span>
+
+<span class="c1">// 计算每日的 SUM(amount)（使用处理时间）</span>
+<span class="nc">Table</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT user, SUM(amount) FROM Orders GROUP BY TUMBLE(proctime, INTERVAL '1' DAY), user"</span><span class="o">);</span>
+
+<span class="c1">// 使用事件时间计算过去24小时中每小时的 SUM(amount) </span>
+<span class="nc">Table</span> <span class="n">result3</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, SUM(amount) FROM Orders GROUP BY HOP(rowtime, INTERVAL '1' HOUR, INTERVAL '1' DAY), product"</span><span class="o">);</span>
+
+<span class="c1">// 计算每个以12小时（事件时间）作为不活动时间的会话的 SUM(amount) </span>
+<span class="nc">Table</span> <span class="n">result4</span> <span class="o">=</span> <span class="n">tableEnv</span><span class="o">.</span><span class="na">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT user, "</span> <span class="o">+</span>
+  <span class="s">"  SESSION_START(rowtime, INTERVAL '12' HOUR) AS sStart, "</span> <span class="o">+</span>
+  <span class="s">"  SESSION_ROWTIME(rowtime, INTERVAL '12' HOUR) AS snd, "</span> <span class="o">+</span>
+  <span class="s">"  SUM(amount) "</span> <span class="o">+</span>
+  <span class="s">"FROM Orders "</span> <span class="o">+</span>
+  <span class="s">"GROUP BY SESSION(rowtime, INTERVAL '12' HOUR), user"</span><span class="o">);</span></code></pre></figure>
+
+  </div>
+
+  <div data-lang="scala">
+
+    <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="nv">env</span> <span class="k">=</span> <span class="nv">StreamExecutionEnvironment</span><span class="o">.</span><span class="py">getExecutionEnvironment</span>
+<span class="k">val</span> <span class="nv">tableEnv</span> <span class="k">=</span> <span class="nv">StreamTableEnvironment</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+
+<span class="c1">// 从外部数据源读取 DataSource</span>
+<span class="k">val</span> <span class="nv">ds</span><span class="k">:</span> <span class="kt">DataStream</span><span class="o">[(</span><span class="kt">Long</span>, <span class="kt">String</span>, <span class="kt">Int</span><span class="o">)]</span> <span class="k">=</span> <span class="nv">env</span><span class="o">.</span><span class="py">addSource</span><span class="o">(...)</span>
+<span class="c1">// 计算每日（使用处理时间）的 SUM(amount) </span>
+<span class="nv">tableEnv</span><span class="o">.</span><span class="py">createTemporaryView</span><span class="o">(</span><span class="s">"Orders"</span><span class="o">,</span> <span class="n">ds</span><span class="o">,</span> <span class="n">$</span><span class="s">"user"</span><span class="o">,</span> <span class="n">$</span><span class="s">"product"</span><span class="o">,</span> <span class="n">$</span><span class="s">"amount"</span><span class="o">,</span> <span class="n">$</span><span class="s">"proctime"</span><span class="o">.</span><span class="py">proctime</span><span class="o">,</span> <span class="n">$</span><span class="s">"rowtime"</span><span class="o">.</span><span class="py">rowtime</span><span class="o">)</span>
+
+<span class="c1">// 计算每日的 SUM(amount) （使用事件时间）</span>
+<span class="k">val</span> <span class="nv">result1</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+    <span class="s">"""
+      |SELECT
+      |  user,
+      |  TUMBLE_START(rowtime, INTERVAL '1' DAY) as wStart,
+      |  SUM(amount)
+      | FROM Orders
+      | GROUP BY TUMBLE(rowtime, INTERVAL '1' DAY), user
+    """</span><span class="o">.</span><span class="py">stripMargin</span><span class="o">)</span>
+
+<span class="c1">// 计算每日的 SUM(amount) （使用处理时间）</span>
+<span class="k">val</span> <span class="nv">result2</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT user, SUM(amount) FROM Orders GROUP BY TUMBLE(proctime, INTERVAL '1' DAY), user"</span><span class="o">)</span>
+
+<span class="c1">// 使用事件时间计算过去24小时中每小时的 SUM(amount) </span>
+<span class="k">val</span> <span class="nv">result3</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+  <span class="s">"SELECT product, SUM(amount) FROM Orders GROUP BY HOP(rowtime, INTERVAL '1' HOUR, INTERVAL '1' DAY), product"</span><span class="o">)</span>
+
+<span class="c1">// 计算每个以12小时（事件时间）作为不活动时间的会话的 SUM(amount) </span>
+<span class="k">val</span> <span class="nv">result4</span> <span class="k">=</span> <span class="nv">tableEnv</span><span class="o">.</span><span class="py">sqlQuery</span><span class="o">(</span>
+    <span class="s">"""
+      |SELECT
+      |  user,
+      |  SESSION_START(rowtime, INTERVAL '12' HOUR) AS sStart,
+      |  SESSION_END(rowtime, INTERVAL '12' HOUR) AS sEnd,
+      |  SUM(amount)
+      | FROM Orders
+      | GROUP BY SESSION(rowtime(), INTERVAL '12' HOUR), user
+    """</span><span class="o">.</span><span class="py">stripMargin</span><span class="o">)</span></code></pre></figure>
+
+  </div>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+<h3 id="模式匹配">模式匹配</h3>
+
+<div>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th class="text-left" style="width: 20%">操作符</th>
+      <th class="text-center">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>MATCH_RECOGNIZE</strong><br />
+        <span class="label label-primary">流处理</span>
+      </td>
+      <td>
+        <p>根据 <code>MATCH_RECOGNIZE</code> <a href="https://standards.iso.org/ittf/PubliclyAvailableStandards/c065143_ISO_IEC_TR_19075-5_2016.zip">ISO 标准</a>在流处理表中搜索给定的模式。 这样就可以在SQL查询中描述复杂的事件处理（CEP）逻辑。</p>
+        <p>更多详情请参考 <a href="//ci.apache.org/projects/flink/flink-docs-release-1.12/zh/dev/table/streaming/match_recognize.html">检测表中的模式</a>.</p>
+
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">T</span><span class="p">.</span><span class="n">aid</span><span class="p">,</span> <span class="n">T</span><span class="p">.</span><span class="n">bid</span><span class="p">,</span> <span class="n">T</span><span class="p">.</span><span class="n">cid</span>
+<span class="k">FROM</span> <span class="n">MyTable</span>
+<span class="n">MATCH_RECOGNIZE</span> <span class="p">(</span>
+  <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">userid</span>
+  <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">proctime</span>
+  <span class="n">MEASURES</span>
+    <span class="n">A</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">aid</span><span class="p">,</span>
+    <span class="n">B</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">bid</span><span class="p">,</span>
+    <span class="k">C</span><span class="p">.</span><span class="n">id</span> <span class="k">AS</span> <span class="n">cid</span>
+  <span class="n">PATTERN</span> <span class="p">(</span><span class="n">A</span> <span class="n">B</span> <span class="k">C</span><span class="p">)</span>
+  <span class="n">DEFINE</span>
+    <span class="n">A</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'a'</span><span class="p">,</span>
+    <span class="n">B</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'b'</span><span class="p">,</span>
+    <span class="k">C</span> <span class="k">AS</span> <span class="n">name</span> <span class="o">=</span> <span class="s1">'c'</span>
+<span class="p">)</span> <span class="k">AS</span> <span class="n">T</span></code></pre></figure>
+
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
+
+<p><a href="#top" class="top pull-right"><span class="glyphicon glyphicon-chevron-up"></span> Back to top</a></p>
+
+
+
+<div class="footer">
+  <a href="https://cwiki.apache.org/confluence/display/FLINK/Flink+Translation+Specifications" target="_blank">
+    
+      想参与贡献翻译？
+    
+  </a>
+</div>
+
+
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+    <!-- default code tab -->
+    <script>var defaultCodeTab = "";</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/3.1.0/anchor.min.js"></script>
+    <script src="//ci.apache.org/projects/flink/flink-docs-release-1.12/page/js/flink.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52545728-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+
+    <!-- Disqus -->
+    
+  </body>
+</html>
